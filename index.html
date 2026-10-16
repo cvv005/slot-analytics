@@ -30,7 +30,6 @@
 
         body {
             background-color: var(--bg-dark);
-            /* 已移除所有網格格子效果，改為純淨暗黑紅金光晕背景 */
             background-image: 
                 radial-gradient(circle at 50% 0%, rgba(255, 0, 21, 0.3), transparent 70%),
                 radial-gradient(circle at 100% 100%, rgba(102, 0, 7, 0.4), transparent 50%),
@@ -269,8 +268,8 @@
             max-width: 90px;
             height: 90px;
             object-fit: contain;
-            filter: drop-shadow(0 4px 10px rgba(255, 0, 21, 0.4));
-            mix-blend-mode: multiply;
+            filter: drop-shadow(0 0 8px rgba(255, 0, 21, 0.6));
+            background: transparent;
         }
 
         .select-card span {
@@ -319,11 +318,11 @@
 
         .signal-container {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 18px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
             border: 1.5px dashed var(--red-bright);
             flex-wrap: wrap;
         }
@@ -331,31 +330,36 @@
         .signal-group {
             display: flex;
             align-items: center;
-            background: rgba(255, 0, 21, 0.12);
-            border: 1px solid rgba(255, 0, 21, 0.35);
-            padding: 8px 12px;
-            gap: 8px;
+            background: rgba(255, 0, 21, 0.15);
+            border: 1px solid rgba(255, 0, 21, 0.4);
+            padding: 10px 16px;
+            gap: 12px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
         .signal-img-wrapper {
             display: flex;
-            gap: 4px;
+            gap: 6px;
+            align-items: center;
         }
 
+        /* 關鍵修復：移除 mix-blend-mode 並加大光暈 */
         .signal-img-wrapper img {
-            width: 36px;
-            height: 36px;
+            width: 45px;
+            height: 45px;
             object-fit: contain;
-            mix-blend-mode: multiply;
-            filter: drop-shadow(0 2px 6px rgba(255, 0, 21, 0.6));
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 12px rgba(255, 0, 21, 0.8));
+            background: transparent;
         }
 
         .signal-count {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
+            font-size: 1.2rem;
             font-weight: 900;
             color: var(--gold-accent);
             margin-left: 4px;
+            text-shadow: 0 0 8px var(--gold-accent);
         }
 
         .calc-box {
@@ -519,11 +523,10 @@
             <p style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; text-align:center;">輸入 VIP 通行碼即可解鎖 10 間實體即時選房與爆分率數據</p>
         </div>
 
-        <!-- 動態觸發訊號 -->
+        <!-- 動態觸發訊號（已關閉並移除重新演算按鈕） -->
         <div class="card">
-            <div class="card-title" style="justify-content:space-between;">
+            <div class="card-title">
                 <span>⚡ 當日動態觸發波段訊號</span>
-                <button class="btn btn-outline" style="width:auto; padding:4px 12px; font-size:0.8rem;" onclick="generateSignal()">重新演算波段</button>
             </div>
             <div class="signal-container" id="signalBox">
                 <!-- 動態產生訊號 -->
