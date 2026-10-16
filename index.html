@@ -43,9 +43,10 @@
             padding: 25px 15px;
         }
 
+        /* 修正：將容器寬度放大至 1100px 滿版大氣 */
         .container {
             width: 100%;
-            max-width: 920px;
+            max-width: 1100px;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -278,9 +279,9 @@
 
         .vip-room-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 15px;
-            max-height: 480px;
+            max-height: 520px;
             overflow-y: auto;
             padding-right: 6px;
         }
@@ -684,7 +685,6 @@
 </div>
 
 <script>
-    // 獨立專屬數據庫：修正赤三國與各遊戲圖片混亂問題
     const GAME_DATABASE = {
         'ATG': [
             { 
@@ -727,7 +727,6 @@
               name: '赤三國', 
               img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', 
               maxRooms: 200,
-              // 赤三國專屬三國符號 (關羽、方天畫戟、赤兔馬、軍令牌)
               symbols: [
                 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp',
                 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp',
@@ -973,7 +972,6 @@
         alert(`已鎖定 VIP 房間 #${num}！\n請立即前往遊戲選擇 #${num} 號房間進行下注！`);
     }
 
-    // ⚡ 波段訊號生成（確保讀取各遊戲專屬 symbols，不隨便混用到賽特圖案）
     function generateSignal() {
         const box = document.getElementById('signalBox');
         box.innerHTML = '';
