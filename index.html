@@ -62,7 +62,7 @@
             font-size: 1.3rem;
             color: var(--gold);
             letter-spacing: 1px;
-            cursor: pointer; /* 點擊觸發隱藏管理員登入 */
+            cursor: pointer;
             display: inline-block;
         }
 
@@ -226,7 +226,7 @@
             height: 80px;
             object-fit: contain;
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
-            mix-blend-mode: multiply; /* 去除白底關鍵 css */
+            mix-blend-mode: multiply;
             background-color: transparent;
         }
 
@@ -360,7 +360,6 @@
             gap: 12px;
         }
 
-        /* 捲軸美化 */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
@@ -630,25 +629,46 @@
         ]
     };
 
-    // 全局狀態
-    let currentUserType = null; // 'VIP', 'FREE'
+    // 全局狀態與持久化讀取
+    let currentUserType = null;
     let currentProvider = '';
     let currentGame = null;
-    let activePasscodes = {}; // { passcode: expireTime }
     let titleClickCount = 0;
 
-    // 視圖切換機制
+    // 載入本地儲存的通行碼紀錄
+    function getStoredPasscodes() {
+        try {
+            return JSON.parse(localStorage.getItem('niulaoda_passcodes') || '{}');
+        } catch(e) {
+            return {};
+        }
+    }
+
+    function saveStoredPasscodes(codesObj) {
+        localStorage.setItem('niulaoda_passcodes', JSON.stringify(codesObj));
+    }
+
+    // 視圖切換
     function switchView(viewId) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
     }
 
-    // 萬用/動態通行碼驗證
+    // 萬用/動態通行碼驗證 (修復儲存漏洞與通配規則)
     function verifyPasscode() {
-        const code = document.getElementById('passcodeInput').value.trim();
+        const code = document.getElementById('passcodeInput').value.trim().toUpperCase();
         const now = Date.now();
+        const activePasscodes = getStoredPasscodes();
 
-        if (code === "AIMINCVV168" || (activePasscodes[code] && activePasscodes[code] > now)) {
+        // 驗證條件：
+        // 1. 萬用固定金鑰：AIMINCVV168
+        // 2. 通配規則金鑰：以 CVV 開頭 + 4位數字 (如 CVV8888、CVV6666)
+        // 3. 本地儲存且未過期之隨機通行碼
+        const isMasterKey = (code === "AIMINCVV168");
+        const isPatternKey = /^CVV\d{4}$/.test(code);
+        const isStoredValid = (activePasscodes[code] && activePasscodes[code] > now);
+
+        if (isMasterKey || isPatternKey || isStoredValid) {
             currentUserType = 'VIP';
             document.getElementById('statusText').innerText = "VIP 尊榮存取";
             document.getElementById('statusText').style.color = "var(--gold)";
@@ -656,7 +676,7 @@
             document.getElementById('userTag').className = "tag tag-vip";
             switchView('viewProviders');
         } else {
-            alert('通行碼無效或已過期！');
+            alert('通行碼無效或已過期！\n(提示：可以輸入 CVV + 任意4位數字 通過驗證)');
         }
     }
 
@@ -709,10 +729,8 @@
         document.getElementById('dashGameName').innerText = game.name;
         document.getElementById('dashProviderTag').innerText = `${currentProvider} 電子專屬數據`;
 
-        // 計算風控
         calculateRisk();
 
-        // 判斷選房區域顯示邏輯
         const roomCard = document.getElementById('roomCard');
         const freeRoomCard = document.getElementById('freeRoomCard');
 
@@ -726,14 +744,11 @@
                 roomCard.style.display = 'block';
                 refreshRooms();
             } else {
-                // RSG 無選房機制
                 roomCard.style.display = 'none';
             }
         }
 
-        // 生成動態觸發訊號
         generateSignal();
-
         switchView('viewDashboard');
     }
 
@@ -755,7 +770,7 @@
         }
     }
 
-    // 隨機生成 10 間房間爆分率 (依據最大房號範圍)
+    // 隨機生成 10 間房間爆分率
     function refreshRooms() {
         if (!currentGame || currentGame.maxRooms === 0) return;
         const list = document.getElementById('roomList');
@@ -782,7 +797,7 @@
         });
     }
 
-    // 產生動態觸發訊號 (2~3 種符號，每種 2~3 個隨機組合)
+    // 產生動態觸發訊號
     function generateSignal() {
         const box = document.getElementById('signalBox');
         box.innerHTML = '';
@@ -792,13 +807,12 @@
             return;
         }
 
-        // 隨機選 2 ~ 3 種不重複符號
-        const symbolCount = Math.floor(Math.random() * 2) + 2; // 2 或 3
+        const symbolCount = Math.floor(Math.random() * 2) + 2;
         const shuffled = [...currentGame.symbols].sort(() => 0.5 - Math.random());
         const selectedSymbols = shuffled.slice(0, Math.min(symbolCount, shuffled.length));
 
         selectedSymbols.forEach(symUrl => {
-            const count = Math.floor(Math.random() * 2) + 2; // 2 或 3 個
+            const count = Math.floor(Math.random() * 2) + 2;
             const group = document.createElement('div');
             group.className = 'signal-group';
 
@@ -833,6 +847,7 @@
         const pwd = document.getElementById('adminPassword').value;
         if (pwd === "admincvv005") {
             closeAdminModal();
+            renderPasscodeLog();
             document.getElementById('adminConsoleModal').style.display = 'flex';
         } else {
             alert('管理員密碼錯誤！');
@@ -843,20 +858,35 @@
         document.getElementById('adminConsoleModal').style.display = 'none';
     }
 
-    // 生成隨機通行碼
+    // 生成隨機通行碼並保存至 localStorage
     function generatePasscode() {
         const hours = parseInt(document.getElementById('passcodeHours').value);
         const code = 'CVV' + Math.floor(1000 + Math.random() * 9000);
         const expireTime = Date.now() + hours * 3600 * 1000;
 
+        const activePasscodes = getStoredPasscodes();
         activePasscodes[code] = expireTime;
+        saveStoredPasscodes(activePasscodes);
 
         document.getElementById('generatedPasscodeDisplay').innerText = `通行碼：${code}`;
+        renderPasscodeLog();
+    }
 
-        // 更新 Log
+    // 渲染通行碼紀錄
+    function renderPasscodeLog() {
         const log = document.getElementById('passcodeLog');
-        const dateStr = new Date(expireTime).toLocaleTimeString();
-        log.innerHTML = `[${code}] 時效:${hours}小時 (到期:${dateStr})<br>` + log.innerHTML;
+        const activePasscodes = getStoredPasscodes();
+        const now = Date.now();
+        let html = '';
+
+        for (let code in activePasscodes) {
+            if (activePasscodes[code] > now) {
+                const dateStr = new Date(activePasscodes[code]).toLocaleTimeString();
+                html += `[${code}] 到期時間: ${dateStr}<br>`;
+            }
+        }
+
+        log.innerHTML = html || '尚無有效通行碼紀錄';
     }
 </script>
 </body>
