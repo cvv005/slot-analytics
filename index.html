@@ -1,677 +1,568 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>牛老大專屬 - 多系統商數據選房平台</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#050307',
+                            card: 'rgba(18, 10, 18, 0.85)',
+                            crimson: '#e60033',
+                            neonRed: '#ff0033',
+                            gold: '#ffb700',
+                            goldLight: '#ffd000',
+                            burgundy: '#2d0812',
+                            cyan: '#00f0ff',
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'Noto Sans TC', 'sans-serif'],
+                        sans: ['Noto Sans TC', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --bg-dark: #060304;
-            --card-bg: rgba(18, 6, 8, 0.92);
-            --red-bright: #ff0015;
-            --red-glow: rgba(255, 0, 21, 0.45);
-            --red-dark: #660007;
-            --gold-accent: #ffb700;
-            --text-main: #ffffff;
-            --text-sub: #b3a1a3;
-            --border-red: rgba(255, 0, 21, 0.45);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
-            user-select: none;
-        }
-
         body {
-            background-color: var(--bg-dark);
+            background-color: #040206;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(255, 0, 21, 0.3), transparent 70%),
-                radial-gradient(circle at 100% 100%, rgba(102, 0, 7, 0.4), transparent 50%),
-                radial-gradient(circle at 0% 50%, rgba(255, 183, 0, 0.08), transparent 40%);
+                radial-gradient(circle at 50% 0%, rgba(230, 0, 51, 0.25), transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(255, 183, 0, 0.15), transparent 50%),
+                radial-gradient(circle at 0% 80%, rgba(128, 0, 32, 0.3), transparent 60%);
             background-attachment: fixed;
-            color: var(--text-main);
+            color: #f3f4f6;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 25px 15px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 880px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            padding: 22px 15px;
-            background: var(--card-bg);
-            border: 2px solid var(--border-red);
-            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
-            box-shadow: 0 0 35px var(--red-glow), inset 0 0 15px rgba(255, 0, 21, 0.15);
+            overflow-x: hidden;
             position: relative;
         }
 
-        header h1 {
-            font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 2.5px;
-            cursor: pointer;
-            display: inline-block;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px var(--red-bright), 0 0 30px var(--red-bright);
-            background: linear-gradient(180deg, #ffffff 30%, #ff4d5a 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Cyberpunk Scanlines Overlays */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 99;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.6;
         }
 
-        header p {
-            font-size: 0.88rem;
-            color: var(--text-sub);
-            margin-top: 6px;
-            letter-spacing: 1px;
-        }
-
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px dashed rgba(255, 0, 21, 0.3);
-        }
-
-        .tag {
-            padding: 3px 12px;
-            border-radius: 4px;
-            font-weight: 900;
-            letter-spacing: 1px;
-        }
-
-        .tag-vip { 
-            background: linear-gradient(135deg, #ff0015, #80000a); 
-            color: #fff; 
-            border: 1px solid var(--red-bright);
-            box-shadow: 0 0 10px rgba(255,0,21,0.5);
-        }
-        .tag-free { 
-            background: rgba(255, 255, 255, 0.08); 
-            color: var(--text-sub); 
-            border: 1px solid rgba(255, 255, 255, 0.2); 
-        }
-
-        /* 幾何科技切角卡片 */
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-red);
-            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
-            padding: 22px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 0, 21, 0.05);
+        /* Sci-Fi HUD Cut Card Corner Styling */
+        .hud-card {
+            background: rgba(16, 7, 14, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 0, 51, 0.35);
+            clip-path: polygon(
+                0 15px, 15px 0, 
+                calc(100% - 15px) 0, 100% 15px, 
+                100% calc(100% - 15px), calc(100% - 15px) 100%, 
+                15px 100%, 0 calc(100% - 15px)
+            );
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(230, 0, 51, 0.1);
             position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .card::before {
+        .hud-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 8px; height: 8px;
-            background: var(--red-bright);
-            box-shadow: 0 0 8px var(--red-bright);
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff0033, #ffb700, #ff0033, transparent);
+            opacity: 0.7;
         }
 
-        .card-title {
+        .hud-card:hover {
+            border-color: rgba(255, 183, 0, 0.6);
+            box-shadow: 0 15px 35px rgba(230, 0, 51, 0.25), inset 0 0 20px rgba(255, 183, 0, 0.15);
+        }
+
+        /* Neon Crimson Text & Glows */
+        .glow-title {
+            text-shadow: 0 0 12px rgba(255, 0, 51, 0.8), 0 0 25px rgba(255, 183, 0, 0.5);
+        }
+
+        .glow-gold {
+            text-shadow: 0 0 10px rgba(255, 183, 0, 0.7);
+        }
+
+        /* Cyber Cut Buttons */
+        .btn-cyber {
+            background: linear-gradient(135deg, #ff0033 0%, #a30021 50%, #610011 100%);
+            border: 1px solid #ff4d6d;
+            color: #ffffff;
             font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 2px solid var(--red-dark);
-            padding-bottom: 8px;
-            letter-spacing: 1px;
-            text-shadow: 0 0 8px rgba(255,0,21,0.6);
+            font-weight: 800;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 0 15px rgba(255, 0, 51, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .view-section {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .view-section.active {
-            display: flex;
-        }
-
-        /* 流光按鈕 */
-        .btn {
-            background: linear-gradient(135deg, #ff1e27 0%, #a8000b 100%);
-            color: #fff;
-            border: 1px solid #ff5c66;
-            padding: 14px 24px;
-            font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
-            font-weight: 900;
-            font-size: 1rem;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 20px rgba(255, 0, 21, 0.4);
-            width: 100%;
-            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-        }
-
-        .btn:hover, .btn:active {
-            background: linear-gradient(135deg, #ff3d46 0%, #cc000d 100%);
-            box-shadow: 0 0 25px rgba(255, 0, 21, 0.8);
+        .btn-cyber:hover {
+            background: linear-gradient(135deg, #ff2a55 0%, #c40028 50%, #850017 100%);
+            box-shadow: 0 0 25px rgba(255, 0, 51, 0.7), 0 0 10px rgba(255, 183, 0, 0.5);
             transform: translateY(-2px);
         }
 
-        .btn-outline {
-            background: rgba(255, 0, 21, 0.08);
-            border: 1px solid var(--red-bright);
-            color: #fff;
-            box-shadow: none;
-        }
-
-        .btn-cyan {
-            background: linear-gradient(135deg, #2a2d32 0%, #111215 100%);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #ccc;
-            box-shadow: none;
-        }
-
-        .btn-back {
-            background: rgba(255, 0, 21, 0.15);
-            color: #fff;
-            border: 1px solid var(--border-red);
-            padding: 9px 18px;
-            font-size: 0.9rem;
-            width: auto;
-            align-self: flex-start;
-        }
-
-        /* 輸入框 */
-        .login-box {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .input-field {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1.5px solid var(--border-red);
-            padding: 14px;
-            color: #fff;
-            font-family: 'Orbitron', monospace;
-            font-size: 1.1rem;
-            text-align: center;
-            outline: none;
-            letter-spacing: 2px;
-            transition: all 0.3s;
-        }
-
-        .input-field:focus {
-            border-color: var(--red-bright);
-            box-shadow: 0 0 15px rgba(255, 0, 21, 0.6), inset 0 0 10px rgba(255, 0, 21, 0.3);
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-        }
-
-        .select-card {
-            background: rgba(255, 0, 21, 0.04);
-            border: 1px solid rgba(255, 0, 21, 0.25);
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.25s;
-            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-        }
-
-        .select-card:hover, .select-card:active {
-            border-color: var(--red-bright);
-            background: rgba(255, 0, 21, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 0 20px rgba(255, 0, 21, 0.5);
-        }
-
-        .select-card img {
-            width: 100%;
-            max-width: 90px;
-            height: 90px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(255, 0, 21, 0.6));
-            background: transparent;
-        }
-
-        .select-card span {
-            font-size: 0.95rem;
+        .btn-cyber-gold {
+            background: linear-gradient(135deg, #ffb700 0%, #d48800 50%, #8f5a00 100%);
+            border: 1px solid #ffe066;
+            color: #000000;
+            font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
             font-weight: 900;
-            color: #fff;
-            text-align: center;
-            letter-spacing: 1px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 0 15px rgba(255, 183, 0, 0.4);
         }
 
-        .room-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            max-height: 320px;
-            overflow-y: auto;
-            padding-right: 6px;
+        .btn-cyber-gold:hover {
+            background: linear-gradient(135deg, #ffd000 0%, #f59e00 100%);
+            box-shadow: 0 0 25px rgba(255, 183, 0, 0.8);
+            transform: translateY(-2px);
         }
 
-        .room-item {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 0, 21, 0.2);
-            padding: 10px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
+        .btn-cyber-dark {
+            background: rgba(20, 10, 20, 0.8);
+            border: 1px solid rgba(255, 0, 51, 0.3);
+            color: #e5e7eb;
+            clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+            transition: all 0.2s ease;
         }
 
-        .room-item.best {
-            border-color: var(--red-bright);
-            background: rgba(255, 0, 21, 0.25);
-            box-shadow: 0 0 15px rgba(255, 0, 21, 0.3);
+        .btn-cyber-dark:hover {
+            border-color: #ff0033;
+            background: rgba(40, 15, 30, 0.9);
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 0, 51, 0.3);
         }
 
-        .room-rate {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            color: var(--red-bright);
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 4, 10, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff0033;
+            border-radius: 2px;
+            box-shadow: 0 0 8px #ff0033;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffb700;
         }
 
-        .room-item.best .room-rate {
-            color: #fff;
-            text-shadow: 0 0 8px var(--red-bright);
+        /* Dynamic Signal Transparent Blending */
+        .symbol-img {
+            mix-blend-mode: multiply;
+            filter: drop-shadow(0 0 8px rgba(255, 0, 51, 0.6)) drop-shadow(0 0 2px rgba(255, 183, 0, 0.8));
         }
 
-        .signal-container {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border: 1.5px dashed var(--red-bright);
-            flex-wrap: wrap;
+        /* Animated Grid Overlay */
+        .cyber-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 0, 51, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 0, 51, 0.05) 1px, transparent 1px);
         }
 
-        .signal-group {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 0, 21, 0.15);
-            border: 1px solid rgba(255, 0, 21, 0.4);
-            padding: 10px 16px;
-            gap: 12px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        .signal-img-wrapper {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-
-        /* 關鍵修復：移除 mix-blend-mode 並加大光暈 */
-        .signal-img-wrapper img {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 12px rgba(255, 0, 21, 0.8));
-            background: transparent;
-        }
-
-        .signal-count {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--gold-accent);
-            margin-left: 4px;
-            text-shadow: 0 0 8px var(--gold-accent);
-        }
-
-        .calc-box {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .calc-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-            padding: 8px 0;
-            border-bottom: 1px dashed rgba(255, 0, 21, 0.2);
-        }
-
-        .calc-value {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            color: var(--gold-accent);
-            font-size: 1rem;
-        }
-
-        .modal-overlay {
-            display: none;
+        /* Particle Canvas Background */
+        #particleCanvas {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92);
-            backdrop-filter: blur(10px);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal {
-            background: var(--card-bg);
-            border: 2px solid var(--red-bright);
-            padding: 25px;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 450px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            box-shadow: 0 0 40px rgba(255, 0, 21, 0.5);
-            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
         }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); }
-        ::-webkit-scrollbar-thumb { background: var(--red-bright); }
     </style>
 </head>
-<body>
+<body class="cyber-grid flex flex-col items-center justify-start p-3 sm:p-6 min-h-screen">
 
-<div class="container">
-    <!-- Header -->
-    <header>
-        <h1 id="appTitle" onclick="handleTitleClick()">🐂 牛老大專屬數據選房</h1>
-        <p>ATG / RSG 雙系統大廳數據整合分析平台</p>
-        <div class="status-bar">
-            <span>系統狀態: <strong id="statusText" style="color:var(--text-sub)">尚未驗證登入</strong></span>
-            <span id="userTag" class="tag tag-free">UNVERIFIED</span>
+<!-- Particle Background -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- Main Shell Container -->
+<div class="relative z-10 w-full max-w-[940px] flex flex-col gap-6 my-auto">
+
+    <!-- Top Futuristic Header HUD -->
+    <header class="hud-card p-5 sm:p-6 text-center relative overflow-hidden">
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-cyber-crimson rounded-full blur-3xl opacity-30 pointer-events-none"></div>
+        <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-cyber-gold rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-burgundy/80 border border-cyber-crimson/40 text-xs font-orbitron tracking-widest text-cyber-gold mb-2">
+            <span class="w-2 h-2 rounded-full bg-cyber-neonRed animate-pulse"></span>
+            CYBER ANALYTICS SYSTEM V4.5
+        </div>
+
+        <h1 id="appTitle" onclick="handleTitleClick()" class="cursor-pointer text-2xl sm:text-4xl font-black font-orbitron tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-cyber-gold to-cyber-neonRed glow-title transition-transform active:scale-95 select-none">
+            🐂 牛老大專屬 - 多系統商數據選房平台
+        </h1>
+        
+        <p class="text-xs sm:text-sm text-gray-400 mt-2 font-mono tracking-wide">
+            ATG / RSG 雙電子大廳 ‧ 實時爆分率波段演算 ‧ 本金風控控管
+        </p>
+
+        <!-- Status Bar Badge -->
+        <div class="mt-5 pt-4 border-t border-cyber-crimson/20 flex flex-wrap justify-between items-center text-xs sm:text-sm gap-2">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-cyber-gold"></i>
+                <span class="text-gray-400">當前狀態：</span>
+                <strong id="statusText" class="text-gray-300 font-bold">尚未驗證通行碼</strong>
+            </div>
+            <span id="userTag" class="px-3 py-1 rounded font-orbitron font-bold text-xs bg-gray-800 text-gray-400 border border-gray-700">
+                UNVERIFIED
+            </span>
         </div>
     </header>
 
-    <!-- 1. 登入視圖 -->
-    <div id="viewLogin" class="view-section active">
-        <div class="card login-box">
-            <div class="card-title">🔑 通行證身份驗證</div>
-            <p style="font-size: 0.85rem; color: var(--text-sub);">請輸入管理員核發之隨機通行碼進入 VIP 高級數據分析大廳：</p>
-            <input type="text" id="passcodeInput" class="input-field" placeholder="請輸入通行碼 (例: CVV8888)" autocomplete="off">
-            <button class="btn" onclick="verifyPasscode()">驗證進入平台</button>
-            <div style="text-align: center; margin: 4px 0; font-size: 0.85rem; color: var(--text-sub);">- 或 -</div>
-            <button class="btn btn-cyan" onclick="enterFreeMode()">免費體驗試玩模式</button>
-        </div>
-    </div>
-
-    <!-- 2. 系統商選擇頁 -->
-    <div id="viewProviders" class="view-section">
-        <button class="btn btn-back" onclick="logout()">‹ 登出系統</button>
-        <div class="card">
-            <div class="card-title">🎰 選擇系統商大廳</div>
-            <div class="grid-2">
-                <div class="select-card" onclick="openProvider('ATG')">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10" alt="ATG">
-                    <span>ATG 電子大廳</span>
+    <!-- VIEW 1: PASSCODE LOGIN -->
+    <div id="viewLogin" class="view-section flex flex-col gap-5">
+        <div class="hud-card p-6 sm:p-8 flex flex-col gap-6 text-center">
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-14 h-14 rounded-full bg-cyber-crimson/10 border border-cyber-neonRed flex items-center justify-center text-cyber-gold text-2xl mb-1 shadow-[0_0_15px_rgba(255,0,51,0.5)]">
+                    <i class="fa-solid fa-key"></i>
                 </div>
-                <div class="select-card" onclick="openProvider('RSG')">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy70P9GpiFiTXhHUUwvcSBitDQpCKY9UdoVYWtQsE89w&s=10" alt="RSG">
-                    <span>RSG 電子大廳</span>
+                <h2 class="text-xl sm:text-2xl font-bold font-orbitron text-cyber-gold glow-gold">VIP 通行憑證存取驗證</h2>
+                <p class="text-xs sm:text-sm text-gray-400 max-w-md">請輸入由總管理員核發之專屬時間通行碼，以解鎖高準確率實時房間爆分數據：</p>
+            </div>
+
+            <div class="flex flex-col gap-4 max-w-md mx-auto w-full">
+                <div class="relative">
+                    <input type="text" id="passcodeInput" placeholder="請輸入通行碼 (例如: CVV8888)" autocomplete="off"
+                           class="w-full bg-black/70 border-2 border-cyber-crimson/50 focus:border-cyber-gold rounded-lg px-4 py-3.5 text-center text-lg sm:text-xl font-orbitron text-cyber-gold placeholder-gray-600 outline-none transition-all shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]">
+                </div>
+                
+                <button onclick="verifyPasscode()" class="btn-cyber-gold py-3.5 text-base sm:text-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-unlock"></i> 立即驗證進入 VIP 大廳
+                </button>
+
+                <div class="relative flex py-1 items-center">
+                    <div class="flex-grow border-t border-gray-800"></div>
+                    <span class="flex-shrink mx-4 text-xs font-mono text-gray-500">或體驗模式</span>
+                    <div class="flex-grow border-t border-gray-800"></div>
+                </div>
+
+                <button onclick="enterFreeMode()" class="btn-cyber-dark py-3 font-semibold text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-vial"></i> 進入免費試玩體驗模式
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 2: PROVIDER SELECTION -->
+    <div id="viewProviders" class="view-section hidden flex-col gap-5">
+        <button onclick="logout()" class="btn-cyber-dark px-4 py-2 text-xs sm:text-sm self-start flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i> 登出安全系統
+        </button>
+
+        <div class="hud-card p-6 sm:p-8">
+            <h2 class="text-lg sm:text-xl font-bold font-orbitron text-cyber-gold glow-gold border-b border-cyber-crimson/20 pb-3 mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-gamepad text-cyber-neonRed"></i> 選擇系統商大廳 (PROVIDER SELECTION)
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <!-- ATG Card -->
+                <div onclick="openProvider('ATG')" class="hud-card p-6 flex flex-col items-center gap-4 cursor-pointer hover:border-cyber-gold group transition-all">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-black/60 p-2 border border-cyber-crimson/30 group-hover:border-cyber-gold flex items-center justify-center shadow-lg transition-all">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10" alt="ATG" class="max-h-full max-w-full object-contain rounded">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-lg font-bold font-orbitron text-white group-hover:text-cyber-gold">ATG 電子大廳</h3>
+                        <p class="text-xs text-gray-400 mt-1">包含戰神賽特1/2、虎小妹、赤三國等全系列即時選房</p>
+                    </div>
+                    <span class="px-3 py-1 bg-cyber-crimson/20 border border-cyber-neonRed/40 text-cyber-neonRed text-xs font-mono rounded group-hover:bg-cyber-gold/20 group-hover:text-cyber-gold group-hover:border-cyber-gold/50 transition-all">
+                        支援 10 間選房數據 <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </span>
+                </div>
+
+                <!-- RSG Card -->
+                <div onclick="openProvider('RSG')" class="hud-card p-6 flex flex-col items-center gap-4 cursor-pointer hover:border-cyber-gold group transition-all">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-black/60 p-2 border border-cyber-crimson/30 group-hover:border-cyber-gold flex items-center justify-center shadow-lg transition-all">
+                        <img src="https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg" alt="RSG" class="max-h-full max-w-full object-contain rounded">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-lg font-bold font-orbitron text-white group-hover:text-cyber-gold">RSG 電子大廳</h3>
+                        <p class="text-xs text-gray-400 mt-1">包含雷神之錘1/2、戰神呂布等波段演算訊號</p>
+                    </div>
+                    <span class="px-3 py-1 bg-cyber-crimson/20 border border-cyber-neonRed/40 text-cyber-neonRed text-xs font-mono rounded group-hover:bg-cyber-gold/20 group-hover:text-cyber-gold group-hover:border-cyber-gold/50 transition-all">
+                        即時訊號波段監控 <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 3. 遊戲大廳頁 -->
-    <div id="viewGames" class="view-section">
-        <button class="btn btn-back" onclick="switchView('viewProviders')">‹ 返回系統商</button>
-        <div class="card">
-            <div class="card-title" id="providerTitle">🎮 選擇分析遊戲</div>
-            <div class="grid-3" id="gameGrid">
-                <!-- 動態載入遊戲 -->
+    <!-- VIEW 3: GAME SELECTION -->
+    <div id="viewGames" class="view-section hidden flex-col gap-5">
+        <button onclick="switchView('viewProviders')" class="btn-cyber-dark px-4 py-2 text-xs sm:text-sm self-start flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i> 返回系統商選單
+        </button>
+
+        <div class="hud-card p-6 sm:p-8">
+            <h2 id="providerTitle" class="text-lg sm:text-xl font-bold font-orbitron text-cyber-gold glow-gold border-b border-cyber-crimson/20 pb-3 mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-dice text-cyber-neonRed"></i> 選擇分析遊戲 (GAME CATALOG)
+            </h2>
+
+            <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <!-- Dynamically populated games -->
             </div>
         </div>
     </div>
 
-    <!-- 4. 遊戲專屬數據儀表板 -->
-    <div id="viewDashboard" class="view-section">
-        <button class="btn btn-back" onclick="switchView('viewGames')">‹ 返回遊戲選單</button>
-        
-        <!-- 遊戲標頭 -->
-        <div class="card" style="display:flex; align-items:center; gap:15px;">
-            <img id="dashGameImg" src="" style="width:60px; height:60px; object-fit:contain; border-radius:8px;">
-            <div>
-                <h3 id="dashGameName" style="color:#fff; font-size:1.3rem;">遊戲名稱</h3>
-                <p id="dashProviderTag" style="font-size:0.8rem; color:var(--text-sub);">系統商專屬數據分析</p>
+    <!-- VIEW 4: DASHBOARD -->
+    <div id="viewDashboard" class="view-section hidden flex-col gap-5">
+        <button onclick="switchView('viewGames')" class="btn-cyber-dark px-4 py-2 text-xs sm:text-sm self-start flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i> 返回遊戲目錄
+        </button>
+
+        <!-- Selected Game Banner -->
+        <div class="hud-card p-5 flex items-center gap-5 border-l-4 border-l-cyber-gold">
+            <img id="dashGameImg" src="" alt="Game Icon" class="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-lg border border-cyber-crimson/40 bg-black/60 p-1 shadow-lg">
+            <div class="flex flex-col">
+                <h2 id="dashGameName" class="text-xl sm:text-2xl font-black font-orbitron text-white">---</h2>
+                <p id="dashProviderTag" class="text-xs font-mono text-cyber-gold mt-1">-- DATA ANALYTICS</p>
             </div>
         </div>
 
-        <!-- 本金風控計算器 -->
-        <div class="card calc-box">
-            <div class="card-title">💰 本金風控與動態配注試算</div>
-            <div style="display:flex; gap:10px;">
-                <input type="number" id="capitalInput" class="input-field" style="flex:1;" placeholder="輸入預計本金" value="10000">
-                <button class="btn" style="width: auto; padding: 0 20px;" onclick="calculateRisk()">開始試算</button>
+        <!-- Risk Controller & Bet Calculator -->
+        <div class="hud-card p-6">
+            <h3 class="text-base sm:text-lg font-bold font-orbitron text-cyber-gold glow-gold border-b border-cyber-crimson/20 pb-3 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-calculator text-cyber-neonRed"></i> 本金風控與動態配注試算器
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-mono text-gray-400 mb-1">預計投入總本金 ($)</label>
+                    <input type="number" id="capitalInput" value="10000" class="w-full bg-black/80 border border-cyber-crimson/40 focus:border-cyber-gold rounded px-3 py-2 text-cyber-gold font-orbitron text-base outline-none">
+                </div>
+                <div class="flex items-end">
+                    <button onclick="calculateRisk()" class="btn-cyber w-full py-2.5 text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate"></i> 重新試算策略
+                    </button>
+                </div>
             </div>
-            <div class="calc-row">
-                <span>建議平押單注金額：</span>
-                <span class="calc-value" id="resSingleBet">$20</span>
-            </div>
-            <div class="calc-row">
-                <span>預計防禦旋轉圈數：</span>
-                <span class="calc-value" id="resSpins">500 圈</span>
-            </div>
-            <div class="calc-row">
-                <span>推薦打法策略：</span>
-                <span class="calc-value" id="resStrategy" style="color:var(--gold-accent)">穩健階梯式倍壓</span>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-black/50 p-4 rounded border border-cyber-crimson/20">
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-400">建議平押單注:</span>
+                    <span id="resSingleBet" class="text-lg font-bold font-orbitron text-cyber-gold">$20</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-400">防禦旋轉圈數:</span>
+                    <span id="resSpins" class="text-lg font-bold font-orbitron text-white">500 圈</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-400">推薦配注打法:</span>
+                    <span id="resStrategy" class="text-sm font-bold text-cyber-neonRed">穩健階梯式倍壓</span>
+                </div>
             </div>
         </div>
 
-        <!-- 房間選擇器（僅 VIP + ATG 顯示） -->
-        <div class="card" id="roomCard">
-            <div class="card-title" style="justify-content:space-between;">
-                <span>🔥 實時爆分房間推薦</span>
-                <button class="btn btn-outline" style="width:auto; padding:4px 12px; font-size:0.8rem;" onclick="refreshRooms()">刷新房間數據</button>
+        <!-- Room Selector Card (ATG Only & Visible to VIP) -->
+        <div id="roomCard" class="hud-card p-6">
+            <div class="flex justify-between items-center border-b border-cyber-crimson/20 pb-4 mb-5">
+                <div>
+                    <h3 class="text-base sm:text-lg font-bold font-orbitron text-cyber-gold glow-gold flex items-center gap-2">
+                        <i class="fa-solid fa-gem text-cyber-neonRed animate-pulse"></i> VIP 專屬高爆率數據包廂監控
+                    </h3>
+                    <p class="text-xs text-gray-400 mt-0.5">實時 AI 晶片聯網演算 ‧ 精確鎖定波段高峰房號</p>
+                </div>
+                <button onclick="refreshRooms()" class="btn-cyber-dark px-3 py-1.5 text-xs font-mono flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrows-rotate"></i> 刷新房間數據
+                </button>
             </div>
-            <div class="room-grid" id="roomList">
-                <!-- 動態房間 -->
+
+            <div id="roomList" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[580px] overflow-y-auto pr-1">
+                <!-- Dynamically Generated 3D Casino VIP Room Cards -->
             </div>
         </div>
 
-        <!-- 體驗模式專用試玩房 -->
-        <div class="card" id="freeRoomCard" style="display:none;">
-            <div class="card-title">🧪 體驗玩家專用試玩房</div>
-            <div class="room-item best" style="padding:15px;">
-                <span>體驗專用測試房 #888</span>
-                <span class="room-rate" id="freeRoomRate">爆分率: 88.5%</span>
+        <!-- Free Trial Isolated Room (For FREE mode) -->
+        <div id="freeRoomCard" class="hud-card p-6 hidden">
+            <h3 class="text-base sm:text-lg font-bold font-orbitron text-cyber-gold border-b border-cyber-crimson/20 pb-3 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-flask text-cyber-cyan"></i> 體驗模式試玩專用房
+            </h3>
+
+            <div class="bg-black/60 border border-cyber-gold/40 p-4 rounded flex justify-between items-center">
+                <div>
+                    <span class="text-xs font-mono text-gray-400">系統測試房號</span>
+                    <div class="text-lg font-bold font-orbitron text-white">ROOM #888</div>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs font-mono text-gray-400">當前爆分率</span>
+                    <div id="freeRoomRate" class="text-xl font-black font-orbitron text-cyber-gold">88.5%</div>
+                </div>
             </div>
-            <p style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; text-align:center;">輸入 VIP 通行碼即可解鎖 10 間實體即時選房與爆分率數據</p>
+            <p class="text-xs text-gray-400 mt-3 text-center">💡 提示：輸入 VIP 通行碼即可解鎖 10 間即時高勝率房間清單與精確爆分波段。</p>
         </div>
 
-        <!-- 動態觸發訊號（已關閉並移除重新演算按鈕） -->
-        <div class="card">
-            <div class="card-title">
-                <span>⚡ 當日動態觸發波段訊號</span>
+        <!-- Dynamic Trigger Signal Section -->
+        <div class="hud-card p-6">
+            <div class="flex justify-between items-center border-b border-cyber-crimson/20 pb-3 mb-4">
+                <h3 class="text-base sm:text-lg font-bold font-orbitron text-cyber-gold glow-gold flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-cyber-neonRed"></i> 當日動態觸發波段訊號
+                </h3>
+                <button onclick="generateSignal()" class="btn-cyber-dark px-3 py-1 text-xs font-mono flex items-center gap-1">
+                    <i class="fa-solid fa-wave-square"></i> 重新演算波段
+                </button>
             </div>
-            <div class="signal-container" id="signalBox">
-                <!-- 動態產生訊號 -->
+
+            <div id="signalBox" class="flex flex-wrap gap-4 justify-center items-center p-4 bg-black/60 rounded border border-cyber-crimson/30 min-h-[100px]">
+                <!-- Dynamically Generated Signals -->
             </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Hidden Admin Verification Modal -->
+<div id="adminModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex justify-center items-center p-4">
+    <div class="hud-card p-6 w-full max-w-md flex flex-col gap-5 border-2 border-cyber-neonRed">
+        <h3 class="text-lg font-bold font-orbitron text-cyber-neonRed flex items-center gap-2">
+            <i class="fa-solid fa-user-shield"></i> 總管理員後台驗證
+        </h3>
+        <p class="text-xs text-gray-400">請輸入最高權限密碼以登入通行碼控制台：</p>
+        <input type="password" id="adminPassword" placeholder="輸入管理密碼" 
+               class="w-full bg-black border border-cyber-crimson rounded px-4 py-3 text-center text-white font-orbitron outline-none focus:border-cyber-gold">
+        <div class="flex gap-3">
+            <button onclick="loginAdmin()" class="btn-cyber flex-1 py-2.5 text-sm">確認登入</button>
+            <button onclick="closeAdminModal()" class="btn-cyber-dark flex-1 py-2.5 text-sm">取消</button>
         </div>
     </div>
 </div>
 
-<!-- 隱藏管理員彈窗 -->
-<div class="modal-overlay" id="adminModal">
-    <div class="modal">
-        <div class="card-title">🛡️ 管理員身分驗證</div>
-        <input type="password" id="adminPassword" class="input-field" placeholder="輸入後台管理密碼">
-        <button class="btn" onclick="loginAdmin()">登入控制台</button>
-        <button class="btn btn-outline" onclick="closeAdminModal()">取消</button>
-    </div>
-</div>
+<!-- Admin Passcode Generator Console Modal -->
+<div id="adminConsoleModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex justify-center items-center p-4">
+    <div class="hud-card p-6 w-full max-w-lg flex flex-col gap-5 border-2 border-cyber-gold">
+        <div class="flex justify-between items-center border-b border-cyber-gold/30 pb-3">
+            <h3 class="text-lg font-bold font-orbitron text-cyber-gold flex items-center gap-2">
+                <i class="fa-solid fa-key"></i> 通行碼核發管理 Console
+            </h3>
+            <button onclick="closeAdminConsole()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
 
-<!-- 管理員控制台 Modal -->
-<div class="modal-overlay" id="adminConsoleModal">
-    <div class="modal" style="max-width:500px;">
-        <div class="card-title">⚙️ 通行碼管理控制台</div>
-        <div style="font-size:0.85rem; color:var(--text-sub);">生成時效隨機通行碼：</div>
-        <div style="display:flex; gap:10px;">
-            <select id="passcodeHours" class="input-field" style="flex:1;">
-                <option value="1">1 小時有效</option>
-                <option value="6">6 小時有效</option>
-                <option value="24">24 小時有效</option>
-                <option value="72">72 小時有效</option>
-            </select>
-            <button class="btn" style="width:auto;" onclick="generatePasscode()">立即生成</button>
+        <div class="flex flex-col gap-3">
+            <label class="text-xs font-mono text-gray-300">產生時效隨機通行碼：</label>
+            <div class="flex gap-2">
+                <select id="passcodeHours" class="bg-black border border-cyber-crimson text-white text-sm rounded px-3 py-2 flex-1 font-mono">
+                    <option value="1">1 小時有效</option>
+                    <option value="6">6 小時有效</option>
+                    <option value="24">24 小時有效</option>
+                    <option value="72">72 小時有效</option>
+                </select>
+                <button onclick="generatePasscode()" class="btn-cyber-gold px-5 py-2 text-sm">生成通行碼</button>
+            </div>
+            <div id="generatedPasscodeDisplay" class="text-center text-xl font-black font-orbitron text-cyber-gold my-2 min-h-[30px] tracking-widest bg-black/80 py-2 border border-cyber-gold/30 rounded">--</div>
         </div>
-        <div id="generatedPasscodeDisplay" style="text-align:center; font-size:1.3rem; font-weight:900; color:var(--gold-accent); min-height:28px; margin:8px 0; font-family:'Orbitron';"></div>
-        <div style="font-size:0.85rem; color:var(--text-sub); margin-top:10px;">已知有效通行碼紀錄：</div>
-        <div id="passcodeLog" style="max-height:150px; overflow-y:auto; font-size:0.8rem; background:rgba(0,0,0,0.7); padding:10px; border:1px solid var(--border-red); font-family:monospace;">
-            尚無紀錄
+
+        <div class="flex flex-col gap-2">
+            <label class="text-xs font-mono text-gray-300">目前生效中之通行碼紀錄：</label>
+            <div id="passcodeLog" class="bg-black/90 p-3 rounded text-xs font-mono text-gray-300 max-h-40 overflow-y-auto border border-gray-800 leading-relaxed">
+                尚無有效紀錄
+            </div>
         </div>
-        <button class="btn btn-outline" onclick="closeAdminConsole()">關閉控制台</button>
+
+        <button onclick="closeAdminConsole()" class="btn-cyber-dark py-2.5 text-xs">關閉控制台</button>
     </div>
 </div>
 
 <script>
+    // System Databases
     const GAME_DATABASE = {
         'ATG': [
-            { id: 'atg_seth', name: '戰神賽特', img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', maxRooms: 1300, 
-              symbols: [
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmuddvFqFi_zrqkc-2-fNWDEyg1vbe2UbnNG_wNAaPFQ&s=10',
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ4cSZZxZ4SY8_CT9eyGe-1KQxNY6pF04yA7f7TrbxVQ&s=10',
-                'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png',
-                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvQ_YLa6Z6hQ9ZlWV4IZDY8zJvhBRwYj5IWjl6U4dWlg&s=10',
-                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon7.png',
-                'https://seth2power.com.tw/wp-content/uploads/2025/11/05.webp',
-                'https://www.storm-of-seth2.tw/wp-content/uploads/2026/05/scatter_.webp'
-              ] 
+            { 
+                id: 'atg_seth', name: '戰神賽特', img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', maxRooms: 1300, 
+                symbols: [
+                    'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmuddvFqFi_zrqkc-2-fNWDEyg1vbe2UbnNG_wNAaPFQ&s=10',
+                    'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ4cSZZxZ4SY8_CT9eyGe-1KQxNY6pF04yA7f7TrbxVQ&s=10',
+                    'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png',
+                    'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png',
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvQ_YLa6Z6hQ9ZlWV4IZDY8zJvhBRwYj5IWjl6U4dWlg&s=10',
+                    'https://storm-of-seth.com/wp-content/uploads/atg1788-icon7.png'
+                ] 
             },
-            { id: 'atg_seth2', name: '戰神賽特2', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10', maxRooms: 4100,
-              symbols: [
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmuddvFqFi_zrqkc-2-fNWDEyg1vbe2UbnNG_wNAaPFQ&s=10',
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ4cSZZxZ4SY8_CT9eyGe-1KQxNY6pF04yA7f7TrbxVQ&s=10',
-                'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png',
-                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvQ_YLa6Z6hQ9ZlWV4IZDY8zJvhBRwYj5IWjl6U4dWlg&s=10',
-                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon7.png',
-                'https://seth2power.com.tw/wp-content/uploads/2025/11/05.webp',
-                'https://www.storm-of-seth2.tw/wp-content/uploads/2026/05/scatter_.webp',
-                'https://風暴賽特.com/wp-content/uploads/2025/09/symbol_16.png'
-              ] 
+            { 
+                id: 'atg_seth2', name: '戰神賽特2', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10', maxRooms: 4100,
+                symbols: [
+                    'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmuddvFqFi_zrqkc-2-fNWDEyg1vbe2UbnNG_wNAaPFQ&s=10',
+                    'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ4cSZZxZ4SY8_CT9eyGe-1KQxNY6pF04yA7f7TrbxVQ&s=10',
+                    'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png',
+                    'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png'
+                ] 
             },
-            { id: 'atg_tiger', name: '虎小妹', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10', maxRooms: 3000,
-              symbols: [
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s2.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s3.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s4.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s5.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s6.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s7.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s8.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s9.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/scatter.webp'
-              ] 
+            { 
+                id: 'atg_tiger', name: '虎小妹', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10', maxRooms: 3000,
+                symbols: [
+                    'https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp',
+                    'https://husiaomei.com.tw/wp-content/uploads/2026/06/s2.webp',
+                    'https://husiaomei.com.tw/wp-content/uploads/2026/06/s3.webp',
+                    'https://husiaomei.com.tw/wp-content/uploads/2026/06/s4.webp'
+                ] 
             },
-            { id: 'atg_samkok', name: '赤三國', img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', maxRooms: 200,
-              symbols: [
-                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_01.webp',
-                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_02.webp',
-                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_03.webp',
-                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_04.webp',
-                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_05.webp',
-                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_06.webp',
-                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_07.webp',
-                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_08.webp',
-                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_09.png.webp'
-              ] 
+            { 
+                id: 'atg_samkok', name: '赤三國', img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', maxRooms: 200,
+                symbols: [
+                    'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_01.webp',
+                    'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_02.webp',
+                    'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_03.webp',
+                    'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_04.webp'
+                ] 
             },
             { id: 'atg_baphomet', name: '古神巴風特', img: 'https://atg-games.com/_ipx/f_webp&s_480x540/elder-god-baphomet/zh-tw/products.png', maxRooms: 1000, symbols: [] }
         ],
         'RSG': [
-            { id: 'rsg_thor', name: '雷神之錘', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg', maxRooms: 0,
-              symbols: [
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM1.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM2.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM3.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM4.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolA.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolK.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolQ.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolJ.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolTE.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolB1.webp'
-              ] 
+            { 
+                id: 'rsg_thor', name: '雷神之錘', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg', maxRooms: 0,
+                symbols: [
+                    'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM1.webp',
+                    'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM2.webp',
+                    'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM3.webp',
+                    'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM4.webp'
+                ] 
             },
-            { id: 'rsg_thor2', name: '雷神之錘2', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg', maxRooms: 0,
-              symbols: [
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM1.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM2.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM3.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM4.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolA.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolK.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolQ.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolJ.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/6qtjro4rlccq8jcu.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolB1.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolB2.webp'
-              ] 
+            { 
+                id: 'rsg_thor2', name: '雷神之錘2', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg', maxRooms: 0,
+                symbols: [
+                    'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM1.webp',
+                    'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM2.webp',
+                    'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM3.webp'
+                ] 
             },
-            { id: 'rsg_lubu', name: '戰神呂布', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg', maxRooms: 0,
-              symbols: [
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E5%91%82%E6%B0%8F%E6%88%B0%E6%97%97.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%BB%8D%E4%BB%A4%E7%89%8C.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%85%E5%AF%B6%E7%9F%B3.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%AB%E5%AF%B6%E7%9F%B3.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E9%BB%83%E5%AF%B6%E7%9F%B3.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B6%A0%E5%AF%B6%E7%9F%B3.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%97%8D%E5%AF%B6%E7%9F%B3.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/legend-of-lu-bu-bonus-symbol.webp'
-              ] 
+            { 
+                id: 'rsg_lubu', name: '戰神呂布', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg', maxRooms: 0,
+                symbols: [
+                    'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp',
+                    'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp',
+                    'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E5%91%82%E6%B0%8F%E6%88%B0%E6%97%97.webp'
+                ] 
             }
         ]
     };
@@ -681,6 +572,7 @@
     let currentGame = null;
     let titleClickCount = 0;
 
+    // Local Storage Utilities
     function getStoredPasscodes() {
         try {
             return JSON.parse(localStorage.getItem('niulaoda_passcodes') || '{}');
@@ -693,11 +585,14 @@
         localStorage.setItem('niulaoda_passcodes', JSON.stringify(codesObj));
     }
 
+    // View Navigation
     function switchView(viewId) {
-        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-        document.getElementById(viewId).classList.add('active');
+        document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+        document.getElementById(viewId).classList.remove('hidden');
+        document.getElementById(viewId).classList.add('flex');
     }
 
+    // Verification Logic
     function verifyPasscode() {
         const code = document.getElementById('passcodeInput').value.trim().toUpperCase();
         const now = Date.now();
@@ -709,48 +604,49 @@
 
         if (isMasterKey || isPatternKey || isStoredValid) {
             currentUserType = 'VIP';
-            document.getElementById('statusText').innerText = "VIP 尊榮特權系統";
-            document.getElementById('statusText').style.color = "var(--red-bright)";
+            document.getElementById('statusText').innerText = "VIP 尊榮特權權限";
+            document.getElementById('statusText').className = "text-cyber-gold font-bold";
             document.getElementById('userTag').innerText = "VIP MEMBER";
-            document.getElementById('userTag').className = "tag tag-vip";
+            document.getElementById('userTag').className = "px-3 py-1 rounded font-orbitron font-bold text-xs bg-cyber-gold/20 text-cyber-gold border border-cyber-gold";
             switchView('viewProviders');
         } else {
-            alert('通行碼驗證失敗！\n(提示：可輸入 CVV + 4位數字 通過測試)');
+            alert('❌ 通行碼驗證失敗或已過期！\n(提示：可輸入 CVV + 4位數字 進行測試，例: CVV8888)');
         }
     }
 
     function enterFreeMode() {
         currentUserType = 'FREE';
-        document.getElementById('statusText').innerText = "體驗試用模式";
-        document.getElementById('statusText').style.color = "var(--text-sub)";
-        document.getElementById('userTag').innerText = "GUEST";
-        document.getElementById('userTag').className = "tag tag-free";
+        document.getElementById('statusText').innerText = "免費體驗試用模式";
+        document.getElementById('statusText').className = "text-gray-400 font-bold";
+        document.getElementById('userTag').innerText = "GUEST TRIAL";
+        document.getElementById('userTag').className = "px-3 py-1 rounded font-orbitron font-bold text-xs bg-gray-800 text-gray-400 border border-gray-700";
         switchView('viewProviders');
     }
 
     function logout() {
         currentUserType = null;
         document.getElementById('passcodeInput').value = '';
-        document.getElementById('statusText').innerText = "尚未驗證登入";
-        document.getElementById('statusText').style.color = "var(--text-sub)";
+        document.getElementById('statusText').innerText = "尚未驗證通行碼";
+        document.getElementById('statusText').className = "text-gray-300 font-bold";
         document.getElementById('userTag').innerText = "UNVERIFIED";
-        document.getElementById('userTag').className = "tag tag-free";
+        document.getElementById('userTag').className = "px-3 py-1 rounded font-orbitron font-bold text-xs bg-gray-800 text-gray-400 border border-gray-700";
         switchView('viewLogin');
     }
 
+    // Provider & Game Loading
     function openProvider(providerKey) {
         currentProvider = providerKey;
-        document.getElementById('providerTitle').innerText = `🎮 ${providerKey} 電子大廳 - 選擇遊戲`;
+        document.getElementById('providerTitle').innerHTML = `<i class="fa-solid fa-gamepad text-cyber-neonRed"></i> ${providerKey} 電子大廳 - 選擇分析遊戲`;
         const grid = document.getElementById('gameGrid');
         grid.innerHTML = '';
 
         GAME_DATABASE[providerKey].forEach(game => {
             const card = document.createElement('div');
-            card.className = 'select-card';
+            card.className = 'hud-card p-4 flex flex-col items-center gap-3 cursor-pointer hover:border-cyber-gold group transition-all text-center';
             card.onclick = () => openDashboard(game);
             card.innerHTML = `
-                <img src="${game.img}" alt="${game.name}">
-                <span>${game.name}</span>
+                <img src="${game.img}" alt="${game.name}" class="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded bg-black/50 p-1 border border-gray-800 group-hover:border-cyber-gold transition-all">
+                <span class="text-xs sm:text-sm font-bold font-orbitron text-white group-hover:text-cyber-gold">${game.name}</span>
             `;
             grid.appendChild(card);
         });
@@ -758,11 +654,12 @@
         switchView('viewGames');
     }
 
+    // Dashboard Engine
     function openDashboard(game) {
         currentGame = game;
         document.getElementById('dashGameImg').src = game.img;
         document.getElementById('dashGameName').innerText = game.name;
-        document.getElementById('dashProviderTag').innerText = `${currentProvider} 電子大廳數據演算`;
+        document.getElementById('dashProviderTag').innerText = `${currentProvider} HALL ‧ CYBER ENGINE DATA`;
 
         calculateRisk();
 
@@ -770,16 +667,16 @@
         const freeRoomCard = document.getElementById('freeRoomCard');
 
         if (currentUserType === 'FREE') {
-            roomCard.style.display = 'none';
-            freeRoomCard.style.display = 'block';
-            document.getElementById('freeRoomRate').innerText = `爆分率: ${(Math.random() * 20 + 75).toFixed(1)}%`;
+            roomCard.classList.add('hidden');
+            freeRoomCard.classList.remove('hidden');
+            document.getElementById('freeRoomRate').innerText = `${(Math.random() * 20 + 75).toFixed(1)}%`;
         } else {
-            freeRoomCard.style.display = 'none';
+            freeRoomCard.classList.add('hidden');
             if (game.maxRooms > 0) {
-                roomCard.style.display = 'block';
+                roomCard.classList.remove('hidden');
                 refreshRooms();
             } else {
-                roomCard.style.display = 'none';
+                roomCard.classList.add('hidden');
             }
         }
 
@@ -796,11 +693,11 @@
         document.getElementById('resSpins').innerText = `${spins} 圈`;
 
         if (capital < 5000) {
-            document.getElementById('resStrategy').innerText = "保守微注保本法";
+            document.getElementById('resStrategy').innerText = "保守低注保本打法";
         } else if (capital <= 20000) {
-            document.getElementById('resStrategy').innerText = "穩健階梯式倍壓";
+            document.getElementById('resStrategy').innerText = "穩健階梯式倍壓策略";
         } else {
-            document.getElementById('resStrategy').innerText = "高波幅爆發波段打法";
+            document.getElementById('resStrategy').innerText = "高波幅突爆放大攻勢";
         }
     }
 
@@ -810,24 +707,120 @@
         list.innerHTML = '';
 
         let rooms = [];
+        const statusBadges = [
+            { label: '🔥 強力爆發中', class: 'bg-gradient-to-r from-red-600 to-orange-500 text-white border-red-400' },
+            { label: '⚡ 熱門波段房', class: 'bg-gradient-to-r from-amber-500 to-yellow-400 text-black border-yellow-200' },
+            { label: '💎 帝王頂級房', class: 'bg-gradient-to-r from-yellow-500 via-amber-300 to-yellow-600 text-black border-yellow-100 font-black' },
+            { label: '🎯 訊號狙擊房', class: 'bg-gradient-to-r from-purple-600 to-pink-500 text-white border-pink-300' },
+            { label: '📈 累積上升期', class: 'bg-gradient-to-r from-emerald-600 to-teal-500 text-white border-teal-300' }
+        ];
+
         for (let i = 0; i < 10; i++) {
             const rNum = Math.floor(Math.random() * currentGame.maxRooms) + 1;
             const formattedNum = String(rNum).padStart(3, '0');
-            const rate = (Math.random() * 30 + 68).toFixed(1);
-            rooms.push({ num: formattedNum, rate: parseFloat(rate) });
+            const rate = (Math.random() * 25 + 73).toFixed(1); // 73.0% - 98.0%
+            const remainingSpins = Math.floor(Math.random() * 12) + 3; // 3-15圈
+            const players = Math.floor(Math.random() * 4) + 1; // 1-4人
+            const returnRate = (Math.random() * 180 + 120).toFixed(0); // 120% - 300%
+
+            rooms.push({
+                num: formattedNum,
+                rate: parseFloat(rate),
+                remainingSpins,
+                players,
+                returnRate
+            });
         }
 
+        // 依爆分率排序
         rooms.sort((a, b) => b.rate - a.rate);
 
         rooms.forEach((r, idx) => {
+            const isEmperor = (idx === 0);
+            const badge = isEmperor ? statusBadges[2] : statusBadges[idx % (statusBadges.length - 1)];
+
             const item = document.createElement('div');
-            item.className = `room-item ${idx === 0 ? 'best' : ''}`;
+            item.className = `relative hud-card p-4 flex flex-col gap-3 transition-all duration-300 overflow-hidden ${
+                isEmperor 
+                ? 'border-2 border-cyber-gold shadow-[0_0_25px_rgba(255,183,0,0.4)] bg-gradient-to-br from-amber-950/70 via-black/90 to-red-950/70' 
+                : 'border border-cyber-crimson/40 bg-black/80 hover:border-cyber-gold/60'
+            }`;
+
             item.innerHTML = `
-                <span>${idx === 0 ? '👑 帝王爆分房' : '房間'} #${r.num}</span>
-                <span class="room-rate">${r.rate}%</span>
+                ${isEmperor ? `
+                    <!-- 金紅皇冠特效區 -->
+                    <div class="absolute -top-3 -right-3 text-cyber-gold text-4xl drop-shadow-[0_0_10px_rgba(255,183,0,0.8)] rotate-12 z-20 pointer-events-none">
+                        <i class="fa-solid fa-crown animate-bounce"></i>
+                    </div>
+                    <div class="absolute inset-0 border border-cyber-gold/50 pointer-events-none animate-pulse"></div>
+                ` : ''}
+
+                <!-- 包廂頂部標頭資訊 -->
+                <div class="flex justify-between items-center z-10">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border shadow-sm ${badge.class}">
+                            ${badge.label}
+                        </span>
+                        <span class="text-xs font-mono text-gray-400">
+                            <i class="fa-solid fa-users text-cyber-gold/80 ml-1"></i> ${r.players}/5人線上
+                        </span>
+                    </div>
+                    <div class="text-xs font-mono font-bold ${isEmperor ? 'text-cyber-gold' : 'text-gray-300'}">
+                        近10局回報率: <span class="text-cyber-neonRed font-orbitron">${r.returnRate}%</span>
+                    </div>
+                </div>
+
+                <!-- 包廂核心數據：房號與爆分率 -->
+                <div class="flex justify-between items-end my-1 z-10">
+                    <div>
+                        <div class="text-[10px] font-mono text-gray-400 tracking-wider">ROOM SUITE</div>
+                        <div class="text-2xl sm:text-3xl font-black font-orbitron tracking-wider ${isEmperor ? 'text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-cyber-gold to-yellow-500 glow-gold' : 'text-white'}">
+                            #${r.num}
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[10px] font-mono text-gray-400">當前爆分率 (WIN RATE)</div>
+                        <div class="text-2xl sm:text-3xl font-black font-orbitron ${isEmperor ? 'text-cyber-gold glow-gold' : 'text-cyber-neonRed'}">
+                            ${r.rate}%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模擬爆分進度條 (Progress Bar) -->
+                <div class="w-full bg-gray-950/80 rounded-full h-2.5 p-0.5 border border-gray-800 z-10 overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-500 ${
+                        isEmperor 
+                        ? 'bg-gradient-to-r from-red-600 via-amber-400 to-yellow-300 shadow-[0_0_10px_#ffb700]' 
+                        : 'bg-gradient-to-r from-red-800 to-cyber-neonRed'
+                    }" style="width: ${r.rate}%"></div>
+                </div>
+
+                <!-- 底部動態預測與操作按鈕 -->
+                <div class="flex justify-between items-center pt-2 border-t border-cyber-crimson/20 z-10 text-xs">
+                    <div class="flex items-center gap-1.5 text-cyber-gold font-mono">
+                        <i class="fa-solid fa-bolt-lightning text-cyber-neonRed animate-pulse"></i>
+                        <span>預計 <strong class="text-white font-orbitron underline decoration-cyber-neonRed">${r.remainingSpins}</strong> 圈內連爆</span>
+                    </div>
+
+                    <button onclick="copyAndSelectRoom('${r.num}')" class="${isEmperor ? 'btn-cyber-gold' : 'btn-cyber'} px-3 py-1.5 text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-crosshairs"></i> 鎖定此房
+                    </button>
+                </div>
             `;
             list.appendChild(item);
         });
+    }
+
+    // 複製房號提示與鎖定功能
+    function copyAndSelectRoom(roomNum) {
+        const dummyInput = document.createElement('input');
+        document.body.appendChild(dummyInput);
+        dummyInput.value = roomNum;
+        dummyInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummyInput);
+
+        alert(`🎯 已成功鎖定包廂 [ ROOM #${roomNum} ]！\n房號已自動複製至剪貼簿，可直接至遊戲大廳切換房號進入。`);
     }
 
     function generateSignal() {
@@ -835,7 +828,7 @@
         box.innerHTML = '';
 
         if (!currentGame || !currentGame.symbols || currentGame.symbols.length === 0) {
-            box.innerHTML = '<span style="font-size:0.85rem; color:var(--text-sub);">該遊戲暫無動態圖鑑波段紀錄</span>';
+            box.innerHTML = '<span class="text-xs font-mono text-gray-500">該遊戲暫無動態圖鑑訊號資料庫</span>';
             return;
         }
 
@@ -846,31 +839,32 @@
         selectedSymbols.forEach(symUrl => {
             const count = Math.floor(Math.random() * 2) + 2;
             const group = document.createElement('div');
-            group.className = 'signal-group';
+            group.className = 'flex items-center bg-black/80 border border-cyber-crimson/40 px-3 py-2 rounded gap-3';
 
             let imgsHtml = '';
             for (let i = 0; i < count; i++) {
-                imgsHtml += `<img src="${symUrl}" alt="symbol">`;
+                imgsHtml += `<img src="${symUrl}" alt="symbol" class="w-9 h-9 object-contain symbol-img">`;
             }
 
             group.innerHTML = `
-                <div class="signal-img-wrapper">${imgsHtml}</div>
-                <span class="signal-count">x${count}</span>
+                <div class="flex gap-1 items-center">${imgsHtml}</div>
+                <span class="font-orbitron font-black text-cyber-gold text-lg">x${count}</span>
             `;
             box.appendChild(group);
         });
     }
 
+    // Hidden Admin Trigger Logic
     function handleTitleClick() {
         titleClickCount++;
         if (titleClickCount >= 3) {
             titleClickCount = 0;
-            document.getElementById('adminModal').style.display = 'flex';
+            document.getElementById('adminModal').classList.remove('hidden');
         }
     }
 
     function closeAdminModal() {
-        document.getElementById('adminModal').style.display = 'none';
+        document.getElementById('adminModal').classList.add('hidden');
         document.getElementById('adminPassword').value = '';
     }
 
@@ -879,14 +873,14 @@
         if (pwd === "admincvv005") {
             closeAdminModal();
             renderPasscodeLog();
-            document.getElementById('adminConsoleModal').style.display = 'flex';
+            document.getElementById('adminConsoleModal').classList.remove('hidden');
         } else {
-            alert('管理員密碼錯誤！');
+            alert('⚠️ 管理員權限驗證失敗！密碼不正確。');
         }
     }
 
     function closeAdminConsole() {
-        document.getElementById('adminConsoleModal').style.display = 'none';
+        document.getElementById('adminConsoleModal').classList.add('hidden');
     }
 
     function generatePasscode() {
@@ -898,7 +892,7 @@
         activePasscodes[code] = expireTime;
         saveStoredPasscodes(activePasscodes);
 
-        document.getElementById('generatedPasscodeDisplay').innerText = `通行碼：${code}`;
+        document.getElementById('generatedPasscodeDisplay').innerText = code;
         renderPasscodeLog();
     }
 
@@ -911,12 +905,53 @@
         for (let code in activePasscodes) {
             if (activePasscodes[code] > now) {
                 const dateStr = new Date(activePasscodes[code]).toLocaleTimeString();
-                html += `[${code}] 到期時間: ${dateStr}<br>`;
+                html += `<div class="flex justify-between border-b border-gray-800 py-1"><span>[${code}]</span><span class="text-cyber-gold">到期: ${dateStr}</span></div>`;
             }
         }
 
         log.innerHTML = html || '尚無有效通行碼紀錄';
     }
+
+    // Canvas Particle Animation
+    window.onload = function() {
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = Array.from({ length: 35 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 1,
+            speedY: - (Math.random() * 0.8 + 0.2),
+            color: Math.random() > 0.5 ? '#ff0033' : '#ffb700',
+            alpha: Math.random() * 0.5 + 0.2
+        }));
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.alpha;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                p.y += p.speedY;
+                if (p.y < 0) {
+                    p.y = canvas.height;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    };
 </script>
 </body>
 </html>
