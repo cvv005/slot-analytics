@@ -4,40 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>牛老大專屬 - 多系統商數據選房平台</title>
-    <!-- 引入高質感科技字體 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Noto+Sans+TC:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #050203;
-            --card-bg: rgba(18, 6, 8, 0.92);
-            --red-bright: #ff0015;
-            --red-glow: #ff2a3b;
-            --red-dark: #660007;
-            --gold-accent: #ffb700;
+            --bg-main: #060304;
+            --card-bg: rgba(20, 6, 9, 0.94);
+            --red-neon: #ff001e;
+            --red-glow: rgba(255, 0, 30, 0.5);
+            --red-dark: #66000c;
+            --gold-light: #ffc837;
             --text-main: #ffffff;
-            --text-sub: #b3a1a3;
-            --border-red: rgba(255, 0, 21, 0.45);
+            --text-sub: #b5a3a5;
+            --border-red: rgba(255, 0, 30, 0.5);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Noto Sans TC', sans-serif;
             user-select: none;
         }
 
         body {
-            background-color: var(--bg-dark);
-            /* 霸氣網格與血紅微粒科技背景 */
+            background-color: var(--bg-main);
             background-image: 
-                linear-gradient(rgba(255, 0, 21, 0.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 21, 0.06) 1px, transparent 1px),
-                radial-gradient(circle at 50% 0%, rgba(255, 0, 21, 0.35), transparent 70%),
-                radial-gradient(circle at 100% 100%, rgba(102, 0, 7, 0.4), transparent 50%);
-            background-size: 30px 30px, 30px 30px, 100% 100%, 100% 100%;
+                linear-gradient(rgba(255, 0, 30, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 30, 0.08) 1px, transparent 1px),
+                radial-gradient(circle at 50% 0%, rgba(255, 0, 30, 0.35), transparent 70%),
+                radial-gradient(circle at 100% 100%, rgba(102, 0, 12, 0.5), transparent 50%);
+            background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -46,7 +44,6 @@
             padding: 25px 15px;
         }
 
-        /* 放大容器寬度至 880px，不再縮在一起 */
         .container {
             width: 100%;
             max-width: 880px;
@@ -55,14 +52,14 @@
             gap: 20px;
         }
 
-        /* 霸氣電競風 Header */
+        /* 霸氣 Header */
         header {
             text-align: center;
             padding: 22px 15px;
             background: var(--card-bg);
             border: 2px solid var(--border-red);
             clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
-            box-shadow: 0 0 35px rgba(255, 0, 21, 0.25), inset 0 0 15px rgba(255, 0, 21, 0.15);
+            box-shadow: 0 0 35px var(--red-glow), inset 0 0 15px rgba(255, 0, 30, 0.2);
             position: relative;
         }
 
@@ -74,8 +71,7 @@
             letter-spacing: 2.5px;
             cursor: pointer;
             display: inline-block;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px var(--red-bright), 0 0 30px var(--red-bright);
+            text-shadow: 0 0 15px var(--red-neon), 0 0 30px var(--red-neon);
             background: linear-gradient(180deg, #ffffff 30%, #ff4d5a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -95,7 +91,7 @@
             font-size: 0.85rem;
             margin-top: 15px;
             padding-top: 10px;
-            border-top: 1px dashed rgba(255, 0, 21, 0.3);
+            border-top: 1px dashed rgba(255, 0, 30, 0.3);
         }
 
         .tag {
@@ -106,10 +102,10 @@
         }
 
         .tag-vip { 
-            background: linear-gradient(135deg, #ff0015, #80000a); 
+            background: linear-gradient(135deg, #ff001e, #80000a); 
             color: #fff; 
-            border: 1px solid var(--red-bright);
-            box-shadow: 0 0 10px rgba(255,0,21,0.5);
+            border: 1px solid var(--red-neon);
+            box-shadow: 0 0 10px rgba(255,0,30,0.6);
         }
         .tag-free { 
             background: rgba(255, 255, 255, 0.08); 
@@ -123,17 +119,16 @@
             border: 1px solid var(--border-red);
             clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
             padding: 22px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 0, 21, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), inset 0 0 20px rgba(255, 0, 30, 0.08);
             position: relative;
         }
 
-        /* 卡片四角紅光亮點裝飾 */
         .card::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 8px; height: 8px;
-            background: var(--red-bright);
-            box-shadow: 0 0 8px var(--red-bright);
+            background: var(--red-neon);
+            box-shadow: 0 0 8px var(--red-neon);
         }
 
         .card-title {
@@ -148,10 +143,9 @@
             border-bottom: 2px solid var(--red-dark);
             padding-bottom: 8px;
             letter-spacing: 1px;
-            text-shadow: 0 0 8px rgba(255,0,21,0.6);
+            text-shadow: 0 0 8px rgba(255,0,30,0.6);
         }
 
-        /* 視圖切換 */
         .view-section {
             display: none;
             width: 100%;
@@ -163,11 +157,11 @@
             display: flex;
         }
 
-        /* 超霸氣流光按鈕 */
+        /* 按鈕 */
         .btn {
-            background: linear-gradient(135deg, #ff1e27 0%, #a8000b 100%);
+            background: linear-gradient(135deg, #ff001e 0%, #99000d 100%);
             color: #fff;
-            border: 1px solid #ff5c66;
+            border: 1px solid #ff5c6d;
             padding: 14px 24px;
             font-family: 'Orbitron', 'Noto Sans TC', sans-serif;
             font-weight: 900;
@@ -176,21 +170,21 @@
             cursor: pointer;
             text-align: center;
             transition: all 0.25s ease;
-            box-shadow: 0 4px 20px rgba(255, 0, 21, 0.4);
+            box-shadow: 0 4px 20px rgba(255, 0, 30, 0.45);
             width: 100%;
             clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
         }
 
         .btn:hover, .btn:active {
-            background: linear-gradient(135deg, #ff3d46 0%, #cc000d 100%);
-            box-shadow: 0 0 25px rgba(255, 0, 21, 0.8);
+            background: linear-gradient(135deg, #ff334b 0%, #cc0012 100%);
+            box-shadow: 0 0 25px rgba(255, 0, 30, 0.8);
             transform: translateY(-2px);
         }
 
         .btn-outline {
-            background: rgba(255, 0, 21, 0.08);
-            border: 1px solid var(--red-bright);
+            background: rgba(255, 0, 30, 0.08);
+            border: 1px solid var(--red-neon);
             color: #fff;
             box-shadow: none;
         }
@@ -203,7 +197,7 @@
         }
 
         .btn-back {
-            background: rgba(255, 0, 21, 0.15);
+            background: rgba(255, 0, 30, 0.15);
             color: #fff;
             border: 1px solid var(--border-red);
             padding: 9px 18px;
@@ -212,7 +206,7 @@
             align-self: flex-start;
         }
 
-        /* 輸入框發光設計 */
+        /* 輸入框 */
         .login-box {
             display: flex;
             flex-direction: column;
@@ -233,11 +227,10 @@
         }
 
         .input-field:focus {
-            border-color: var(--red-bright);
-            box-shadow: 0 0 15px rgba(255, 0, 21, 0.6), inset 0 0 10px rgba(255, 0, 21, 0.3);
+            border-color: var(--red-neon);
+            box-shadow: 0 0 15px rgba(255, 0, 30, 0.6), inset 0 0 10px rgba(255, 0, 30, 0.3);
         }
 
-        /* 清單格自適應放大 */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -251,8 +244,8 @@
         }
 
         .select-card {
-            background: rgba(255, 0, 21, 0.04);
-            border: 1px solid rgba(255, 0, 21, 0.25);
+            background: rgba(255, 0, 30, 0.04);
+            border: 1px solid rgba(255, 0, 30, 0.25);
             padding: 16px;
             display: flex;
             flex-direction: column;
@@ -264,10 +257,10 @@
         }
 
         .select-card:hover, .select-card:active {
-            border-color: var(--red-bright);
-            background: rgba(255, 0, 21, 0.2);
+            border-color: var(--red-neon);
+            background: rgba(255, 0, 30, 0.2);
             transform: translateY(-3px);
-            box-shadow: 0 0 20px rgba(255, 0, 21, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 30, 0.5);
         }
 
         .select-card img {
@@ -275,7 +268,7 @@
             max-width: 90px;
             height: 90px;
             object-fit: contain;
-            filter: drop-shadow(0 4px 10px rgba(255, 0, 21, 0.4));
+            filter: drop-shadow(0 4px 10px rgba(255, 0, 30, 0.4));
             mix-blend-mode: multiply;
         }
 
@@ -287,7 +280,6 @@
             letter-spacing: 1px;
         }
 
-        /* 房間列表雙欄放大 */
         .room-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -299,7 +291,7 @@
 
         .room-item {
             background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 0, 21, 0.2);
+            border: 1px solid rgba(255, 0, 30, 0.2);
             padding: 10px 14px;
             display: flex;
             justify-content: space-between;
@@ -308,23 +300,22 @@
         }
 
         .room-item.best {
-            border-color: var(--red-bright);
-            background: rgba(255, 0, 21, 0.25);
-            box-shadow: 0 0 15px rgba(255, 0, 21, 0.3);
+            border-color: var(--red-neon);
+            background: rgba(255, 0, 30, 0.25);
+            box-shadow: 0 0 15px rgba(255, 0, 30, 0.35);
         }
 
         .room-rate {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            color: var(--red-bright);
+            color: var(--red-neon);
         }
 
         .room-item.best .room-rate {
             color: #fff;
-            text-shadow: 0 0 8px var(--red-bright);
+            text-shadow: 0 0 8px var(--red-neon);
         }
 
-        /* 動態訊號模組 */
         .signal-container {
             display: flex;
             gap: 12px;
@@ -332,15 +323,15 @@
             align-items: center;
             background: rgba(0, 0, 0, 0.7);
             padding: 18px;
-            border: 1.5px dashed var(--red-bright);
+            border: 1.5px dashed var(--red-neon);
             flex-wrap: wrap;
         }
 
         .signal-group {
             display: flex;
             align-items: center;
-            background: rgba(255, 0, 21, 0.12);
-            border: 1px solid rgba(255, 0, 21, 0.35);
+            background: rgba(255, 0, 30, 0.12);
+            border: 1px solid rgba(255, 0, 30, 0.35);
             padding: 8px 12px;
             gap: 8px;
         }
@@ -355,18 +346,17 @@
             height: 36px;
             object-fit: contain;
             mix-blend-mode: multiply;
-            filter: drop-shadow(0 2px 6px rgba(255, 0, 21, 0.6));
+            filter: drop-shadow(0 2px 6px rgba(255, 0, 30, 0.6));
         }
 
         .signal-count {
             font-family: 'Orbitron', sans-serif;
             font-size: 1rem;
             font-weight: 900;
-            color: var(--gold-accent);
+            color: var(--gold-light);
             margin-left: 4px;
         }
 
-        /* 風控試算 */
         .calc-box {
             display: flex;
             flex-direction: column;
@@ -379,17 +369,16 @@
             align-items: center;
             font-size: 0.9rem;
             padding: 8px 0;
-            border-bottom: 1px dashed rgba(255, 0, 21, 0.2);
+            border-bottom: 1px dashed rgba(255, 0, 30, 0.2);
         }
 
         .calc-value {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            color: var(--gold-accent);
+            color: var(--gold-light);
             font-size: 1rem;
         }
 
-        /* 彈窗 Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -404,20 +393,20 @@
 
         .modal {
             background: var(--card-bg);
-            border: 2px solid var(--red-bright);
+            border: 2px solid var(--red-neon);
             padding: 25px;
             width: 100%;
             max-width: 450px;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            box-shadow: 0 0 40px rgba(255, 0, 21, 0.5);
+            box-shadow: 0 0 40px rgba(255, 0, 30, 0.5);
             clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
         }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); }
-        ::-webkit-scrollbar-thumb { background: var(--red-bright); }
+        ::-webkit-scrollbar-thumb { background: var(--red-neon); }
     </style>
 </head>
 <body>
@@ -504,7 +493,7 @@
             </div>
             <div class="calc-row">
                 <span>推薦打法策略：</span>
-                <span class="calc-value" id="resStrategy" style="color:var(--gold-accent)">穩健階梯式倍壓</span>
+                <span class="calc-value" id="resStrategy" style="color:var(--gold-light)">穩健階梯式倍壓</span>
             </div>
         </div>
 
@@ -566,7 +555,7 @@
             </select>
             <button class="btn" style="width:auto;" onclick="generatePasscode()">立即生成</button>
         </div>
-        <div id="generatedPasscodeDisplay" style="text-align:center; font-size:1.3rem; font-weight:900; color:var(--gold-accent); min-height:28px; margin:8px 0; font-family:'Orbitron';"></div>
+        <div id="generatedPasscodeDisplay" style="text-align:center; font-size:1.3rem; font-weight:900; color:var(--gold-light); min-height:28px; margin:8px 0; font-family:'Orbitron';"></div>
         <div style="font-size:0.85rem; color:var(--text-sub); margin-top:10px;">已知有效通行碼紀錄：</div>
         <div id="passcodeLog" style="max-height:150px; overflow-y:auto; font-size:0.8rem; background:rgba(0,0,0,0.7); padding:10px; border:1px solid var(--border-red); font-family:monospace;">
             尚無紀錄
@@ -576,7 +565,6 @@
 </div>
 
 <script>
-    // 遊戲與符號資料庫
     const GAME_DATABASE = {
         'ATG': [
             { id: 'atg_seth', name: '戰神賽特', img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', maxRooms: 1300, 
@@ -718,7 +706,7 @@
         if (isMasterKey || isPatternKey || isStoredValid) {
             currentUserType = 'VIP';
             document.getElementById('statusText').innerText = "VIP 尊榮特權系統";
-            document.getElementById('statusText').style.color = "var(--red-bright)";
+            document.getElementById('statusText').style.color = "var(--red-neon)";
             document.getElementById('userTag').innerText = "VIP MEMBER";
             document.getElementById('userTag').className = "tag tag-vip";
             switchView('viewProviders');
