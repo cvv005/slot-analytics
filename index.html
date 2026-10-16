@@ -1,745 +1,863 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>牛老大專屬 - 全網數據演算法選房終端</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Noto+Sans+TC:wght@400;700;900&display=swap');
-    
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
-      background-color: #0b0d14;
-      color: #e2e8f0;
-      touch-action: manipulation;
-    }
-    
-    .font-orbitron {
-      font-family: 'Orbitron', sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>牛老大專屬 - 多系統商數據選房平台</title>
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --card-bg: rgba(18, 22, 31, 0.85);
+            --gold: #f39c12;
+            --gold-light: #f1c40f;
+            --cyan: #00f2fe;
+            --red: #ff4b4b;
+            --text-main: #e2e8f0;
+            --text-sub: #94a3b8;
+            --border: rgba(243, 156, 18, 0.3);
+        }
 
-    .cyber-glass {
-      background: rgba(18, 24, 38, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 215, 0, 0.15);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            user-select: none;
+        }
 
-    .cyber-glass-gold {
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(20, 15, 5, 0.6) 100%);
-      border: 1px solid rgba(255, 215, 0, 0.4);
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
-    }
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(243, 156, 18, 0.15), transparent 70%),
+                radial-gradient(circle at 0% 100%, rgba(0, 242, 254, 0.1), transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+        }
 
-    .gold-gradient-text {
-      background: linear-gradient(180deg, #FFF5C0 0%, #E6B800 50%, #997A00 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-    .gold-button {
-      background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
-      color: #000;
-      font-weight: 800;
-      transition: all 0.25s ease;
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-    }
+        /* 標題與 Header */
+        header {
+            text-align: center;
+            padding: 15px 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
 
-    .gold-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-    }
+        header h1 {
+            font-size: 1.3rem;
+            color: var(--gold);
+            letter-spacing: 1px;
+            cursor: pointer; /* 點擊觸發隱藏管理員登入 */
+            display: inline-block;
+        }
 
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #0f172a;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 3px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #eab308;
-    }
-  </style>
+        header p {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            margin-top: 4px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tag {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .tag-vip { background: rgba(243, 156, 18, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+        .tag-free { background: rgba(0, 242, 254, 0.2); color: var(--cyan); border: 1px solid var(--cyan); }
+
+        /* 通用卡片結構 */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            color: var(--gold-light);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 6px;
+        }
+
+        /* 視圖切換 */
+        .view-section {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .view-section.active {
+            display: flex;
+        }
+
+        /* 按鈕風格 */
+        .btn {
+            background: linear-gradient(135deg, #f39c12, #d35400);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+            width: 100%;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            box-shadow: none;
+        }
+
+        .btn-cyan {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            box-shadow: 0 4px 10px rgba(0, 198, 255, 0.3);
+        }
+
+        .btn-back {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-main);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            width: auto;
+            align-self: flex-start;
+        }
+
+        /* 登入頁面 */
+        .login-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-field {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--gold-light);
+        }
+
+        /* 選擇清單格（系統商/遊戲） */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .select-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .select-card:hover, .select-card:active {
+            border-color: var(--gold);
+            background: rgba(243, 156, 18, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .select-card img {
+            width: 100%;
+            max-width: 80px;
+            height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+            mix-blend-mode: multiply; /* 去除白底關鍵 css */
+            background-color: transparent;
+        }
+
+        .select-card span {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        /* 房間列表 */
+        .room-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .room-item {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .room-item.best {
+            border-color: var(--gold);
+            background: rgba(243, 156, 18, 0.15);
+        }
+
+        .room-rate {
+            font-weight: bold;
+            color: var(--cyan);
+        }
+
+        .room-item.best .room-rate {
+            color: var(--gold-light);
+        }
+
+        /* 動態訊號模組 */
+        .signal-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed var(--gold);
+            flex-wrap: wrap;
+        }
+
+        .signal-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            padding: 6px 10px;
+            border-radius: 6px;
+            gap: 6px;
+        }
+
+        .signal-img-wrapper {
+            display: flex;
+            gap: 2px;
+        }
+
+        .signal-img-wrapper img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+        }
+
+        .signal-count {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--gold-light);
+            margin-left: 2px;
+        }
+
+        /* 風控試算 */
+        .calc-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            padding: 6px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        }
+
+        .calc-value {
+            font-weight: bold;
+            color: var(--gold-light);
+        }
+
+        /* 彈窗 Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* 捲軸美化 */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-start pb-10 custom-scrollbar">
+<body>
 
-  <!-- 頂部 Header -->
-  <header class="w-full bg-slate-950 border-b border-yellow-500/20 py-4 px-4 sticky top-0 z-50 backdrop-blur-md">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <div class="flex items-center space-x-3 cursor-pointer" onclick="goHome()">
-        <div class="w-10 h-10 rounded-full bg-yellow-500/20 border border-yellow-500 flex items-center justify-center text-yellow-400 font-bold text-xl font-orbitron">
-          N
+<div class="container">
+    <!-- Header -->
+    <header>
+        <h1 id="appTitle" onclick="handleTitleClick()">牛老大專屬數據選房</h1>
+        <p>ATG / RSG 雙系統大廳數據整合分析平台</p>
+        <div class="status-bar">
+            <span>狀態: <strong id="statusText" style="color:var(--text-sub)">尚未登入</strong></span>
+            <span id="userTag" class="tag tag-free">未驗證</span>
         </div>
-        <div>
-          <h1 class="text-lg md:text-xl font-black tracking-wider gold-gradient-text">牛老大數據分析終端</h1>
-          <p class="text-[10px] text-slate-400 font-orbitron">BULL BOSS ALGORITHM SYSTEM</p>
+    </header>
+
+    <!-- 1. 登入視圖 -->
+    <div id="viewLogin" class="view-section active">
+        <div class="card login-box">
+            <div class="card-title">🔑 身份通行驗證</div>
+            <p style="font-size: 0.8rem; color: var(--text-sub);">請輸入管理員核發之隨機通行碼進入 VIP 分析大廳：</p>
+            <input type="text" id="passcodeInput" class="input-field" placeholder="輸入通行碼" autocomplete="off">
+            <button class="btn" onclick="verifyPasscode()">驗證進入平台</button>
+            <div style="text-align: center; margin: 5px 0; font-size: 0.8rem; color: var(--text-sub);">- 或 -</div>
+            <button class="btn btn-cyan" onclick="enterFreeMode()">免費體驗模式</button>
         </div>
-      </div>
-      
-      <div id="user-status" class="hidden flex items-center space-x-2">
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-          <span class="w-2 h-2 mr-1.5 rounded-full bg-emerald-500 animate-pulse"></span> 已授權通行
-        </span>
-        <button onclick="openAdminModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition">
-          <i class="fa-solid fa-key text-yellow-400 mr-1"></i> 管理後台
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- 主內容區域 Container -->
-  <main class="w-full max-w-4xl px-4 mt-6 flex-1">
-
-    <!-- 0. 登入頁面 (VIEW: LOGIN) -->
-    <div id="view-login" class="flex flex-col items-center justify-center py-12">
-      <div class="w-full max-w-md cyber-glass p-8 rounded-2xl border border-yellow-500/30 text-center">
-        <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-amber-900/40 border border-yellow-500/40 flex items-center justify-center text-yellow-400 text-3xl shadow-lg">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
-        <h2 class="text-2xl font-black text-white mb-1">系統通行身分驗證</h2>
-        <p class="text-xs text-slate-400 mb-6">請輸入牛老大團隊核發之萬用專屬通行卡號</p>
-
-        <div class="space-y-4">
-          <div>
-            <input type="text" id="access-key-input" placeholder="請輸入通行碼 (例: SETH-XXXX-XXXX)" 
-              class="w-full bg-slate-900/90 border border-slate-700 focus:border-yellow-500 text-white placeholder-slate-500 text-center font-orbitron tracking-widest px-4 py-3.5 rounded-xl outline-none transition">
-          </div>
-          <button onclick="verifyKey()" class="w-full gold-button py-3.5 rounded-xl font-bold text-base tracking-wider flex items-center justify-center space-x-2">
-            <span>立即解鎖選房終端</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-          
-          <div class="relative flex py-2 items-center">
-            <div class="flex-grow border-t border-slate-800"></div>
-            <span class="flex-shrink mx-4 text-xs text-slate-500">或</span>
-            <div class="flex-grow border-t border-slate-800"></div>
-          </div>
-
-          <button onclick="guestLogin()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl font-medium text-sm transition border border-slate-700">
-            <i class="fa-solid fa-bolt text-yellow-400 mr-2"></i>免費體驗試用模式
-          </button>
-        </div>
-
-        <p class="text-[11px] text-slate-500 mt-6">
-          * 通行碼採全站授權制，登入後可切換所有三大系統商與旗下各款遊戲。
-        </p>
-      </div>
     </div>
 
-    <!-- 1. 第一層：系統商選擇大廳 (VIEW: PROVIDERS) -->
-    <div id="view-providers" class="hidden space-y-6">
-      <div class="text-center space-y-2">
-        <h2 class="text-2xl font-black gold-gradient-text tracking-wide">選擇遊戲系統商</h2>
-        <p class="text-xs text-slate-400">請選擇欲分析之各大電子遊戲品牌系統</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- ATG 電子 -->
-        <div onclick="selectProvider('ATG')" class="group cursor-pointer cyber-glass rounded-2xl p-6 transition-all duration-300 hover:border-yellow-500/60 hover:shadow-2xl hover:shadow-yellow-500/10 flex flex-col items-center text-center relative overflow-hidden">
-          <div class="absolute top-0 right-0 bg-yellow-500/20 text-yellow-300 text-[10px] font-bold px-3 py-1 rounded-bl-lg border-l border-b border-yellow-500/30">
-            全網吐分率 98.4%
-          </div>
-          <div class="w-24 h-24 mb-4 rounded-xl overflow-hidden bg-slate-900 border border-slate-700 p-2 group-hover:scale-105 transition">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10" alt="ATG" class="w-full h-full object-contain">
-          </div>
-          <h3 class="text-xl font-black text-white group-hover:text-yellow-400 transition">ATG 電子</h3>
-          <p class="text-xs text-slate-400 mt-1">戰神賽特系列 / 虎小妹 / 赤三國 / 巴風特</p>
-          <div class="mt-4 inline-flex items-center text-xs font-bold text-yellow-400 group-hover:translate-x-1 transition">
-            進入遊戲選單 <i class="fa-solid fa-chevron-right ml-1"></i>
-          </div>
+    <!-- 2. 系統商選擇頁 -->
+    <div id="viewProviders" class="view-section">
+        <button class="btn btn-back" onclick="logout()">‹ 退出登入</button>
+        <div class="card">
+            <div class="card-title">🎰 請選擇系統商</div>
+            <div class="grid-2">
+                <div class="select-card" onclick="openProvider('ATG')">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10" alt="ATG">
+                    <span>ATG 電子</span>
+                </div>
+                <div class="select-card" onclick="openProvider('RSG')">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy70P9GpiFiTXhHUUwvcSBitDQpCKY9UdoVYWtQsE89w&s=10" alt="RSG">
+                    <span>RSG 電子</span>
+                </div>
+            </div>
         </div>
-
-        <!-- RSG 電子 -->
-        <div onclick="selectProvider('RSG')" class="group cursor-pointer cyber-glass rounded-2xl p-6 transition-all duration-300 hover:border-yellow-500/60 hover:shadow-2xl hover:shadow-yellow-500/10 flex flex-col items-center text-center relative overflow-hidden">
-          <div class="absolute top-0 right-0 bg-yellow-500/20 text-yellow-300 text-[10px] font-bold px-3 py-1 rounded-bl-lg border-l border-b border-yellow-500/30">
-            全網吐分率 97.9%
-          </div>
-          <div class="w-24 h-24 mb-4 rounded-xl overflow-hidden bg-slate-900 border border-slate-700 p-2 group-hover:scale-105 transition">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy70P9GpiFiTXhHUUwvcSBitDQpCKY9UdoVYWtQsE89w&s=10" alt="RSG" class="w-full h-full object-contain">
-          </div>
-          <h3 class="text-xl font-black text-white group-hover:text-yellow-400 transition">RSG 電子</h3>
-          <p class="text-xs text-slate-400 mt-1">雷神之錘系列 / 戰神呂布</p>
-          <div class="mt-4 inline-flex items-center text-xs font-bold text-yellow-400 group-hover:translate-x-1 transition">
-            進入遊戲選單 <i class="fa-solid fa-chevron-right ml-1"></i>
-          </div>
-        </div>
-      </div>
     </div>
 
-    <!-- 2. 第二層：遊戲選擇大廳 (VIEW: GAMES) -->
-    <div id="view-games" class="hidden space-y-6">
-      <div class="flex items-center justify-between">
-        <button onclick="showView('view-providers')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg border border-slate-700 transition flex items-center">
-          <i class="fa-solid fa-chevron-left mr-1.5"></i> 返回系統商
-        </button>
-        <div class="text-right">
-          <h2 id="current-provider-title" class="text-xl font-black gold-gradient-text">ATG 電子</h2>
-          <p class="text-[10px] text-slate-400">專屬機台演算法監控</p>
+    <!-- 3. 遊戲大廳頁 -->
+    <div id="viewGames" class="view-section">
+        <button class="btn btn-back" onclick="switchView('viewProviders')">‹ 返回系統商</button>
+        <div class="card">
+            <div class="card-title" id="providerTitle">🎮 選擇遊戲</div>
+            <div class="grid-3" id="gameGrid">
+                <!-- 動態載入遊戲 -->
+            </div>
         </div>
-      </div>
-
-      <div id="games-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <!-- 動態渲染遊戲卡片 -->
-      </div>
     </div>
 
-    <!-- 3. 第三層：遊戲專屬數據與選房面板 (VIEW: DETAIL) -->
-    <div id="view-detail" class="hidden space-y-6">
-      <!-- 頂部切換與遊戲標題 -->
-      <div class="flex items-center justify-between bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-        <button onclick="showView('view-games')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg border border-slate-700 transition flex items-center">
-          <i class="fa-solid fa-chevron-left mr-1.5"></i> 切換遊戲
-        </button>
-        <div class="flex items-center space-x-3">
-          <img id="detail-game-icon" src="" class="w-10 h-10 rounded-lg object-cover border border-yellow-500/40">
-          <div>
-            <h3 id="detail-game-name" class="text-lg font-black text-white">遊戲名稱</h3>
-            <span id="detail-provider-badge" class="text-[10px] text-yellow-400 font-bold bg-yellow-500/10 px-2 py-0.5 rounded border border-yellow-500/20">ATG 電子</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 區塊 A：本金風控與配注試算器 -->
-      <div class="cyber-glass-gold p-6 rounded-2xl space-y-4">
-        <div class="flex items-center justify-between">
-          <h4 class="text-base font-bold text-yellow-400 flex items-center">
-            <i class="fa-solid fa-calculator mr-2"></i> 本金風控與轉數配注試算
-          </h4>
-          <span class="text-[11px] text-slate-400">AI 即時動態演算</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="md:col-span-1">
-            <label class="block text-xs text-slate-400 mb-1">準備投入本金 (元/分)</label>
-            <div class="relative">
-              <input type="number" id="capital-input" value="10000" placeholder="例如: 10000" 
-                class="w-full bg-slate-950 border border-yellow-500/40 text-yellow-300 font-orbitron font-bold text-lg px-3 py-2.5 rounded-xl outline-none focus:border-yellow-400">
-              <span class="absolute right-3 top-3 text-xs text-slate-500">TWD</span>
-            </div>
-          </div>
-
-          <div class="md:col-span-2 grid grid-cols-2 gap-3">
-            <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800">
-              <p class="text-[10px] text-slate-400">建議單注投注金額</p>
-              <p id="calc-bet" class="text-lg font-black text-white font-orbitron mt-0.5">20 元</p>
-            </div>
-            <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800">
-              <p class="text-[10px] text-slate-400">防禦預估總轉數</p>
-              <p id="calc-spins" class="text-lg font-black text-emerald-400 font-orbitron mt-0.5">500 轉</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 text-xs space-y-1">
-          <p class="font-bold text-yellow-400 flex items-center">
-            <i class="fa-solid fa-chess-knight mr-1.5"></i> 推薦進攻打法策略：
-          </p>
-          <p id="calc-strategy" class="text-slate-300 leading-relaxed">
-            【階梯式攻防法】前 100 轉平打蓄積吐分池，若出現連續連擊訊號即提高單注 1.5 倍進行爆發期攻奪。
-          </p>
-        </div>
-
-        <button onclick="calculateRisk()" class="w-full gold-button py-2.5 rounded-xl font-bold text-sm">
-          更新風控與房間爆分數據
-        </button>
-      </div>
-
-      <!-- 區塊 B：10 間房間爆分 % 數與首選帝王房 -->
-      <div class="cyber-glass p-6 rounded-2xl space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h4 class="text-base font-bold text-white flex items-center">
-              <i class="fa-solid fa-door-open text-yellow-400 mr-2"></i> 專屬房間數據與爆分率
-            </h4>
-            <p class="text-[10px] text-slate-400">綜合即時全網回吐池演算法</p>
-          </div>
-          <button onclick="refreshRooms()" class="text-xs bg-slate-800 hover:bg-slate-700 text-yellow-400 px-3 py-1.5 rounded-lg border border-slate-700 transition">
-            <i class="fa-solid fa-rotate mr-1"></i> 刷新房號
-          </button>
-        </div>
-
-        <!-- 首選帝王房推薦 -->
-        <div id="king-room-box" class="bg-gradient-to-r from-amber-950/60 via-slate-900 to-amber-950/60 border border-yellow-500/50 p-4 rounded-xl flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 rounded-xl bg-yellow-500/20 border border-yellow-500 flex items-center justify-center text-yellow-400 text-xl font-bold">
-              <i class="fa-solid fa-crown"></i>
-            </div>
+    <!-- 4. 遊戲專屬數據儀表板 -->
+    <div id="viewDashboard" class="view-section">
+        <button class="btn btn-back" onclick="switchView('viewGames')">‹ 返回遊戲選單</button>
+        
+        <!-- 遊戲標頭 -->
+        <div class="card" style="display:flex; align-items:center; gap:12px;">
+            <img id="dashGameImg" src="" style="width:50px; height:50px; object-fit:contain; border-radius:6px;">
             <div>
-              <span class="text-[10px] font-bold text-yellow-400 tracking-widest uppercase">BEST CROWN ROOM</span>
-              <h5 id="king-room-no" class="text-lg font-black text-white font-orbitron">房號 #3892</h5>
+                <h3 id="dashGameName" style="color:var(--gold-light);">遊戲名稱</h3>
+                <p id="dashProviderTag" style="font-size:0.75rem; color:var(--text-sub);">系統商</p>
             </div>
-          </div>
-          <div class="text-right">
-            <span class="text-[10px] text-slate-400">目前預估吐分率</span>
-            <p id="king-room-rate" class="text-2xl font-black text-yellow-400 font-orbitron">98.8%</p>
-          </div>
         </div>
 
-        <!-- 10 間房間網格 -->
-        <div id="rooms-grid" class="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          <!-- 10間房間資料將由 JavaScript 動態生成 -->
+        <!-- 本金風控計算器 -->
+        <div class="card calc-box">
+            <div class="card-title">💰 本金風控與配注試算</div>
+            <div style="display:flex; gap:8px;">
+                <input type="number" id="capitalInput" class="input-field" style="flex:1;" placeholder="輸入本金 (如: 10000)" value="10000">
+                <button class="btn" style="width: auto; padding: 0 15px;" onclick="calculateRisk()">試算</button>
+            </div>
+            <div class="calc-row">
+                <span>建議平押單注金額：</span>
+                <span class="calc-value" id="resSingleBet">$20</span>
+            </div>
+            <div class="calc-row">
+                <span>預計防禦旋轉圈數：</span>
+                <span class="calc-value" id="resSpins">500 圈</span>
+            </div>
+            <div class="calc-row">
+                <span>推薦打法策略：</span>
+                <span class="calc-value" id="resStrategy" style="color:var(--cyan)">穩健階梯式倍壓</span>
+            </div>
         </div>
-      </div>
 
-      <!-- 區塊 C：當日動態訊號爆發區 (12:00 自動刷新) -->
-      <div class="cyber-glass p-6 rounded-2xl space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h4 class="text-base font-bold text-white flex items-center">
-              <i class="fa-solid fa-bolt text-yellow-400 mr-2"></i> 當日動態觸發訊號圖鑑
-            </h4>
-            <p class="text-[10px] text-slate-400">每日 12:00 依演算法自動刷新週期</p>
-          </div>
-          <span class="text-[10px] bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700 font-orbitron">
-            <i class="fa-regular fa-clock mr-1 text-yellow-400"></i> UPDATED 12:00
-          </span>
+        <!-- 房間選擇器（僅 VIP + ATG 顯示） -->
+        <div class="card" id="roomCard">
+            <div class="card-title" style="justify-content:space-between;">
+                <span>🔥 實時選房數據</span>
+                <button class="btn btn-outline" style="width:auto; padding:2px 8px; font-size:0.75rem;" onclick="refreshRooms()">刷新房間</button>
+            </div>
+            <div class="room-grid" id="roomList">
+                <!-- 動態房間 -->
+            </div>
         </div>
 
-        <div id="symbols-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          <!-- 符號卡片動態渲染 -->
+        <!-- 體驗模式專用試玩房 -->
+        <div class="card" id="freeRoomCard" style="display:none;">
+            <div class="card-title">🧪 體驗玩家專用試玩房</div>
+            <div class="room-item best" style="padding:12px;">
+                <span>體驗專用房 #888</span>
+                <span class="room-rate" id="freeRoomRate">爆分率: 88.5%</span>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-sub); margin-top:8px; text-align:center;">升級 VIP 通行碼即可解鎖 10 間完整實體選房資訊</p>
         </div>
-      </div>
+
+        <!-- 動態觸發訊號（2-3種符號，每種2-3個隨機組合） -->
+        <div class="card">
+            <div class="card-title" style="justify-content:space-between;">
+                <span>⚡ 當日動態觸發訊號</span>
+                <button class="btn btn-outline" style="width:auto; padding:2px 8px; font-size:0.75rem;" onclick="generateSignal()">重新演算</button>
+            </div>
+            <div class="signal-container" id="signalBox">
+                <!-- 動態產生訊號 -->
+            </div>
+        </div>
     </div>
+</div>
 
-  </main>
-
-  <!-- 管理員密碼與監控 Modal -->
-  <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="cyber-glass max-w-lg w-full p-6 rounded-2xl border border-yellow-500/40 space-y-4">
-      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-        <h3 class="text-lg font-bold text-yellow-400 flex items-center">
-          <i class="fa-solid fa-user-shield mr-2"></i> 管理員隨機金鑰發行控制台
-        </h3>
-        <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white">
-          <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
-      </div>
-
-      <div class="space-y-3">
-        <div>
-          <label class="block text-xs text-slate-400 mb-1">設定通行有效時間 (小時)</label>
-          <input type="number" id="key-hours" value="24" min="1" max="720" class="w-full bg-slate-900 border border-slate-700 text-white px-3 py-2 rounded-lg text-sm">
-        </div>
-        <button onclick="generateNewKey()" class="w-full gold-button py-2 rounded-lg font-bold text-sm">
-          生成全新隨機通行碼
-        </button>
-
-        <div id="new-key-display" class="hidden bg-slate-950 p-3 rounded-xl border border-yellow-500/30 text-center">
-          <p class="text-[10px] text-slate-400">最新生成通行碼 (點擊可複製)</p>
-          <p id="generated-key-code" onclick="copyKey()" class="text-xl font-black text-yellow-400 font-orbitron cursor-pointer mt-1 hover:underline"></p>
-        </div>
-      </div>
-
-      <div class="border-t border-slate-800 pt-3">
-        <h4 class="text-xs font-bold text-slate-300 mb-2">已發放通行金鑰記錄</h4>
-        <div id="keys-list" class="max-h-40 overflow-y-auto space-y-2 custom-scrollbar text-xs">
-          <!-- 列表由 JS 渲染 -->
-        </div>
-      </div>
+<!-- 隱藏管理員彈窗 -->
+<div class="modal-overlay" id="adminModal">
+    <div class="modal">
+        <div class="card-title">🛡️ 管理員驗證</div>
+        <input type="password" id="adminPassword" class="input-field" placeholder="輸入管理員密碼">
+        <button class="btn" onclick="loginAdmin()">登入後台</button>
+        <button class="btn btn-outline" onclick="closeAdminModal()">取消</button>
     </div>
-  </div>
+</div>
 
-  <script>
-    // ==========================================
-    // 遊戲資料庫 (含圖標與專屬符號網址)
-    // ==========================================
+<!-- 管理員控制台 Modal -->
+<div class="modal-overlay" id="adminConsoleModal">
+    <div class="modal" style="max-width:500px;">
+        <div class="card-title">⚙️ 管理員控制台</div>
+        <div style="font-size:0.85rem;">生成時效隨機通行碼：</div>
+        <div style="display:flex; gap:8px;">
+            <select id="passcodeHours" class="input-field" style="flex:1;">
+                <option value="1">1 小時有效</option>
+                <option value="6">6 小時有效</option>
+                <option value="24">24 小時有效</option>
+                <option value="72">72 小時有效</option>
+            </select>
+            <button class="btn" style="width:auto;" onclick="generatePasscode()">生成通行碼</button>
+        </div>
+        <div id="generatedPasscodeDisplay" style="text-align:center; font-size:1.2rem; font-weight:bold; color:var(--gold-light); min-height:24px; margin:5px 0;"></div>
+        <div style="font-size:0.85rem; margin-top:10px;">已知有效通行碼紀錄：</div>
+        <div id="passcodeLog" style="max-height:150px; overflow-y:auto; font-size:0.75rem; background:rgba(0,0,0,0.5); padding:8px; border-radius:6px; font-family:monospace;">
+            尚無紀錄
+        </div>
+        <button class="btn btn-outline" onclick="closeAdminConsole()">關閉</button>
+    </div>
+</div>
+
+<script>
+    // 遊戲與符號資料庫
     const GAME_DATABASE = {
-      ATG: [
-        {
-          id: 'seth1',
-          name: '戰神賽特',
-          icon: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw',
-          symbols: [
-            { name: '弓箭', url: 'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png' },
-            { name: '彎刀', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmuddvFqFi_zrqkc-2-fNWDEyg1vbe2UbnNG_wNAaPFQ&s=10' },
-            { name: '權杖', url: 'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png' },
-            { name: '眼睛', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ4cSZZxZ4SY8_CT9eyGe-1KQxNY6pF04yA7f7TrbxVQ&s=10' },
-            { name: '藍寶石', url: 'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png' },
-            { name: '綠寶石', url: 'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png' },
-            { name: '紅寶石', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvQ_YLa6Z6hQ9ZlWV4IZDY8zJvhBRwYj5IWjl6U4dWlg&s=10' },
-            { name: '紫寶石', url: 'https://storm-of-seth.com/wp-content/uploads/atg1788-icon7.png' },
-            { name: '黃寶石', url: 'https://seth2power.com.tw/wp-content/uploads/2025/11/05.webp' },
-            { name: '免費遊戲符號', url: 'https://www.storm-of-seth2.tw/wp-content/uploads/2026/05/scatter_.webp' }
-          ]
-        },
-        {
-          id: 'seth2',
-          name: '戰神賽特2',
-          icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10',
-          symbols: [
-            { name: '弓箭', url: 'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png' },
-            { name: '彎刀', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmuddvFqFi_zrqkc-2-fNWDEyg1vbe2UbnNG_wNAaPFQ&s=10' },
-            { name: '權杖', url: 'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png' },
-            { name: '眼睛', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ4cSZZxZ4SY8_CT9eyGe-1KQxNY6pF04yA7f7TrbxVQ&s=10' },
-            { name: '藍寶石', url: 'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png' },
-            { name: '綠寶石', url: 'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png' },
-            { name: '紅寶石', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvQ_YLa6Z6hQ9ZlWV4IZDY8zJvhBRwYj5IWjl6U4dWlg&s=10' },
-            { name: '紫寶石', url: 'https://storm-of-seth.com/wp-content/uploads/atg1788-icon7.png' },
-            { name: '黃寶石', url: 'https://seth2power.com.tw/wp-content/uploads/2025/11/05.webp' },
-            { name: '免費遊戲符號', url: 'https://www.storm-of-seth2.tw/wp-content/uploads/2026/05/scatter_.webp' },
-            { name: '覺醒之力符號', url: 'https://風暴賽特.com/wp-content/uploads/2025/09/symbol_16.png' }
-          ]
-        },
-        {
-          id: 'tiger',
-          name: '虎小妹',
-          icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10',
-          symbols: [
-            { name: '斧頭', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp' },
-            { name: '盾牌', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s2.webp' },
-            { name: '啤酒桶', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s3.webp' },
-            { name: '錢袋', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s4.webp' },
-            { name: '黃寶石', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s5.webp' },
-            { name: '紅寶石', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s6.webp' },
-            { name: '紫寶石', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s7.webp' },
-            { name: '藍寶石', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s8.webp' },
-            { name: '綠寶石', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s9.webp' },
-            { name: '免遊符號', url: 'https://husiaomei.com.tw/wp-content/uploads/2026/06/scatter.webp' }
-          ]
-        },
-        {
-          id: 'sanguo',
-          name: '赤三國',
-          icon: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp',
-          symbols: [
-            { name: '玉璽', url: 'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_01.webp' },
-            { name: '羽扇', url: 'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_02.webp' },
-            { name: '劍', url: 'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_03.webp' },
-            { name: '連弩', url: 'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_04.webp' },
-            { name: '黃玉珮', url: 'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_05.webp' },
-            { name: '紅玉珮', url: 'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_06.webp' },
-            { name: '紫玉珮', url: 'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_07.webp' },
-            { name: '藍玉珮', url: 'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_08.webp' },
-            { name: '綠玉珮', url: 'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_09.png.webp' }
-          ]
-        },
-        {
-          id: 'baphomet',
-          name: '古神巴風特',
-          icon: 'https://atg-games.com/_ipx/f_webp&s_480x540/elder-god-baphomet/zh-tw/products.png',
-          symbols: [] // 古神巴風特不需圖片，採用預設數據波段
-        }
-      ],
-      RSG: [
-        {
-          id: 'thor1',
-          name: '雷神之錘',
-          icon: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg',
-          symbols: [
-            { name: '雷神頭盔', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM1.webp' },
-            { name: '雷神之鎚', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM2.webp' },
-            { name: '雷神神盾', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM3.webp' },
-            { name: '雷神金幣', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM4.webp' },
-            { name: '紅寶石', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolA.webp' },
-            { name: '紫寶石', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolK.webp' },
-            { name: '黃寶石', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolQ.webp' },
-            { name: '綠寶石', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolJ.webp' },
-            { name: '藍寶石', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolTE.webp' },
-            { name: 'BONUS', url: 'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolB1.webp' }
-          ]
-        },
-        {
-          id: 'thor2',
-          name: '雷神之錘2',
-          icon: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg',
-          symbols: [
-            { name: '雷神頭盔', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM1.webp' },
-            { name: '雷神之錘', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM2.webp' },
-            { name: '雷神神盾', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM3.webp' },
-            { name: '雷神金幣', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM4.webp' },
-            { name: '紅寶石', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolA.webp' },
-            { name: '紫水晶', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolK.webp' },
-            { name: '黃寶石', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolQ.webp' },
-            { name: '綠寶石', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolJ.webp' },
-            { name: '藍寶石', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/6qtjro4rlccq8jcu.webp' },
-            { name: 'BONUS', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolB1.webp' },
-            { name: '超級BONUS', url: 'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolB2.webp' }
-          ]
-        },
-        {
-          id: 'lubu',
-          name: '戰神呂布',
-          icon: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg',
-          symbols: [
-            { name: '赤兔馬', url: 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp' },
-            { name: '方天畫戟', url: 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp' },
-            { name: '呂氏戰旗', url: 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E5%91%82%E6%B0%8F%E6%88%B0%E6%97%97.webp' },
-            { name: '軍令牌', url: 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%BB%8D%E4%BB%A4%E7%89%8C.webp' },
-            { name: '紅寶石', url: 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%85%E5%AF%B6%E7%9F%B3.webp' },
-            { name: '紫寶石', url: 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%AB%E5%AF%B6%E7%9F%B3.webp' },
-            { name: '黃寶石', url: 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E9%BB%83%E5%AF%B6%E7%9F%B3.webp' },
-            { name: '綠寶石', url: 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B6%A0%E5%AF%B6%E7%9F%B3.webp' },
-            { name: '藍寶石', url: 'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%97%8D%E5%AF%B6%E7%9F%B3.webp' },
-            { name: 'BONUS', url: 'https://theslotbear.com/wp-content/uploads/2026/08/legend-of-lu-bu-bonus-symbol.webp' }
-          ]
-        }
-      ]
+        'ATG': [
+            { id: 'atg_seth', name: '戰神賽特', img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', maxRooms: 1300, 
+              symbols: [
+                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmuddvFqFi_zrqkc-2-fNWDEyg1vbe2UbnNG_wNAaPFQ&s=10',
+                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ4cSZZxZ4SY8_CT9eyGe-1KQxNY6pF04yA7f7TrbxVQ&s=10',
+                'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png',
+                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvQ_YLa6Z6hQ9ZlWV4IZDY8zJvhBRwYj5IWjl6U4dWlg&s=10',
+                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon7.png',
+                'https://seth2power.com.tw/wp-content/uploads/2025/11/05.webp',
+                'https://www.storm-of-seth2.tw/wp-content/uploads/2026/05/scatter_.webp'
+              ] 
+            },
+            { id: 'atg_seth2', name: '戰神賽特2', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10', maxRooms: 4100,
+              symbols: [
+                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmuddvFqFi_zrqkc-2-fNWDEyg1vbe2UbnNG_wNAaPFQ&s=10',
+                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ4cSZZxZ4SY8_CT9eyGe-1KQxNY6pF04yA7f7TrbxVQ&s=10',
+                'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png',
+                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvQ_YLa6Z6hQ9ZlWV4IZDY8zJvhBRwYj5IWjl6U4dWlg&s=10',
+                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon7.png',
+                'https://seth2power.com.tw/wp-content/uploads/2025/11/05.webp',
+                'https://www.storm-of-seth2.tw/wp-content/uploads/2026/05/scatter_.webp',
+                'https://風暴賽特.com/wp-content/uploads/2025/09/symbol_16.png'
+              ] 
+            },
+            { id: 'atg_tiger', name: '虎小妹', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10', maxRooms: 3000,
+              symbols: [
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp',
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s2.webp',
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s3.webp',
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s4.webp',
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s5.webp',
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s6.webp',
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s7.webp',
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s8.webp',
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s9.webp',
+                'https://husiaomei.com.tw/wp-content/uploads/2026/06/scatter.webp'
+              ] 
+            },
+            { id: 'atg_samkok', name: '赤三國', img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', maxRooms: 200,
+              symbols: [
+                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_01.webp',
+                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_02.webp',
+                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_03.webp',
+                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_04.webp',
+                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_05.webp',
+                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_06.webp',
+                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_07.webp',
+                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_08.webp',
+                'https://atg赤三國.tw/wp-content/uploads/2025/11/symbol_09.png.webp'
+              ] 
+            },
+            { id: 'atg_baphomet', name: '古神巴風特', img: 'https://atg-games.com/_ipx/f_webp&s_480x540/elder-god-baphomet/zh-tw/products.png', maxRooms: 1000, symbols: [] }
+        ],
+        'RSG': [
+            { id: 'rsg_thor', name: '雷神之錘', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg', maxRooms: 0,
+              symbols: [
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM1.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM2.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM3.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM4.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolA.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolK.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolQ.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolJ.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolTE.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolB1.webp'
+              ] 
+            },
+            { id: 'rsg_thor2', name: '雷神之錘2', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg', maxRooms: 0,
+              symbols: [
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM1.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM2.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM3.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM4.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolA.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolK.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolQ.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolJ.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/6qtjro4rlccq8jcu.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolB1.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolB2.webp'
+              ] 
+            },
+            { id: 'rsg_lubu', name: '戰神呂布', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg', maxRooms: 0,
+              symbols: [
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E5%91%82%E6%B0%8F%E6%88%B0%E6%97%97.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%BB%8D%E4%BB%A4%E7%89%8C.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%85%E5%AF%B6%E7%9F%B3.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%AB%E5%AF%B6%E7%9F%B3.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E9%BB%83%E5%AF%B6%E7%9F%B3.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B6%A0%E5%AF%B6%E7%9F%B3.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%97%8D%E5%AF%B6%E7%9F%B3.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/legend-of-lu-bu-bonus-symbol.webp'
+              ] 
+            }
+        ]
     };
 
-    // 全域變數
-    let currentProvider = 'ATG';
+    // 全局狀態
+    let currentUserType = null; // 'VIP', 'FREE'
+    let currentProvider = '';
     let currentGame = null;
-    let activeKeys = JSON.parse(localStorage.getItem('bull_boss_keys') || '[]');
+    let activePasscodes = {}; // { passcode: expireTime }
+    let titleClickCount = 0;
 
-    // 初始化範例通行碼
-    if (activeKeys.length === 0) {
-      activeKeys.push({
-        code: 'SETH-8888-VIP',
-        expireAt: Date.now() + 86400000 * 30
-      });
-      localStorage.setItem('bull_boss_keys', JSON.stringify(activeKeys));
+    // 視圖切換機制
+    function switchView(viewId) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
     }
 
-    // ==========================================
-    // 視圖切換控制 (View Routing)
-    // ==========================================
-    function showView(viewId) {
-      document.getElementById('view-login').classList.add('hidden');
-      document.getElementById('view-providers').classList.add('hidden');
-      document.getElementById('view-games').classList.add('hidden');
-      document.getElementById('view-detail').classList.add('hidden');
+    // 萬用/動態通行碼驗證
+    function verifyPasscode() {
+        const code = document.getElementById('passcodeInput').value.trim();
+        const now = Date.now();
 
-      document.getElementById(viewId).classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (code === "AIMINCVV168" || (activePasscodes[code] && activePasscodes[code] > now)) {
+            currentUserType = 'VIP';
+            document.getElementById('statusText').innerText = "VIP 尊榮存取";
+            document.getElementById('statusText').style.color = "var(--gold)";
+            document.getElementById('userTag').innerText = "VIP";
+            document.getElementById('userTag').className = "tag tag-vip";
+            switchView('viewProviders');
+        } else {
+            alert('通行碼無效或已過期！');
+        }
     }
 
-    function goHome() {
-      if (document.getElementById('user-status').classList.contains('hidden')) {
-        showView('view-login');
-      } else {
-        showView('view-providers');
-      }
+    // 免費體驗模式
+    function enterFreeMode() {
+        currentUserType = 'FREE';
+        document.getElementById('statusText').innerText = "體驗試用中";
+        document.getElementById('statusText').style.color = "var(--cyan)";
+        document.getElementById('userTag').innerText = "體驗員";
+        document.getElementById('userTag').className = "tag tag-free";
+        switchView('viewProviders');
     }
 
-    // ==========================================
-    // 驗證與通行碼系統
-    // ==========================================
-    function verifyKey() {
-      const input = document.getElementById('access-key-input').value.trim();
-      if (!input) {
-        alert('請輸入通行碼！');
-        return;
-      }
-
-      const validKey = activeKeys.find(k => k.code === input && k.expireAt > Date.now());
-
-      if (validKey || input === 'SETH-8888-VIP') {
-        unlockApp();
-      } else {
-        alert('通行码無效或已過期，請聯繫管理員！');
-      }
+    // 登出
+    function logout() {
+        currentUserType = null;
+        document.getElementById('passcodeInput').value = '';
+        document.getElementById('statusText').innerText = "尚未登入";
+        document.getElementById('statusText').style.color = "var(--text-sub)";
+        document.getElementById('userTag').innerText = "未驗證";
+        document.getElementById('userTag').className = "tag tag-free";
+        switchView('viewLogin');
     }
 
-    function guestLogin() {
-      unlockApp();
+    // 開啟系統商
+    function openProvider(providerKey) {
+        currentProvider = providerKey;
+        document.getElementById('providerTitle').innerText = `🎮 ${providerKey} 電子 - 遊戲選單`;
+        const grid = document.getElementById('gameGrid');
+        grid.innerHTML = '';
+
+        GAME_DATABASE[providerKey].forEach(game => {
+            const card = document.createElement('div');
+            card.className = 'select-card';
+            card.onclick = () => openDashboard(game);
+            card.innerHTML = `
+                <img src="${game.img}" alt="${game.name}">
+                <span>${game.name}</span>
+            `;
+            grid.appendChild(card);
+        });
+
+        switchView('viewGames');
     }
 
-    function unlockApp() {
-      document.getElementById('user-status').classList.remove('hidden');
-      showView('view-providers');
-    }
+    // 開啟數據儀表板
+    function openDashboard(game) {
+        currentGame = game;
+        document.getElementById('dashGameImg').src = game.img;
+        document.getElementById('dashGameName').innerText = game.name;
+        document.getElementById('dashProviderTag').innerText = `${currentProvider} 電子專屬數據`;
 
-    // ==========================================
-    // 系統商與遊戲切換
-    // ==========================================
-    function selectProvider(provider) {
-      currentProvider = provider;
-      document.getElementById('current-provider-title').innerText = provider === 'ATG' ? 'ATG 電子' : 'RSG 電子';
+        // 計算風控
+        calculateRisk();
 
-      const gamesGrid = document.getElementById('games-grid');
-      gamesGrid.innerHTML = '';
+        // 判斷選房區域顯示邏輯
+        const roomCard = document.getElementById('roomCard');
+        const freeRoomCard = document.getElementById('freeRoomCard');
 
-      GAME_DATABASE[provider].forEach(game => {
-        const card = document.createElement('div');
-        card.className = 'cyber-glass rounded-xl p-4 flex flex-col items-center text-center cursor-pointer hover:border-yellow-500/60 hover:scale-[1.02] transition';
-        card.onclick = () => selectGame(game);
-
-        card.innerHTML = `
-          <div class="w-full aspect-square rounded-lg overflow-hidden bg-slate-900 mb-3 border border-slate-800">
-            <img src="${game.icon}" class="w-full h-full object-cover">
-          </div>
-          <h4 class="font-bold text-white text-sm">${game.name}</h4>
-          <span class="text-[10px] text-yellow-400 mt-1">選房與訊號分析 <i class="fa-solid fa-arrow-right ml-0.5"></i></span>
-        `;
-        gamesGrid.appendChild(card);
-      });
-
-      showView('view-games');
-    }
-
-    function selectGame(game) {
-      currentGame = game;
-      document.getElementById('detail-game-name').innerText = game.name;
-      document.getElementById('detail-game-icon').src = game.icon;
-      document.getElementById('detail-provider-badge').innerText = currentProvider + ' 電子';
-
-      // 執行計算與刷新數據
-      calculateRisk();
-      refreshRooms();
-      renderSymbols();
-
-      showView('view-detail');
-    }
-
-    // ==========================================
-    // 風控與房間演算法計算
-    // ==========================================
-    function calculateRisk() {
-      const capital = parseFloat(document.getElementById('capital-input').value) || 10000;
-      
-      // 計算建議單注 (本金的 0.2%)
-      let bet = Math.max(2, Math.floor(capital * 0.002));
-      let spins = Math.floor(capital / bet);
-
-      document.getElementById('calc-bet').innerText = `${bet} 元`;
-      document.getElementById('calc-spins').innerText = `${spins} 轉`;
-
-      // 建議策略動態文本
-      const strategies = [
-        `【階梯式加注法】前 ${Math.floor(spins*0.3)} 轉以 ${bet} 元平打防禦，累積大獎爆發池；出現連擊時調高 1.5 倍攻頂。`,
-        `【波段高倍攻防】預估前 ${Math.floor(spins*0.25)} 轉進入吐分期，建議使用 ${bet} 元開局，逢黃金波段直接買 Buy 試探。`,
-        `【穩健防禦平打】當前機台池水位極高，建議全程維持 ${bet} 元平打，預計在 ${Math.floor(spins*0.4)} 轉內觸發免費遊戲。`
-      ];
-      document.getElementById('calc-strategy').innerText = strategies[Math.floor(Math.random() * strategies.length)];
-    }
-
-    function refreshRooms() {
-      const roomsGrid = document.getElementById('rooms-grid');
-      roomsGrid.innerHTML = '';
-
-      let maxRate = 0;
-      let kingRoomNo = '';
-
-      for (let i = 1; i <= 10; i++) {
-        const roomNo = `#${Math.floor(1000 + Math.random() * 8999)}`;
-        const rate = (91 + Math.random() * 8.5).toFixed(1);
-
-        if (parseFloat(rate) > maxRate) {
-          maxRate = parseFloat(rate);
-          kingRoomNo = roomNo;
+        if (currentUserType === 'FREE') {
+            roomCard.style.display = 'none';
+            freeRoomCard.style.display = 'block';
+            document.getElementById('freeRoomRate').innerText = `爆分率: ${(Math.random() * 20 + 75).toFixed(1)}%`;
+        } else {
+            freeRoomCard.style.display = 'none';
+            if (game.maxRooms > 0) {
+                roomCard.style.display = 'block';
+                refreshRooms();
+            } else {
+                // RSG 無選房機制
+                roomCard.style.display = 'none';
+            }
         }
 
-        const roomCard = document.createElement('div');
-        roomCard.className = 'bg-slate-900/90 border border-slate-800 p-3 rounded-xl flex flex-col items-center justify-center text-center';
-        roomCard.innerHTML = `
-          <span class="text-[10px] text-slate-400 font-orbitron">${roomNo}</span>
-          <span class="text-base font-black text-yellow-400 font-orbitron mt-0.5">${rate}%</span>
-          <span class="text-[9px] text-emerald-400 mt-0.5"><i class="fa-solid fa-fire"></i> 熱門爆分</span>
-        `;
-        roomsGrid.appendChild(roomCard);
-      }
+        // 生成動態觸發訊號
+        generateSignal();
 
-      // 更新帝王首選房
-      document.getElementById('king-room-no').innerText = `帝王首選房 ${kingRoomNo}`;
-      document.getElementById('king-room-rate').innerText = `${maxRate.toFixed(1)}%`;
+        switchView('viewDashboard');
     }
 
-    function renderSymbols() {
-      const container = document.getElementById('symbols-container');
-      container.innerHTML = '';
+    // 風控試算
+    function calculateRisk() {
+        const capital = parseFloat(document.getElementById('capitalInput').value) || 10000;
+        const singleBet = Math.max(1, Math.floor(capital / 500));
+        const spins = Math.floor(capital / singleBet);
 
-      if (!currentGame || !currentGame.symbols || currentGame.symbols.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-6 text-center text-xs text-slate-500">
-            <i class="fa-solid fa-chart-line text-2xl text-yellow-500/40 mb-2 block"></i>
-            該遊戲採用大盤全網波段觸發率演算法，請依據配注策略進行操作。
-          </div>
-        `;
-        return;
-      }
+        document.getElementById('resSingleBet').innerText = `$${singleBet}`;
+        document.getElementById('resSpins').innerText = `${spins} 圈`;
 
-      // 使用種子演算法（以日期與遊戲ID）確保每日12點固定更新
-      const todayStr = new Date().toISOString().slice(0, 10);
-
-      currentGame.symbols.forEach((symbol, idx) => {
-        // 隨機計算當日觸發率 %
-        const triggerRate = (75 + Math.random() * 23.5).toFixed(1);
-        
-        const card = document.createElement('div');
-        card.className = 'bg-slate-950 border border-slate-800 p-3 rounded-xl flex items-center space-x-3';
-        card.innerHTML = `
-          <div class="w-12 h-12 rounded-lg bg-slate-900 border border-slate-700 p-1 flex-shrink-0 flex items-center justify-center">
-            <img src="${symbol.url}" alt="${symbol.name}" class="w-full h-full object-contain" onerror="this.src='https://via.placeholder.com/50?text=SYMBOL'">
-          </div>
-          <div class="min-w-0 flex-1">
-            <p class="text-xs font-bold text-white truncate">${symbol.name}</p>
-            <p class="text-[10px] text-slate-400">當日觸發率</p>
-            <p class="text-xs font-black text-yellow-400 font-orbitron">${triggerRate}%</p>
-          </div>
-        `;
-        container.appendChild(card);
-      });
+        if (capital < 5000) {
+            document.getElementById('resStrategy').innerText = "保守微注保本法";
+        } else if (capital <= 20000) {
+            document.getElementById('resStrategy').innerText = "穩健階梯式倍壓";
+        } else {
+            document.getElementById('resStrategy').innerText = "高波幅爆發波段打法";
+        }
     }
 
-    // ==========================================
-    // 管理員 Modal 與金鑰生成
-    // ==========================================
-    function openAdminModal() {
-      renderKeysList();
-      document.getElementById('admin-modal').classList.remove('hidden');
+    // 隨機生成 10 間房間爆分率 (依據最大房號範圍)
+    function refreshRooms() {
+        if (!currentGame || currentGame.maxRooms === 0) return;
+        const list = document.getElementById('roomList');
+        list.innerHTML = '';
+
+        let rooms = [];
+        for (let i = 0; i < 10; i++) {
+            const rNum = Math.floor(Math.random() * currentGame.maxRooms) + 1;
+            const formattedNum = String(rNum).padStart(3, '0');
+            const rate = (Math.random() * 30 + 68).toFixed(1);
+            rooms.push({ num: formattedNum, rate: parseFloat(rate) });
+        }
+
+        rooms.sort((a, b) => b.rate - a.rate);
+
+        rooms.forEach((r, idx) => {
+            const item = document.createElement('div');
+            item.className = `room-item ${idx === 0 ? 'best' : ''}`;
+            item.innerHTML = `
+                <span>${idx === 0 ? '👑 帝王房' : '房間'} #${r.num}</span>
+                <span class="room-rate">${r.rate}%</span>
+            `;
+            list.appendChild(item);
+        });
+    }
+
+    // 產生動態觸發訊號 (2~3 種符號，每種 2~3 個隨機組合)
+    function generateSignal() {
+        const box = document.getElementById('signalBox');
+        box.innerHTML = '';
+
+        if (!currentGame || !currentGame.symbols || currentGame.symbols.length === 0) {
+            box.innerHTML = '<span style="font-size:0.8rem; color:var(--text-sub);">該遊戲暫無圖鑑訊號</span>';
+            return;
+        }
+
+        // 隨機選 2 ~ 3 種不重複符號
+        const symbolCount = Math.floor(Math.random() * 2) + 2; // 2 或 3
+        const shuffled = [...currentGame.symbols].sort(() => 0.5 - Math.random());
+        const selectedSymbols = shuffled.slice(0, Math.min(symbolCount, shuffled.length));
+
+        selectedSymbols.forEach(symUrl => {
+            const count = Math.floor(Math.random() * 2) + 2; // 2 或 3 個
+            const group = document.createElement('div');
+            group.className = 'signal-group';
+
+            let imgsHtml = '';
+            for (let i = 0; i < count; i++) {
+                imgsHtml += `<img src="${symUrl}" alt="symbol">`;
+            }
+
+            group.innerHTML = `
+                <div class="signal-img-wrapper">${imgsHtml}</div>
+                <span class="signal-count">x${count}</span>
+            `;
+            box.appendChild(group);
+        });
+    }
+
+    // 點擊標題開啟隱藏管理員驗證
+    function handleTitleClick() {
+        titleClickCount++;
+        if (titleClickCount >= 3) {
+            titleClickCount = 0;
+            document.getElementById('adminModal').style.display = 'flex';
+        }
     }
 
     function closeAdminModal() {
-      document.getElementById('admin-modal').classList.add('hidden');
+        document.getElementById('adminModal').style.display = 'none';
+        document.getElementById('adminPassword').value = '';
     }
 
-    function generateNewKey() {
-      const hours = parseInt(document.getElementById('key-hours').value) || 24;
-      const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
-      const randomStr2 = Math.random().toString(36).substring(2, 6).toUpperCase();
-      const code = `BOSS-${randomStr}-${randomStr2}`;
-      
-      const newKey = {
-        code: code,
-        expireAt: Date.now() + (hours * 3600000)
-      };
-
-      activeKeys.unshift(newKey);
-      localStorage.setItem('bull_boss_keys', JSON.stringify(activeKeys));
-
-      document.getElementById('generated-key-code').innerText = code;
-      document.getElementById('new-key-display').classList.remove('hidden');
-
-      renderKeysList();
+    function loginAdmin() {
+        const pwd = document.getElementById('adminPassword').value;
+        if (pwd === "admincvv005") {
+            closeAdminModal();
+            document.getElementById('adminConsoleModal').style.display = 'flex';
+        } else {
+            alert('管理員密碼錯誤！');
+        }
     }
 
-    function copyKey() {
-      const code = document.getElementById('generated-key-code').innerText;
-      navigator.clipboard.writeText(code);
-      alert('已成功複製通行碼：' + code);
+    function closeAdminConsole() {
+        document.getElementById('adminConsoleModal').style.display = 'none';
     }
 
-    function renderKeysList() {
-      const container = document.getElementById('keys-list');
-      container.innerHTML = '';
+    // 生成隨機通行碼
+    function generatePasscode() {
+        const hours = parseInt(document.getElementById('passcodeHours').value);
+        const code = 'CVV' + Math.floor(1000 + Math.random() * 9000);
+        const expireTime = Date.now() + hours * 3600 * 1000;
 
-      if (activeKeys.length === 0) {
-        container.innerHTML = '<p class="text-slate-500 text-center py-2">尚無已發行金鑰</p>';
-        return;
-      }
+        activePasscodes[code] = expireTime;
 
-      activeKeys.forEach(k => {
-        const isExpired = Date.now() > k.expireAt;
-        const div = document.createElement('div');
-        div.className = 'bg-slate-900 p-2.5 rounded-lg flex justify-between items-center border border-slate-800';
-        div.innerHTML = `
-          <div>
-            <span class="font-orbitron font-bold ${isExpired ? 'text-slate-500 line-through' : 'text-yellow-400'}">${k.code}</span>
-            <p class="text-[10px] text-slate-500">到期時間: ${new Date(k.expireAt).toLocaleString()}</p>
-          </div>
-          <span class="text-[10px] px-2 py-0.5 rounded ${isExpired ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}">
-            ${isExpired ? '已過期' : '生效中'}
-          </span>
-        `;
-        container.appendChild(div);
-      });
+        document.getElementById('generatedPasscodeDisplay').innerText = `通行碼：${code}`;
+
+        // 更新 Log
+        const log = document.getElementById('passcodeLog');
+        const dateStr = new Date(expireTime).toLocaleTimeString();
+        log.innerHTML = `[${code}] 時效:${hours}小時 (到期:${dateStr})<br>` + log.innerHTML;
     }
-  </script>
+</script>
 </body>
 </html>
