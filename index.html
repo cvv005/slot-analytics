@@ -6,15 +6,15 @@
     <title>牛老大專屬 - 多系統商數據選房平台</title>
     <style>
         :root {
-            --bg-dark: #0a0c10;
-            --card-bg: rgba(18, 22, 31, 0.85);
-            --gold: #f39c12;
-            --gold-light: #f1c40f;
-            --cyan: #00f2fe;
-            --red: #ff4b4b;
-            --text-main: #e2e8f0;
-            --text-sub: #94a3b8;
-            --border: rgba(243, 156, 18, 0.3);
+            --bg-dark: #080303;
+            --card-bg: rgba(22, 10, 12, 0.88);
+            --red-main: #ff1e27;
+            --red-light: #ff4d54;
+            --red-dark: #800005;
+            --red-glow: rgba(255, 30, 39, 0.4);
+            --text-main: #f1f5f9;
+            --text-sub: #a3a8b2;
+            --border: rgba(255, 30, 39, 0.35);
         }
 
         * {
@@ -28,8 +28,9 @@
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(243, 156, 18, 0.15), transparent 70%),
-                radial-gradient(circle at 0% 100%, rgba(0, 242, 254, 0.1), transparent 50%);
+                radial-gradient(circle at 50% 0%, rgba(255, 30, 39, 0.25), transparent 70%),
+                radial-gradient(circle at 100% 100%, rgba(128, 0, 5, 0.2), transparent 50%),
+                radial-gradient(circle at 0% 50%, rgba(255, 77, 84, 0.1), transparent 40%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -53,17 +54,18 @@
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 25px rgba(255, 30, 39, 0.2);
+            backdrop-filter: blur(12px);
             position: relative;
         }
 
         header h1 {
-            font-size: 1.3rem;
-            color: var(--gold);
-            letter-spacing: 1px;
+            font-size: 1.35rem;
+            color: var(--red-light);
+            letter-spacing: 1.5px;
             cursor: pointer;
             display: inline-block;
+            text-shadow: 0 0 10px var(--red-glow);
         }
 
         header p {
@@ -79,7 +81,7 @@
             font-size: 0.75rem;
             margin-top: 10px;
             padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 30, 39, 0.2);
         }
 
         .tag {
@@ -88,8 +90,8 @@
             font-weight: bold;
         }
 
-        .tag-vip { background: rgba(243, 156, 18, 0.2); color: var(--gold); border: 1px solid var(--gold); }
-        .tag-free { background: rgba(0, 242, 254, 0.2); color: var(--cyan); border: 1px solid var(--cyan); }
+        .tag-vip { background: rgba(255, 30, 39, 0.25); color: var(--red-light); border: 1px solid var(--red-main); }
+        .tag-free { background: rgba(255, 255, 255, 0.1); color: var(--text-sub); border: 1px solid rgba(255, 255, 255, 0.2); }
 
         /* 通用卡片結構 */
         .card {
@@ -97,19 +99,20 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
         }
 
         .card-title {
             font-size: 1rem;
-            color: var(--gold-light);
+            color: var(--red-light);
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255, 30, 39, 0.2);
             padding-bottom: 6px;
+            font-weight: bold;
         }
 
         /* 視圖切換 */
@@ -126,9 +129,9 @@
 
         /* 按鈕風格 */
         .btn {
-            background: linear-gradient(135deg, #f39c12, #d35400);
+            background: linear-gradient(135deg, #ff1e27, #990005);
             color: #fff;
-            border: none;
+            border: 1px solid #ff4d54;
             padding: 12px 20px;
             border-radius: 8px;
             font-weight: bold;
@@ -136,7 +139,7 @@
             cursor: pointer;
             text-align: center;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 30, 39, 0.35);
             width: 100%;
         }
 
@@ -145,21 +148,23 @@
         }
 
         .btn-outline {
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
+            background: rgba(255, 30, 39, 0.05);
+            border: 1px solid var(--red-main);
+            color: var(--red-light);
             box-shadow: none;
         }
 
         .btn-cyan {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            box-shadow: 0 4px 10px rgba(0, 198, 255, 0.3);
+            background: linear-gradient(135deg, #333, #111);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #ddd;
+            box-shadow: none;
         }
 
         .btn-back {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 30, 39, 0.1);
             color: var(--text-main);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 30, 39, 0.3);
             padding: 8px 15px;
             font-size: 0.85rem;
             width: auto;
@@ -174,7 +179,7 @@
         }
 
         .input-field {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid var(--border);
             border-radius: 6px;
             padding: 12px;
@@ -185,7 +190,8 @@
         }
 
         .input-field:focus {
-            border-color: var(--gold-light);
+            border-color: var(--red-main);
+            box-shadow: 0 0 10px var(--red-glow);
         }
 
         /* 選擇清單格（系統商/遊戲） */
@@ -202,8 +208,8 @@
         }
 
         .select-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 30, 39, 0.03);
+            border: 1px solid rgba(255, 30, 39, 0.2);
             border-radius: 10px;
             padding: 12px;
             display: flex;
@@ -215,9 +221,10 @@
         }
 
         .select-card:hover, .select-card:active {
-            border-color: var(--gold);
-            background: rgba(243, 156, 18, 0.1);
+            border-color: var(--red-main);
+            background: rgba(255, 30, 39, 0.15);
             transform: translateY(-2px);
+            box-shadow: 0 4px 15px var(--red-glow);
         }
 
         .select-card img {
@@ -225,7 +232,7 @@
             max-width: 80px;
             height: 80px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 2px 8px rgba(255, 30, 39, 0.3));
             mix-blend-mode: multiply;
             background-color: transparent;
         }
@@ -248,8 +255,8 @@
         }
 
         .room-item {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 30, 39, 0.15);
             border-radius: 6px;
             padding: 8px 10px;
             display: flex;
@@ -259,17 +266,19 @@
         }
 
         .room-item.best {
-            border-color: var(--gold);
-            background: rgba(243, 156, 18, 0.15);
+            border-color: var(--red-main);
+            background: rgba(255, 30, 39, 0.2);
+            box-shadow: 0 0 10px rgba(255, 30, 39, 0.2);
         }
 
         .room-rate {
             font-weight: bold;
-            color: var(--cyan);
+            color: var(--red-light);
         }
 
         .room-item.best .room-rate {
-            color: var(--gold-light);
+            color: #fff;
+            text-shadow: 0 0 5px var(--red-main);
         }
 
         /* 動態訊號模組 */
@@ -278,17 +287,18 @@
             gap: 10px;
             justify-content: center;
             align-items: center;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             padding: 15px;
             border-radius: 8px;
-            border: 1px dashed var(--gold);
+            border: 1px dashed var(--red-main);
             flex-wrap: wrap;
         }
 
         .signal-group {
             display: flex;
             align-items: center;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 30, 39, 0.08);
+            border: 1px solid rgba(255, 30, 39, 0.2);
             padding: 6px 10px;
             border-radius: 6px;
             gap: 6px;
@@ -304,13 +314,13 @@
             height: 32px;
             object-fit: contain;
             mix-blend-mode: multiply;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+            filter: drop-shadow(0 2px 5px rgba(255, 30, 39, 0.5));
         }
 
         .signal-count {
             font-size: 0.85rem;
             font-weight: bold;
-            color: var(--gold-light);
+            color: var(--red-light);
             margin-left: 2px;
         }
 
@@ -327,12 +337,12 @@
             align-items: center;
             font-size: 0.85rem;
             padding: 6px 0;
-            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            border-bottom: 1px dashed rgba(255, 30, 39, 0.15);
         }
 
         .calc-value {
             font-weight: bold;
-            color: var(--gold-light);
+            color: var(--red-light);
         }
 
         /* 彈窗 Modal */
@@ -340,8 +350,8 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(8px);
             z-index: 999;
             justify-content: center;
             align-items: center;
@@ -350,7 +360,7 @@
 
         .modal {
             background: var(--card-bg);
-            border: 1px solid var(--gold);
+            border: 1px solid var(--red-main);
             border-radius: 12px;
             padding: 20px;
             width: 100%;
@@ -358,11 +368,12 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            box-shadow: 0 0 30px var(--red-glow);
         }
 
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
+        ::-webkit-scrollbar-thumb { background: var(--red-main); border-radius: 2px; }
     </style>
 </head>
 <body>
@@ -427,7 +438,7 @@
         <div class="card" style="display:flex; align-items:center; gap:12px;">
             <img id="dashGameImg" src="" style="width:50px; height:50px; object-fit:contain; border-radius:6px;">
             <div>
-                <h3 id="dashGameName" style="color:var(--gold-light);">遊戲名稱</h3>
+                <h3 id="dashGameName" style="color:var(--red-light);">遊戲名稱</h3>
                 <p id="dashProviderTag" style="font-size:0.75rem; color:var(--text-sub);">系統商</p>
             </div>
         </div>
@@ -449,7 +460,7 @@
             </div>
             <div class="calc-row">
                 <span>推薦打法策略：</span>
-                <span class="calc-value" id="resStrategy" style="color:var(--cyan)">穩健階梯式倍壓</span>
+                <span class="calc-value" id="resStrategy" style="color:var(--red-light)">穩健階梯式倍壓</span>
             </div>
         </div>
 
@@ -474,7 +485,7 @@
             <p style="font-size:0.75rem; color:var(--text-sub); margin-top:8px; text-align:center;">升級 VIP 通行碼即可解鎖 10 間完整實體選房資訊</p>
         </div>
 
-        <!-- 動態觸發訊號（2-3種符號，每種2-3個隨機組合） -->
+        <!-- 動態觸發訊號 -->
         <div class="card">
             <div class="card-title" style="justify-content:space-between;">
                 <span>⚡ 當日動態觸發訊號</span>
@@ -511,9 +522,9 @@
             </select>
             <button class="btn" style="width:auto;" onclick="generatePasscode()">生成通行碼</button>
         </div>
-        <div id="generatedPasscodeDisplay" style="text-align:center; font-size:1.2rem; font-weight:bold; color:var(--gold-light); min-height:24px; margin:5px 0;"></div>
+        <div id="generatedPasscodeDisplay" style="text-align:center; font-size:1.2rem; font-weight:bold; color:var(--red-light); min-height:24px; margin:5px 0;"></div>
         <div style="font-size:0.85rem; margin-top:10px;">已知有效通行碼紀錄：</div>
-        <div id="passcodeLog" style="max-height:150px; overflow-y:auto; font-size:0.75rem; background:rgba(0,0,0,0.5); padding:8px; border-radius:6px; font-family:monospace;">
+        <div id="passcodeLog" style="max-height:150px; overflow-y:auto; font-size:0.75rem; background:rgba(0,0,0,0.6); padding:8px; border-radius:6px; font-family:monospace; border:1px solid rgba(255,30,39,0.2);">
             尚無紀錄
         </div>
         <button class="btn btn-outline" onclick="closeAdminConsole()">關閉</button>
@@ -629,13 +640,11 @@
         ]
     };
 
-    // 全局狀態與持久化讀取
     let currentUserType = null;
     let currentProvider = '';
     let currentGame = null;
     let titleClickCount = 0;
 
-    // 載入本地儲存的通行碼紀錄
     function getStoredPasscodes() {
         try {
             return JSON.parse(localStorage.getItem('niulaoda_passcodes') || '{}');
@@ -648,22 +657,16 @@
         localStorage.setItem('niulaoda_passcodes', JSON.stringify(codesObj));
     }
 
-    // 視圖切換
     function switchView(viewId) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
     }
 
-    // 萬用/動態通行碼驗證 (修復儲存漏洞與通配規則)
     function verifyPasscode() {
         const code = document.getElementById('passcodeInput').value.trim().toUpperCase();
         const now = Date.now();
         const activePasscodes = getStoredPasscodes();
 
-        // 驗證條件：
-        // 1. 萬用固定金鑰：AIMINCVV168
-        // 2. 通配規則金鑰：以 CVV 開頭 + 4位數字 (如 CVV8888、CVV6666)
-        // 3. 本地儲存且未過期之隨機通行碼
         const isMasterKey = (code === "AIMINCVV168");
         const isPatternKey = /^CVV\d{4}$/.test(code);
         const isStoredValid = (activePasscodes[code] && activePasscodes[code] > now);
@@ -671,7 +674,7 @@
         if (isMasterKey || isPatternKey || isStoredValid) {
             currentUserType = 'VIP';
             document.getElementById('statusText').innerText = "VIP 尊榮存取";
-            document.getElementById('statusText').style.color = "var(--gold)";
+            document.getElementById('statusText').style.color = "var(--red-light)";
             document.getElementById('userTag').innerText = "VIP";
             document.getElementById('userTag').className = "tag tag-vip";
             switchView('viewProviders');
@@ -680,17 +683,15 @@
         }
     }
 
-    // 免費體驗模式
     function enterFreeMode() {
         currentUserType = 'FREE';
         document.getElementById('statusText').innerText = "體驗試用中";
-        document.getElementById('statusText').style.color = "var(--cyan)";
+        document.getElementById('statusText').style.color = "var(--text-sub)";
         document.getElementById('userTag').innerText = "體驗員";
         document.getElementById('userTag').className = "tag tag-free";
         switchView('viewProviders');
     }
 
-    // 登出
     function logout() {
         currentUserType = null;
         document.getElementById('passcodeInput').value = '';
@@ -701,7 +702,6 @@
         switchView('viewLogin');
     }
 
-    // 開啟系統商
     function openProvider(providerKey) {
         currentProvider = providerKey;
         document.getElementById('providerTitle').innerText = `🎮 ${providerKey} 電子 - 遊戲選單`;
@@ -722,7 +722,6 @@
         switchView('viewGames');
     }
 
-    // 開啟數據儀表板
     function openDashboard(game) {
         currentGame = game;
         document.getElementById('dashGameImg').src = game.img;
@@ -752,7 +751,6 @@
         switchView('viewDashboard');
     }
 
-    // 風控試算
     function calculateRisk() {
         const capital = parseFloat(document.getElementById('capitalInput').value) || 10000;
         const singleBet = Math.max(1, Math.floor(capital / 500));
@@ -770,7 +768,6 @@
         }
     }
 
-    // 隨機生成 10 間房間爆分率
     function refreshRooms() {
         if (!currentGame || currentGame.maxRooms === 0) return;
         const list = document.getElementById('roomList');
@@ -797,7 +794,6 @@
         });
     }
 
-    // 產生動態觸發訊號
     function generateSignal() {
         const box = document.getElementById('signalBox');
         box.innerHTML = '';
@@ -829,7 +825,6 @@
         });
     }
 
-    // 點擊標題開啟隱藏管理員驗證
     function handleTitleClick() {
         titleClickCount++;
         if (titleClickCount >= 3) {
@@ -858,7 +853,6 @@
         document.getElementById('adminConsoleModal').style.display = 'none';
     }
 
-    // 生成隨機通行碼並保存至 localStorage
     function generatePasscode() {
         const hours = parseInt(document.getElementById('passcodeHours').value);
         const code = 'CVV' + Math.floor(1000 + Math.random() * 9000);
@@ -872,7 +866,6 @@
         renderPasscodeLog();
     }
 
-    // 渲染通行碼紀錄
     function renderPasscodeLog() {
         const log = document.getElementById('passcodeLog');
         const activePasscodes = getStoredPasscodes();
