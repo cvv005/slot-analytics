@@ -276,7 +276,6 @@
             letter-spacing: 1px;
         }
 
-        /* 👑 VIP 包廂卡片式設計 */
         .vip-room-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -413,7 +412,6 @@
             box-shadow: 0 2px 8px rgba(255, 183, 0, 0.4);
         }
 
-        /* ⚡ 觸發波段訊號修復（強效亮白防黑背景） */
         .signal-container {
             display: flex;
             gap: 16px;
@@ -443,7 +441,6 @@
             align-items: center;
         }
 
-        /* 核心修復：白色襯底卡片包覆圖騰圖片，徹底解決暗黑融底不顯示問題 */
         .signal-img-card {
             width: 46px;
             height: 46px;
@@ -611,7 +608,7 @@
             </div>
         </div>
 
-        <!-- 👑 VIP 專屬實體包廂卡片選房系統 -->
+        <!-- VIP 專屬實體包廂卡片選房系統 -->
         <div class="card" id="roomCard">
             <div class="card-title" style="justify-content:space-between;">
                 <span>💎 VIP 專屬高爆率數據包廂監控</span>
@@ -641,7 +638,7 @@
             <p style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; text-align:center;">輸入 VIP 通行碼即可解鎖 10 間實體高級包廂即時監控數據</p>
         </div>
 
-        <!-- 動態觸發波段訊號 (完全顯色不失真) -->
+        <!-- 動態觸發波段訊號 -->
         <div class="card">
             <div class="card-title">
                 <span>⚡ 當日動態觸發波段訊號</span>
@@ -687,26 +684,14 @@
 </div>
 
 <script>
-    // 穩定高品質符號備用庫，確保不破圖
-    const FALLBACK_SYMBOLS = [
-        'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
-        'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
-        'https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp',
-        'https://husiaomei.com.tw/wp-content/uploads/2026/06/scatter.webp'
-    ];
-
+    // 獨立專屬數據庫：修正赤三國與各遊戲圖片混亂問題
     const GAME_DATABASE = {
         'ATG': [
-            { id: 'atg_seth', name: '戰神賽特', img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', maxRooms: 1300, 
-              symbols: [
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
-                'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png',
-                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png',
-                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon7.png'
-              ] 
-            },
-            { id: 'atg_seth2', name: '戰神賽特2', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10', maxRooms: 4100,
+            { 
+              id: 'atg_seth', 
+              name: '戰神賽特', 
+              img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', 
+              maxRooms: 1300, 
               symbols: [
                 'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
                 'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
@@ -714,7 +699,22 @@
                 'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png'
               ] 
             },
-            { id: 'atg_tiger', name: '虎小妹', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10', maxRooms: 3000,
+            { 
+              id: 'atg_seth2', 
+              name: '戰神賽特2', 
+              img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10', 
+              maxRooms: 4100,
+              symbols: [
+                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
+                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
+                'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png'
+              ] 
+            },
+            { 
+              id: 'atg_tiger', 
+              name: '虎小妹', 
+              img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10', 
+              maxRooms: 3000,
               symbols: [
                 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp',
                 'https://husiaomei.com.tw/wp-content/uploads/2026/06/s2.webp',
@@ -722,18 +722,62 @@
                 'https://husiaomei.com.tw/wp-content/uploads/2026/06/scatter.webp'
               ] 
             },
-            { id: 'atg_samkok', name: '赤三國', img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', maxRooms: 200,
+            { 
+              id: 'atg_samkok', 
+              name: '赤三國', 
+              img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', 
+              maxRooms: 200,
+              // 赤三國專屬三國符號 (關羽、方天畫戟、赤兔馬、軍令牌)
               symbols: [
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png'
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%BB%8D%E4%BB%A4%E7%89%8C.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E5%91%82%E6%B0%8F%E6%88%B0%E6%97%97.webp'
               ] 
             },
-            { id: 'atg_baphomet', name: '古神巴風特', img: 'https://atg-games.com/_ipx/f_webp&s_480x540/elder-god-baphomet/zh-tw/products.png', maxRooms: 1000, symbols: FALLBACK_SYMBOLS }
+            { 
+              id: 'atg_baphomet', 
+              name: '古神巴風特', 
+              img: 'https://atg-games.com/_ipx/f_webp&s_480x540/elder-god-baphomet/zh-tw/products.png', 
+              maxRooms: 1000, 
+              symbols: [
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%85%E5%AF%B6%E7%9F%B3.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%AB%E5%AF%B6%E7%9F%B3.webp'
+              ] 
+            }
         ],
         'RSG': [
-            { id: 'rsg_thor', name: '雷神之錘', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg', maxRooms: 0, symbols: FALLBACK_SYMBOLS },
-            { id: 'rsg_thor2', name: '雷神之錘2', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg', maxRooms: 0, symbols: FALLBACK_SYMBOLS },
-            { id: 'rsg_lubu', name: '戰神呂布', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg', maxRooms: 0, symbols: FALLBACK_SYMBOLS }
+            { 
+              id: 'rsg_thor', 
+              name: '雷神之錘', 
+              img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg', 
+              maxRooms: 0, 
+              symbols: [
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM1.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM2.webp',
+                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM3.webp'
+              ] 
+            },
+            { 
+              id: 'rsg_thor2', 
+              name: '雷神之錘2', 
+              img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg', 
+              maxRooms: 0, 
+              symbols: [
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM1.webp',
+                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM2.webp'
+              ] 
+            },
+            { 
+              id: 'rsg_lubu', 
+              name: '戰神呂布', 
+              img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg', 
+              maxRooms: 0, 
+              symbols: [
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp',
+                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp'
+              ] 
+            }
         ]
     };
 
@@ -865,7 +909,6 @@
         }
     }
 
-    // 👑 升級為 VIP 實體包廂格式生成器
     function refreshRooms() {
         if (!currentGame || currentGame.maxRooms === 0) return;
         const list = document.getElementById('roomList');
@@ -930,16 +973,18 @@
         alert(`已鎖定 VIP 房間 #${num}！\n請立即前往遊戲選擇 #${num} 號房間進行下注！`);
     }
 
-    // ⚡ 動態波段訊號生成器 (採用強效亮白防黑襯底卡片)
+    // ⚡ 波段訊號生成（確保讀取各遊戲專屬 symbols，不隨便混用到賽特圖案）
     function generateSignal() {
         const box = document.getElementById('signalBox');
         box.innerHTML = '';
 
-        if (!currentGame) return;
-        const symList = (currentGame.symbols && currentGame.symbols.length > 0) ? currentGame.symbols : FALLBACK_SYMBOLS;
+        if (!currentGame || !currentGame.symbols || currentGame.symbols.length === 0) {
+            box.innerHTML = '<span style="font-size:0.85rem; color:var(--text-sub);">該遊戲暫無動態圖鑑波段紀錄</span>';
+            return;
+        }
 
         const symbolCount = Math.floor(Math.random() * 2) + 2;
-        const shuffled = [...symList].sort(() => 0.5 - Math.random());
+        const shuffled = [...currentGame.symbols].sort(() => 0.5 - Math.random());
         const selectedSymbols = shuffled.slice(0, Math.min(symbolCount, shuffled.length));
 
         selectedSymbols.forEach(symUrl => {
@@ -949,10 +994,9 @@
 
             let imgsHtml = '';
             for (let i = 0; i < count; i++) {
-                // 每張圖片加上白襯底包覆，確保在任何底色下都 100% 顯色
                 imgsHtml += `
                     <div class="signal-img-card">
-                        <img src="${symUrl}" alt="signal" onerror="this.src='${FALLBACK_SYMBOLS[0]}'">
+                        <img src="${symUrl}" alt="signal">
                     </div>`;
             }
 
