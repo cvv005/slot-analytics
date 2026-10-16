@@ -43,7 +43,6 @@
             padding: 25px 15px;
         }
 
-        /* 修正：將容器寬度放大至 1100px 滿版大氣 */
         .container {
             width: 100%;
             max-width: 1100px;
@@ -281,7 +280,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 15px;
-            max-height: 520px;
+            max-height: 600px;
             overflow-y: auto;
             padding-right: 6px;
         }
@@ -616,7 +615,7 @@
                 <button class="btn btn-outline" style="width:auto; padding:4px 12px; font-size:0.8rem;" onclick="refreshRooms()">刷新房間數據</button>
             </div>
             <div class="vip-room-grid" id="roomList">
-                <!-- 動態生成的實體 VIP 包廂 -->
+                <!-- 動態生成的實體 VIP 包廂 (20 間) -->
             </div>
         </div>
 
@@ -636,7 +635,7 @@
                     </div>
                 </div>
             </div>
-            <p style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; text-align:center;">輸入 VIP 通行碼即可解鎖 10 間實體高級包廂即時監控數據</p>
+            <p style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; text-align:center;">輸入 VIP 通行碼即可解鎖 20 間實體高級包廂即時監控數據</p>
         </div>
 
         <!-- 動態觸發波段訊號 -->
@@ -908,6 +907,7 @@
         }
     }
 
+    // 將 VIP 包廂推薦數量擴充至 20 間
     function refreshRooms() {
         if (!currentGame || currentGame.maxRooms === 0) return;
         const list = document.getElementById('roomList');
@@ -916,10 +916,10 @@
         let rooms = [];
         const badges = ['🔥 強力爆發中', '⚡ 熱門波段房', '🎯 訊號狙擊房', '👑 帝王頂級房'];
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 20; i++) {
             const rNum = Math.floor(Math.random() * currentGame.maxRooms) + 1;
             const formattedNum = String(rNum).padStart(3, '0');
-            const rate = (Math.random() * 25 + 75).toFixed(1);
+            const rate = (Math.random() * 30 + 68).toFixed(1);
             const online = Math.floor(Math.random() * 4) + 1;
             const returnRate = Math.floor(Math.random() * 150) + 130;
             const spinsLeft = Math.floor(Math.random() * 12) + 3;
