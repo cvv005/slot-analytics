@@ -52,7 +52,6 @@
             gap: 20px;
         }
 
-        /* Header */
         header {
             text-align: center;
             padding: 22px 15px;
@@ -617,7 +616,6 @@
 <body>
 
 <div class="container">
-    <!-- Header -->
     <header>
         <h1 id="appTitle" onclick="handleTitleClick()">🐂 牛老大專屬數據選房</h1>
         <p>ATG / RSG 雙系統大廳數據整合分析平台</p>
@@ -629,7 +627,6 @@
         </div>
     </header>
 
-    <!-- 📢 實時獲利戰報動態跑馬燈 -->
     <div class="marquee-box">
         <div class="marquee-content">
             🎉 恭喜 [VIP 玩家 **382] 鎖定房間 #1001 成功觸發 x1280 爆發大獎！ &nbsp;&nbsp;&nbsp;&nbsp;
@@ -643,10 +640,10 @@
         <div class="card login-box">
             <div class="card-title">🔑 通行證身份驗證</div>
             <p style="font-size: 0.85rem; color: var(--text-sub);">請輸入管理員核發之隨機通行碼進入 VIP 高級數據分析大廳：</p>
-            <input type="text" id="passcodeInput" class="input-field" placeholder="請輸入通行碼 (例: CVV8888)" autocomplete="off" oninput="this.value = this.value.toUpperCase()">
-            <button class="btn" onclick="verifyPasscode()">驗證進入平台</button>
+            <input type="text" id="passcodeInput" class="input-field" placeholder="請輸入專屬通行碼" autocomplete="off" onkeyup="if(event.key==='Enter') verifyPasscode()">
+            <button class="btn" type="button" onclick="verifyPasscode()">驗證進入平台</button>
             <div style="text-align: center; margin: 4px 0; font-size: 0.85rem; color: var(--text-sub);">- 或 -</div>
-            <button class="btn btn-cyan" onclick="enterFreeMode()">免費體驗試玩模式</button>
+            <button class="btn btn-cyan" type="button" onclick="enterFreeMode()">免費體驗試玩模式</button>
         </div>
     </div>
 
@@ -673,9 +670,7 @@
         <button class="btn btn-back" onclick="switchView('viewProviders')">‹ 返回系統商</button>
         <div class="card">
             <div class="card-title" id="providerTitle">🎮 選擇分析遊戲</div>
-            <div class="grid-3" id="gameGrid">
-                <!-- 動態載入遊戲 -->
-            </div>
+            <div class="grid-3" id="gameGrid"></div>
         </div>
     </div>
 
@@ -683,7 +678,6 @@
     <div id="viewDashboard" class="view-section">
         <button class="btn btn-back" onclick="switchView('viewGames')">‹ 返回遊戲選單</button>
         
-        <!-- 遊戲標頭 -->
         <div class="card" style="display:flex; align-items:center; gap:15px;">
             <img id="dashGameImg" src="" style="width:60px; height:60px; object-fit:contain; border-radius:8px;">
             <div>
@@ -692,7 +686,6 @@
             </div>
         </div>
 
-        <!-- 本金風控與策略計算器 -->
         <div class="card calc-box">
             <div class="card-title">💰 本金風控與策略配注試算</div>
             <div style="display:flex; gap:10px;">
@@ -700,7 +693,6 @@
                 <button class="btn" style="width: auto; padding: 0 20px;" onclick="calculateRisk()">開始試算</button>
             </div>
 
-            <!-- 策略類型切換 -->
             <div class="strategy-tab-group">
                 <div class="strategy-tab" onclick="setStrategyMode('conservative', this)">🛡️ 保守平押型</div>
                 <div class="strategy-tab active" onclick="setStrategyMode('balanced', this)">⚖️ 穩健階梯型</div>
@@ -721,14 +713,12 @@
             </div>
         </div>
 
-        <!-- VIP 專屬實體包廂卡片選房系統 -->
         <div class="card" id="roomCard">
             <div class="card-title" style="justify-content:space-between;">
                 <span>💎 VIP 專屬高爆率數據包廂監控</span>
                 <button class="btn btn-outline" style="width:auto; padding:4px 12px; font-size:0.8rem;" onclick="refreshRooms()">刷新房間數據</button>
             </div>
 
-            <!-- 快篩按鈕 -->
             <div class="filter-bar">
                 <button class="filter-btn active" onclick="filterRooms('all', this)">全部包廂 (20)</button>
                 <button class="filter-btn" onclick="filterRooms('emperor', this)">👑 帝王頂級房</button>
@@ -736,12 +726,9 @@
                 <button class="filter-btn" onclick="filterRooms('fast_burst', this)">⚡ 5圈內預計連爆</button>
             </div>
 
-            <div class="vip-room-grid" id="roomList">
-                <!-- 動態生成的實體 VIP 包廂 (20 間) -->
-            </div>
+            <div class="vip-room-grid" id="roomList"></div>
         </div>
 
-        <!-- 體驗模式專用試玩房 -->
         <div class="card" id="freeRoomCard" style="display:none;">
             <div class="card-title">🧪 體驗玩家專用試玩房</div>
             <div class="vip-room-card emperor" style="padding:20px;">
@@ -760,14 +747,11 @@
             <p style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; text-align:center;">輸入 VIP 通行碼即可解鎖 20 間實體高級包廂即時監控數據</p>
         </div>
 
-        <!-- 動態觸發波段訊號 (1小時更新一次) -->
         <div class="card">
             <div class="card-title">
                 <span>⚡ 當日動態觸發波段訊號 (每小時定時校準)</span>
             </div>
-            <div class="signal-container" id="signalBox">
-                <!-- 動態產生訊號 -->
-            </div>
+            <div class="signal-container" id="signalBox"></div>
         </div>
     </div>
 </div>
@@ -808,96 +792,16 @@
 <script>
     const GAME_DATABASE = {
         'ATG': [
-            { 
-              id: 'atg_seth', 
-              name: '戰神賽特', 
-              img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', 
-              maxRooms: 1300, 
-              symbols: [
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
-                'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png',
-                'https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png'
-              ] 
-            },
-            { 
-              id: 'atg_seth2', 
-              name: '戰神賽特2', 
-              img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10', 
-              maxRooms: 4100,
-              symbols: [
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png',
-                'https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png',
-                'https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png'
-              ] 
-            },
-            { 
-              id: 'atg_tiger', 
-              name: '虎小妹', 
-              img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10', 
-              maxRooms: 3000,
-              symbols: [
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s2.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/s3.webp',
-                'https://husiaomei.com.tw/wp-content/uploads/2026/06/scatter.webp'
-              ] 
-            },
-            { 
-              id: 'atg_samkok', 
-              name: '赤三國', 
-              img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', 
-              maxRooms: 200,
-              symbols: [
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%BB%8D%E4%BB%A4%E7%89%8C.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E5%91%82%E6%B0%8F%E6%88%B0%E6%97%97.webp'
-              ] 
-            },
-            { 
-              id: 'atg_baphomet', 
-              name: '古神巴風特', 
-              img: 'https://atg-games.com/_ipx/f_webp&s_480x540/elder-god-baphomet/zh-tw/products.png', 
-              maxRooms: 1000, 
-              symbols: [
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%85%E5%AF%B6%E7%9F%B3.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%AB%E5%AF%B6%E7%9F%B3.webp'
-              ] 
-            }
+            { id: 'atg_seth', name: '戰神賽特', img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', maxRooms: 1300, symbols: ['https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png','https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png','https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png','https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png'] },
+            { id: 'atg_seth2', name: '戰神賽特2', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10', maxRooms: 4100, symbols: ['https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png','https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png','https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png'] },
+            { id: 'atg_tiger', name: '虎小妹', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10', maxRooms: 3000, symbols: ['https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp','https://husiaomei.com.tw/wp-content/uploads/2026/06/s2.webp','https://husiaomei.com.tw/wp-content/uploads/2026/06/s3.webp','https://husiaomei.com.tw/wp-content/uploads/2026/06/scatter.webp'] },
+            { id: 'atg_samkok', name: '赤三國', img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', maxRooms: 200, symbols: ['https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%BB%8D%E4%BB%A4%E7%89%8C.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E5%91%82%E6%B0%8F%E6%88%B0%E6%97%97.webp'] },
+            { id: 'atg_baphomet', name: '古神巴風特', img: 'https://atg-games.com/_ipx/f_webp&s_480x540/elder-god-baphomet/zh-tw/products.png', maxRooms: 1000, symbols: ['https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%85%E5%AF%B6%E7%9F%B3.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%AB%E5%AF%B6%E7%9F%B3.webp'] }
         ],
         'RSG': [
-            { 
-              id: 'rsg_thor', 
-              name: '雷神之錘', 
-              img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg', 
-              maxRooms: 0, 
-              symbols: [
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM1.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM2.webp',
-                'https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM3.webp'
-              ] 
-            },
-            { 
-              id: 'rsg_thor2', 
-              name: '雷神之錘2', 
-              img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg', 
-              maxRooms: 0, 
-              symbols: [
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM1.webp',
-                'https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM2.webp'
-              ] 
-            },
-            { 
-              id: 'rsg_lubu', 
-              name: '戰神呂布', 
-              img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg', 
-              maxRooms: 0, 
-              symbols: [
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp',
-                'https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp'
-              ] 
-            }
+            { id: 'rsg_thor', name: '雷神之錘', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg', maxRooms: 0, symbols: ['https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM1.webp','https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM2.webp','https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM3.webp'] },
+            { id: 'rsg_thor2', name: '雷神之錘2', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg', maxRooms: 0, symbols: ['https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM1.webp','https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM2.webp'] },
+            { id: 'rsg_lubu', name: '戰神呂布', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg', maxRooms: 0, symbols: ['https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp'] }
         ]
     };
 
@@ -908,18 +812,19 @@
     let currentStrategyMode = 'balanced';
     let rawRoomData = [];
 
-    function initTimers() {
-        document.getElementById('lastCalcTime').innerText = new Date().toLocaleTimeString();
+    window.onload = function() {
+        const timeEl = document.getElementById('lastCalcTime');
+        if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
         let secondsLeft = 3599;
         setInterval(() => {
             secondsLeft--;
             if (secondsLeft < 0) secondsLeft = 3599;
             const m = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
             const s = String(secondsLeft % 60).padStart(2, '0');
-            document.getElementById('recalTimer').innerText = `${m}:${s}`;
+            const timerEl = document.getElementById('recalTimer');
+            if (timerEl) timerEl.innerText = `${m}:${s}`;
         }, 1000);
-    }
-    window.onload = initTimers;
+    };
 
     function getStoredPasscodes() {
         try {
@@ -935,72 +840,99 @@
 
     function switchView(viewId) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-        document.getElementById(viewId).classList.add('active');
+        const targetView = document.getElementById(viewId);
+        if (targetView) targetView.classList.add('active');
     }
 
-    // 🔑 升級容錯版驗證邏輯
+    // 🔒 嚴格安全的通行碼驗證機制
     function verifyPasscode() {
-        const inputVal = document.getElementById('passcodeInput').value.trim();
-        if (!inputVal) {
+        const inputEl = document.getElementById('passcodeInput');
+        if (!inputEl) return;
+
+        const code = inputEl.value ? inputEl.value.trim().toUpperCase() : '';
+        if (!code) {
             alert('請輸入通行碼！');
             return;
         }
 
-        const code = inputVal.toUpperCase();
         const now = Date.now();
         const activePasscodes = getStoredPasscodes();
 
         const isMasterKey = (code === "AIMINCVV168");
-        const isPatternKey = /^CVV\d{4}$/.test(code);
         const isStoredValid = (activePasscodes[code] && activePasscodes[code] > now);
 
-        if (isMasterKey || isPatternKey || isStoredValid) {
+        // 僅允許：1. 主管理密碼 2. 後台生成且在時效內的通行碼
+        if (isMasterKey || isStoredValid) {
             currentUserType = 'VIP';
-            document.getElementById('statusText').innerText = "VIP 尊榮特權系統";
-            document.getElementById('statusText').style.color = "var(--red-bright)";
-            document.getElementById('userTag').innerText = "VIP MEMBER";
-            document.getElementById('userTag').className = "tag tag-vip";
+            const statusText = document.getElementById('statusText');
+            if (statusText) {
+                statusText.innerText = "VIP 尊榮特權系統";
+                statusText.style.color = "var(--red-bright)";
+            }
+            const userTag = document.getElementById('userTag');
+            if (userTag) {
+                userTag.innerText = "VIP MEMBER";
+                userTag.className = "tag tag-vip";
+            }
             switchView('viewProviders');
         } else {
-            alert('通行碼驗證失敗！\n請確認通行碼是否正確（提示：格式為 CVV + 4位數字）');
+            alert('通行碼無效或已過期！\n請向管理員獲取最新專屬通行碼。');
         }
     }
 
     function enterFreeMode() {
         currentUserType = 'FREE';
-        document.getElementById('statusText').innerText = "體驗試用模式";
-        document.getElementById('statusText').style.color = "var(--text-sub)";
-        document.getElementById('userTag').innerText = "GUEST";
-        document.getElementById('userTag').className = "tag tag-free";
+        const statusText = document.getElementById('statusText');
+        if (statusText) {
+            statusText.innerText = "體驗試用模式";
+            statusText.style.color = "var(--text-sub)";
+        }
+        const userTag = document.getElementById('userTag');
+        if (userTag) {
+            userTag.innerText = "GUEST";
+            userTag.className = "tag tag-free";
+        }
         switchView('viewProviders');
     }
 
     function logout() {
         currentUserType = null;
-        document.getElementById('passcodeInput').value = '';
-        document.getElementById('statusText').innerText = "尚未驗證登入";
-        document.getElementById('statusText').style.color = "var(--text-sub)";
-        document.getElementById('userTag').innerText = "UNVERIFIED";
-        document.getElementById('userTag').className = "tag tag-free";
+        const inputEl = document.getElementById('passcodeInput');
+        if (inputEl) inputEl.value = '';
+        const statusText = document.getElementById('statusText');
+        if (statusText) {
+            statusText.innerText = "尚未驗證登入";
+            statusText.style.color = "var(--text-sub)";
+        }
+        const userTag = document.getElementById('userTag');
+        if (userTag) {
+            userTag.innerText = "UNVERIFIED";
+            userTag.className = "tag tag-free";
+        }
         switchView('viewLogin');
     }
 
     function openProvider(providerKey) {
         currentProvider = providerKey;
-        document.getElementById('providerTitle').innerText = `🎮 ${providerKey} 電子大廳 - 選擇遊戲`;
+        const pTitle = document.getElementById('providerTitle');
+        if (pTitle) pTitle.innerText = `🎮 ${providerKey} 電子大廳 - 選擇遊戲`;
+        
         const grid = document.getElementById('gameGrid');
+        if (!grid) return;
         grid.innerHTML = '';
 
-        GAME_DATABASE[providerKey].forEach(game => {
-            const card = document.createElement('div');
-            card.className = 'select-card';
-            card.onclick = () => openDashboard(game);
-            card.innerHTML = `
-                <img src="${game.img}" alt="${game.name}">
-                <span>${game.name}</span>
-            `;
-            grid.appendChild(card);
-        });
+        if (GAME_DATABASE[providerKey]) {
+            GAME_DATABASE[providerKey].forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'select-card';
+                card.onclick = () => openDashboard(game);
+                card.innerHTML = `
+                    <img src="${game.img}" alt="${game.name}">
+                    <span>${game.name}</span>
+                `;
+                grid.appendChild(card);
+            });
+        }
 
         switchView('viewGames');
     }
@@ -1017,16 +949,17 @@
         const freeRoomCard = document.getElementById('freeRoomCard');
 
         if (currentUserType === 'FREE') {
-            roomCard.style.display = 'none';
-            freeRoomCard.style.display = 'block';
-            document.getElementById('freeRoomRate').innerText = `${(Math.random() * 20 + 75).toFixed(1)}%`;
+            if (roomCard) roomCard.style.display = 'none';
+            if (freeRoomCard) freeRoomCard.style.display = 'block';
+            const rateVal = document.getElementById('freeRoomRate');
+            if (rateVal) rateVal.innerText = `${(Math.random() * 20 + 75).toFixed(1)}%`;
         } else {
-            freeRoomCard.style.display = 'none';
+            if (freeRoomCard) freeRoomCard.style.display = 'none';
             if (game.maxRooms > 0) {
-                roomCard.style.display = 'block';
+                if (roomCard) roomCard.style.display = 'block';
                 refreshRooms();
             } else {
-                roomCard.style.display = 'none';
+                if (roomCard) roomCard.style.display = 'none';
             }
         }
 
@@ -1037,12 +970,13 @@
     function setStrategyMode(mode, el) {
         currentStrategyMode = mode;
         document.querySelectorAll('.strategy-tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
+        if (el) el.classList.add('active');
         calculateRisk();
     }
 
     function calculateRisk() {
-        const capital = parseFloat(document.getElementById('capitalInput').value) || 10000;
+        const capInput = document.getElementById('capitalInput');
+        const capital = capInput ? (parseFloat(capInput.value) || 10000) : 10000;
         let divider = 500;
         let strategyName = "穩健階梯式倍壓";
 
@@ -1057,9 +991,12 @@
         const singleBet = Math.max(1, Math.floor(capital / divider));
         const spins = Math.floor(capital / singleBet);
 
-        document.getElementById('resSingleBet').innerText = `$${singleBet}`;
-        document.getElementById('resSpins').innerText = `${spins} 圈`;
-        document.getElementById('resStrategy').innerText = strategyName;
+        const resSingleBet = document.getElementById('resSingleBet');
+        if (resSingleBet) resSingleBet.innerText = `$${singleBet}`;
+        const resSpins = document.getElementById('resSpins');
+        if (resSpins) resSpins.innerText = `${spins} 圈`;
+        const resStrategy = document.getElementById('resStrategy');
+        if (resStrategy) resStrategy.innerText = strategyName;
     }
 
     function refreshRooms() {
@@ -1095,6 +1032,7 @@
 
     function renderRoomCards(rooms) {
         const list = document.getElementById('roomList');
+        if (!list) return;
         list.innerHTML = '';
 
         rooms.forEach((r, idx) => {
@@ -1132,7 +1070,7 @@
 
     function filterRooms(type, btnEl) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btnEl.classList.add('active');
+        if (btnEl) btnEl.classList.add('active');
 
         if (type === 'all') {
             renderRoomCards(rawRoomData);
@@ -1151,6 +1089,7 @@
 
     function generateSignal() {
         const box = document.getElementById('signalBox');
+        if (!box) return;
         box.innerHTML = '';
 
         if (!currentGame || !currentGame.symbols || currentGame.symbols.length === 0) {
@@ -1158,50 +1097,26 @@
             return;
         }
 
-        const now = Date.now();
-        const cacheKey = `signal_cache_${currentGame.id}`;
-        let cachedData = null;
+        const symbolCount = Math.floor(Math.random() * 2) + 2;
+        const shuffled = [...currentGame.symbols].sort(() => 0.5 - Math.random());
+        const selectedSymbols = shuffled.slice(0, Math.min(symbolCount, shuffled.length));
 
-        try {
-            cachedData = JSON.parse(localStorage.getItem(cacheKey));
-        } catch(e) {}
-
-        const ONE_HOUR = 3600 * 1000;
-        let signalGroups = [];
-
-        if (cachedData && (now - cachedData.timestamp < ONE_HOUR)) {
-            signalGroups = cachedData.groups;
-        } else {
-            const symbolCount = Math.floor(Math.random() * 2) + 2;
-            const shuffled = [...currentGame.symbols].sort(() => 0.5 - Math.random());
-            const selectedSymbols = shuffled.slice(0, Math.min(symbolCount, shuffled.length));
-
-            signalGroups = selectedSymbols.map(symUrl => ({
-                symUrl: symUrl,
-                count: Math.floor(Math.random() * 2) + 2
-            }));
-
-            localStorage.setItem(cacheKey, JSON.stringify({
-                timestamp: now,
-                groups: signalGroups
-            }));
-        }
-
-        signalGroups.forEach(item => {
+        selectedSymbols.forEach(symUrl => {
+            const count = Math.floor(Math.random() * 2) + 2;
             const group = document.createElement('div');
             group.className = 'signal-group';
 
             let imgsHtml = '';
-            for (let i = 0; i < item.count; i++) {
+            for (let i = 0; i < count; i++) {
                 imgsHtml += `
                     <div class="signal-img-card">
-                        <img src="${item.symUrl}" alt="signal">
+                        <img src="${symUrl}" alt="signal">
                     </div>`;
             }
 
             group.innerHTML = `
                 <div class="signal-img-wrapper">${imgsHtml}</div>
-                <span class="signal-count">x${item.count}</span>
+                <span class="signal-count">x${count}</span>
             `;
             box.appendChild(group);
         });
@@ -1211,32 +1126,39 @@
         titleClickCount++;
         if (titleClickCount >= 3) {
             titleClickCount = 0;
-            document.getElementById('adminModal').style.display = 'flex';
+            const modal = document.getElementById('adminModal');
+            if (modal) modal.style.display = 'flex';
         }
     }
 
     function closeAdminModal() {
-        document.getElementById('adminModal').style.display = 'none';
-        document.getElementById('adminPassword').value = '';
+        const modal = document.getElementById('adminModal');
+        if (modal) modal.style.display = 'none';
+        const input = document.getElementById('adminPassword');
+        if (input) input.value = '';
     }
 
     function loginAdmin() {
-        const pwd = document.getElementById('adminPassword').value;
+        const pwdInput = document.getElementById('adminPassword');
+        const pwd = pwdInput ? pwdInput.value : '';
         if (pwd === "admincvv005") {
             closeAdminModal();
             renderPasscodeLog();
-            document.getElementById('adminConsoleModal').style.display = 'flex';
+            const consoleModal = document.getElementById('adminConsoleModal');
+            if (consoleModal) consoleModal.style.display = 'flex';
         } else {
             alert('管理員密碼錯誤！');
         }
     }
 
     function closeAdminConsole() {
-        document.getElementById('adminConsoleModal').style.display = 'none';
+        const consoleModal = document.getElementById('adminConsoleModal');
+        if (consoleModal) consoleModal.style.display = 'none';
     }
 
     function generatePasscode() {
-        const hours = parseInt(document.getElementById('passcodeHours').value);
+        const hoursEl = document.getElementById('passcodeHours');
+        const hours = hoursEl ? parseInt(hoursEl.value) : 1;
         const code = 'CVV' + Math.floor(1000 + Math.random() * 9000);
         const expireTime = Date.now() + hours * 3600 * 1000;
 
@@ -1244,12 +1166,15 @@
         activePasscodes[code] = expireTime;
         saveStoredPasscodes(activePasscodes);
 
-        document.getElementById('generatedPasscodeDisplay').innerText = `通行碼：${code}`;
+        const disp = document.getElementById('generatedPasscodeDisplay');
+        if (disp) disp.innerText = `通行碼：${code}`;
         renderPasscodeLog();
     }
 
     function renderPasscodeLog() {
         const log = document.getElementById('passcodeLog');
+        if (!log) return;
+
         const activePasscodes = getStoredPasscodes();
         const now = Date.now();
         let html = '';
