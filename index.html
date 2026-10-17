@@ -583,6 +583,20 @@
             font-size: 1rem;
         }
 
+        /* 🔻 頁尾聲明樣式 */
+        footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            border-top: 1px solid rgba(255, 0, 21, 0.2);
+            padding-top: 15px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -747,13 +761,23 @@
             <p style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; text-align:center;">輸入 VIP 通行碼即可解鎖 20 間實體高級包廂即時監控數據</p>
         </div>
 
+        <!-- 當日動態波段訊號區 -->
         <div class="card">
             <div class="card-title">
                 <span>⚡ 當日動態觸發波段訊號 (每小時定時校準)</span>
             </div>
             <div class="signal-container" id="signalBox"></div>
+            <p style="font-size: 0.82rem; color: var(--gold-accent); text-align: center; margin-top: 12px; font-weight: bold; background: rgba(255, 183, 0, 0.08); padding: 8px; border-radius: 4px; border: 1px dashed rgba(255, 183, 0, 0.3);">
+                💡 策略提示：當前版面出現以上訊號，請直接購買免費遊戲（訊號數量須完全一致，不可多不可少）
+            </p>
         </div>
     </div>
+
+    <!-- 🔻 頁尾宣告 -->
+    <footer>
+        <div>SYSTEM VER 4.2.0 | 牛老大專屬大廳數據選房演算法中心</div>
+        <div>本平台數據皆由大數據模型進行波段與回報率監控演算，僅供策略選擇參考</div>
+    </footer>
 </div>
 
 <div class="modal-overlay" id="adminModal">
@@ -824,7 +848,6 @@
             if (timerEl) timerEl.innerText = `${m}:${s}`;
         }, 1000);
 
-        // ⏱️ 10 分鐘（600000 毫秒）自動刷新房間數據
         setInterval(() => {
             if (currentGame && currentUserType === 'VIP') {
                 refreshRooms();
