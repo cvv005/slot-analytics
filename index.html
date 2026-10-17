@@ -7,7 +7,8 @@
     <!-- PWA 關聯設定 -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff0015">
- <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10">
+    <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
@@ -801,7 +802,7 @@
                 <option value="24">24 小時有效</option>
                 <option value="72">72 小時有效</option>
             </select>
-            <button class="btn" style="width:auto;" onclick="generatePasscode()">立即生成</button>
+            <button class="btn" style="width:auto;" onclick="generatePasscode()">點擊生成隨機碼</button>
         </div>
         <div id="generatedPasscodeDisplay" style="text-align:center; font-size:1.3rem; font-weight:900; color:var(--gold-accent); min-height:28px; margin:8px 0; font-family:'Orbitron';"></div>
         <div style="font-size:0.85rem; color:var(--text-sub); margin-top:10px;">已知有效通行碼紀錄：</div>
@@ -813,7 +814,6 @@
 </div>
 
 <script>
-    // 🚀 註冊 PWA Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW register failed:', err));
@@ -841,6 +841,41 @@
     let titleClickCount = 0;
     let currentStrategyMode = 'balanced';
     let rawRoomData = [];
+    let currentSessionExpiry = 0; // 紀錄目前登入的到期時間戳記
+
+    // 🔑 核心演算法：解析編碼中的時效與隨機碼，進行跨裝置自動到期驗證
+    function createPasscodeForHours(hours) {
+        const randNum = Math.floor(100 + Math.random() * 900); // 3位隨機數
+        const expireTime = Date.now() + (hours * 3600 * 1000);
+        
+        // 將到期時間（秒數）轉為 36 進位字串進行編碼
+        const expireSec = Math.floor(expireTime / 1000);
+        const encodedTime = expireSec.toString(36).toUpperCase();
+        
+        return `CVV-${randNum}-${encodedTime}`;
+    }
+
+    function verifyPasscodeLogic(code) {
+        const clean = code.trim().toUpperCase();
+        if (clean === "AIMINCVV168") {
+            return { valid: true, expireTime: Infinity }; // 主管理密碼永不過期
+        }
+
+        const parts = clean.split('-');
+        if (parts.length === 3 && parts[0] === 'CVV') {
+            const encodedTime = parts[2];
+            const expireSec = parseInt(encodedTime, 36);
+            if (!isNaN(expireSec)) {
+                const expireTime = expireSec * 1000;
+                if (Date.now() < expireTime) {
+                    return { valid: true, expireTime: expireTime };
+                } else {
+                    return { valid: false, reason: 'EXPIRED' };
+                }
+            }
+        }
+        return { valid: false, reason: 'INVALID' };
+    }
 
     window.onload = function() {
         const timeEl = document.getElementById('lastCalcTime');
@@ -856,24 +891,22 @@
             if (timerEl) timerEl.innerText = `${m}:${s}`;
         }, 1000);
 
+        // ⏱️ 全局背景監控：時間一到立即自動踢出登入裝置
+        setInterval(() => {
+            if (currentUserType === 'VIP' && currentSessionExpiry !== Infinity) {
+                if (Date.now() >= currentSessionExpiry) {
+                    alert('⚠️ 您的通行碼使用期限已到期！系統已自動將您剔除登入。');
+                    logout();
+                }
+            }
+        }, 3000);
+
         setInterval(() => {
             if (currentGame && currentUserType === 'VIP') {
                 refreshRooms();
             }
         }, 600000);
     };
-
-    function getStoredPasscodes() {
-        try {
-            return JSON.parse(localStorage.getItem('niulaoda_passcodes') || '{}');
-        } catch(e) {
-            return {};
-        }
-    }
-
-    function saveStoredPasscodes(codesObj) {
-        localStorage.setItem('niulaoda_passcodes', JSON.stringify(codesObj));
-    }
 
     function switchView(viewId) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -891,19 +924,10 @@
             return;
         }
 
-        const now = Date.now();
-        const activePasscodes = getStoredPasscodes();
-
-        const isMasterKey = (code === "AIMINCVV168");
-        const isStoredValid = (activePasscodes[code] && activePasscodes[code] > now);
-
-        if (isMasterKey || isStoredValid) {
+        const res = verifyPasscodeLogic(code);
+        if (res.valid) {
             currentUserType = 'VIP';
-            const statusText = document.getElementById('statusText');
-            if (statusText) {
-                statusText.innerText = "VIP 尊榮特權系統";
-                statusText.style.color = "var(--red-bright)";
-            }
+            currentSessionExpiry = res.expireTime;
             const userTag = document.getElementById('userTag');
             if (userTag) {
                 userTag.innerText = "VIP MEMBER";
@@ -911,17 +935,17 @@
             }
             switchView('viewProviders');
         } else {
-            alert('通行碼無效或已過期！\n請向管理員獲取最新專屬通行碼。');
+            if (res.reason === 'EXPIRED') {
+                alert('⚠️ 此通行碼已經超過有效時間，請聯繫管理員獲取最新通行碼！');
+            } else {
+                alert('❌ 通行碼無效！請輸入正確之專屬通行碼。');
+            }
         }
     }
 
     function enterFreeMode() {
         currentUserType = 'FREE';
-        const statusText = document.getElementById('statusText');
-        if (statusText) {
-            statusText.innerText = "體驗試用模式";
-            statusText.style.color = "var(--text-sub)";
-        }
+        currentSessionExpiry = Infinity;
         const userTag = document.getElementById('userTag');
         if (userTag) {
             userTag.innerText = "GUEST";
@@ -932,13 +956,9 @@
 
     function logout() {
         currentUserType = null;
+        currentSessionExpiry = 0;
         const inputEl = document.getElementById('passcodeInput');
         if (inputEl) inputEl.value = '';
-        const statusText = document.getElementById('statusText');
-        if (statusText) {
-            statusText.innerText = "尚未驗證登入";
-            statusText.style.color = "var(--text-sub)";
-        }
         const userTag = document.getElementById('userTag');
         if (userTag) {
             userTag.innerText = "UNVERIFIED";
@@ -1179,7 +1199,6 @@
         const pwd = pwdInput ? pwdInput.value : '';
         if (pwd === "admincvv005") {
             closeAdminModal();
-            renderPasscodeLog();
             const consoleModal = document.getElementById('adminConsoleModal');
             if (consoleModal) consoleModal.style.display = 'flex';
         } else {
@@ -1195,34 +1214,17 @@
     function generatePasscode() {
         const hoursEl = document.getElementById('passcodeHours');
         const hours = hoursEl ? parseInt(hoursEl.value) : 1;
-        const code = 'CVV' + Math.floor(1000 + Math.random() * 9000);
-        const expireTime = Date.now() + hours * 3600 * 1000;
-
-        const activePasscodes = getStoredPasscodes();
-        activePasscodes[code] = expireTime;
-        saveStoredPasscodes(activePasscodes);
+        const code = createPasscodeForHours(hours);
 
         const disp = document.getElementById('generatedPasscodeDisplay');
         if (disp) disp.innerText = `通行碼：${code}`;
-        renderPasscodeLog();
-    }
 
-    function renderPasscodeLog() {
         const log = document.getElementById('passcodeLog');
-        if (!log) return;
-
-        const activePasscodes = getStoredPasscodes();
-        const now = Date.now();
-        let html = '';
-
-        for (let code in activePasscodes) {
-            if (activePasscodes[code] > now) {
-                const dateStr = new Date(activePasscodes[code]).toLocaleTimeString();
-                html += `[${code}] 到期時間: ${dateStr}<br>`;
-            }
+        if (log) {
+            const expireDate = new Date(Date.now() + hours * 3600 * 1000);
+            const timeStr = expireDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            log.innerHTML = `最新生成: <b>${code}</b> (效期${hours}H，至 ${timeStr} 剔除)<br>` + log.innerHTML;
         }
-
-        log.innerHTML = html || '尚無有效通行碼紀錄';
     }
 </script>
 </body>
