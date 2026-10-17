@@ -85,7 +85,6 @@
             letter-spacing: 1px;
         }
 
-        /* 🟢 實時閃爍連線燈與定時校準 */
         .live-dot {
             display: inline-block;
             width: 8px;
@@ -114,7 +113,6 @@
             gap: 8px;
         }
 
-        /* 📢 跑馬燈戰報列 */
         .marquee-box {
             background: rgba(255, 0, 21, 0.1);
             border: 1px solid rgba(255, 0, 21, 0.3);
@@ -265,6 +263,7 @@
             outline: none;
             letter-spacing: 2px;
             transition: all 0.3s;
+            text-transform: uppercase;
         }
 
         .input-field:focus {
@@ -320,7 +319,6 @@
             letter-spacing: 1px;
         }
 
-        /* 🎛️ 房間分類快篩按鈕群 */
         .filter-bar {
             display: flex;
             gap: 8px;
@@ -545,7 +543,6 @@
             gap: 12px;
         }
 
-        /* ⚖️ 風控策略切換 TAB */
         .strategy-tab-group {
             display: flex;
             gap: 8px;
@@ -646,7 +643,7 @@
         <div class="card login-box">
             <div class="card-title">🔑 通行證身份驗證</div>
             <p style="font-size: 0.85rem; color: var(--text-sub);">請輸入管理員核發之隨機通行碼進入 VIP 高級數據分析大廳：</p>
-            <input type="text" id="passcodeInput" class="input-field" placeholder="請輸入通行碼 (例: CVV8888)" autocomplete="off">
+            <input type="text" id="passcodeInput" class="input-field" placeholder="請輸入通行碼 (例: CVV8888)" autocomplete="off" oninput="this.value = this.value.toUpperCase()">
             <button class="btn" onclick="verifyPasscode()">驗證進入平台</button>
             <div style="text-align: center; margin: 4px 0; font-size: 0.85rem; color: var(--text-sub);">- 或 -</div>
             <button class="btn btn-cyan" onclick="enterFreeMode()">免費體驗試玩模式</button>
@@ -911,7 +908,6 @@
     let currentStrategyMode = 'balanced';
     let rawRoomData = [];
 
-    // 初始化倒數計時與時間
     function initTimers() {
         document.getElementById('lastCalcTime').innerText = new Date().toLocaleTimeString();
         let secondsLeft = 3599;
@@ -942,8 +938,15 @@
         document.getElementById(viewId).classList.add('active');
     }
 
+    // 🔑 升級容錯版驗證邏輯
     function verifyPasscode() {
-        const code = document.getElementById('passcodeInput').value.trim().toUpperCase();
+        const inputVal = document.getElementById('passcodeInput').value.trim();
+        if (!inputVal) {
+            alert('請輸入通行碼！');
+            return;
+        }
+
+        const code = inputVal.toUpperCase();
         const now = Date.now();
         const activePasscodes = getStoredPasscodes();
 
@@ -959,7 +962,7 @@
             document.getElementById('userTag').className = "tag tag-vip";
             switchView('viewProviders');
         } else {
-            alert('通行碼驗證失敗！\n(提示：可輸入 CVV + 4位數字 通過測試)');
+            alert('通行碼驗證失敗！\n請確認通行碼是否正確（提示：格式為 CVV + 4位數字）');
         }
     }
 
