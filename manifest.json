@@ -7,12 +7,12 @@
   "theme_color": "#ff0015",
   "icons": [
     {
-      "src": ":https://gemini.google.com/406c3acd-6d82-4ddd-b291-001ae66e10c6",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": ":https://gemini.google.com/406c3acd-6d82-4ddd-b291-001ae66e10c6",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10",
       "sizes": "512x512",
       "type": "image/png"
     }
