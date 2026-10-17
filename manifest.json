@@ -1,0 +1,15 @@
+{
+  "name": "牛老大專屬數據選房",
+  "short_name": "牛老大選房",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#060304",
+  "theme_color": "#ff0015",
+  "icons": [
+    {
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
