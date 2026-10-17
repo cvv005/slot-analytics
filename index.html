@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>牛老大專屬 - 多系統商數據選房平台</title>
+    <!-- PWA 關聯設定 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff0015">
+    <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq2bUIfzQKhM2YG9zsro-kDYLpQ9ZzvXKB1fC2QfBe7WdThLrRvu48cPCU&s=10">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
@@ -583,7 +588,6 @@
             font-size: 1rem;
         }
 
-        /* 🔻 頁尾聲明樣式 */
         footer {
             margin-top: 25px;
             text-align: center;
@@ -761,7 +765,6 @@
             <p style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; text-align:center;">輸入 VIP 通行碼即可解鎖 20 間實體高級包廂即時監控數據</p>
         </div>
 
-        <!-- 當日動態波段訊號區 -->
         <div class="card">
             <div class="card-title">
                 <span>⚡ 當日動態觸發波段訊號 (每小時定時校準)</span>
@@ -773,7 +776,6 @@
         </div>
     </div>
 
-    <!-- 🔻 頁尾宣告 -->
     <footer>
         <div>SYSTEM VER 4.2.0 | 牛老大專屬大廳數據選房演算法中心</div>
         <div>本平台數據皆由大數據模型進行波段與回報率監控演算，僅供策略選擇參考</div>
@@ -812,6 +814,13 @@
 </div>
 
 <script>
+    // 🚀 註冊 PWA Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW register failed:', err));
+        });
+    }
+
     const GAME_DATABASE = {
         'ATG': [
             { id: 'atg_seth', name: '戰神賽特', img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', maxRooms: 1300, symbols: ['https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png','https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png','https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png','https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png'] },
