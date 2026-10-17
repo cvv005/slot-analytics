@@ -638,10 +638,10 @@
             <p style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; text-align:center;">輸入 VIP 通行碼即可解鎖 20 間實體高級包廂即時監控數據</p>
         </div>
 
-        <!-- 動態觸發波段訊號 -->
+        <!-- 動態觸發波段訊號 (1小時更新一次) -->
         <div class="card">
             <div class="card-title">
-                <span>⚡ 當日動態觸發波段訊號</span>
+                <span>⚡ 當日動態觸發波段訊號 (每小時動態校準)</span>
             </div>
             <div class="signal-container" id="signalBox">
                 <!-- 動態產生訊號 -->
@@ -907,7 +907,6 @@
         }
     }
 
-    // 將 VIP 包廂推薦數量擴充至 20 間
     function refreshRooms() {
         if (!currentGame || currentGame.maxRooms === 0) return;
         const list = document.getElementById('roomList');
@@ -972,6 +971,7 @@
         alert(`已鎖定 VIP 房間 #${num}！\n請立即前往遊戲選擇 #${num} 號房間進行下注！`);
     }
 
+    // ⚡ 波段訊號：設定為 1 小時 (3600000 毫秒) 自動更新一次
     function generateSignal() {
         const box = document.getElementById('signalBox');
         box.innerHTML = '';
@@ -981,26 +981,51 @@
             return;
         }
 
-        const symbolCount = Math.floor(Math.random() * 2) + 2;
-        const shuffled = [...currentGame.symbols].sort(() => 0.5 - Math.random());
-        const selectedSymbols = shuffled.slice(0, Math.min(symbolCount, shuffled.length));
+        const now = Date.now();
+        const cacheKey = `signal_cache_${currentGame.id}`;
+        let cachedData = null;
 
-        selectedSymbols.forEach(symUrl => {
-            const count = Math.floor(Math.random() * 2) + 2;
+        try {
+            cachedData = JSON.parse(localStorage.getItem(cacheKey));
+        } catch(e) {}
+
+        const ONE_HOUR = 3600 * 1000;
+        let signalGroups = [];
+
+        // 若在 1 小時內，使用歷史演算訊號；否則重新演算生成
+        if (cachedData && (now - cachedData.timestamp < ONE_HOUR)) {
+            signalGroups = cachedData.groups;
+        } else {
+            const symbolCount = Math.floor(Math.random() * 2) + 2;
+            const shuffled = [...currentGame.symbols].sort(() => 0.5 - Math.random());
+            const selectedSymbols = shuffled.slice(0, Math.min(symbolCount, shuffled.length));
+
+            signalGroups = selectedSymbols.map(symUrl => ({
+                symUrl: symUrl,
+                count: Math.floor(Math.random() * 2) + 2
+            }));
+
+            localStorage.setItem(cacheKey, JSON.stringify({
+                timestamp: now,
+                groups: signalGroups
+            }));
+        }
+
+        signalGroups.forEach(item => {
             const group = document.createElement('div');
             group.className = 'signal-group';
 
             let imgsHtml = '';
-            for (let i = 0; i < count; i++) {
+            for (let i = 0; i < item.count; i++) {
                 imgsHtml += `
                     <div class="signal-img-card">
-                        <img src="${symUrl}" alt="signal">
+                        <img src="${item.symUrl}" alt="signal">
                     </div>`;
             }
 
             group.innerHTML = `
                 <div class="signal-img-wrapper">${imgsHtml}</div>
-                <span class="signal-count">x${count}</span>
+                <span class="signal-count">x${item.count}</span>
             `;
             box.appendChild(group);
         });
