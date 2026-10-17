@@ -1216,8 +1216,10 @@
         const hours = hoursEl ? parseInt(hoursEl.value) : 1;
         const code = createPasscodeForHours(hours);
 
-        const disp = document.getElementById('generatedPasscodeDisplay');
-        if (disp) disp.innerText = `通行碼：${code}`;
+       const disp = document.getElementById('generatedPasscodeDisplay');
+        if (disp) {
+            disp.innerHTML = `通行碼：<span id="codeText" style="user-select:all;">${code}</span> <button onclick="navigator.clipboard.writeText('${code}').then(()=>alert('已複製通行碼：${code}'))" style="background:var(--red-bright); color:#fff; border:none; padding:4px 10px; font-size:0.8rem; cursor:pointer; border-radius:4px; margin-left:8px;">📋 複製</button>`;
+        }
 
         const log = document.getElementById('passcodeLog');
         if (log) {
