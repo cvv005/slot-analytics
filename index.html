@@ -15,6 +15,7 @@
             --red-glow: rgba(255, 0, 21, 0.45);
             --red-dark: #660007;
             --gold-accent: #ffb700;
+            --green-glow: #00ff66;
             --text-main: #ffffff;
             --text-sub: #b3a1a3;
             --border-red: rgba(255, 0, 21, 0.45);
@@ -84,14 +85,57 @@
             letter-spacing: 1px;
         }
 
+        /* 🟢 實時閃爍連線燈與定時校準 */
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--green-glow);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--green-glow);
+            animation: blink 1.2s infinite ease-in-out;
+            margin-right: 5px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.8); }
+        }
+
         .status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px dashed rgba(255, 0, 21, 0.3);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* 📢 跑馬燈戰報列 */
+        .marquee-box {
+            background: rgba(255, 0, 21, 0.1);
+            border: 1px solid rgba(255, 0, 21, 0.3);
+            border-radius: 6px;
+            padding: 8px 12px;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 0.82rem;
+            color: var(--gold-accent);
+            display: flex;
+            align-items: center;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 22s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
         .tag {
@@ -274,6 +318,33 @@
             color: #fff;
             text-align: center;
             letter-spacing: 1px;
+        }
+
+        /* 🎛️ 房間分類快篩按鈕群 */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--text-sub);
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: rgba(255, 0, 21, 0.25);
+            border-color: var(--red-bright);
+            color: #fff;
         }
 
         .vip-room-grid {
@@ -474,6 +545,32 @@
             gap: 12px;
         }
 
+        /* ⚖️ 風控策略切換 TAB */
+        .strategy-tab-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .strategy-tab {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,0,21,0.3);
+            color: var(--text-sub);
+            font-size: 0.82rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .strategy-tab.active {
+            background: rgba(255, 0, 21, 0.3);
+            border-color: var(--red-bright);
+            color: #fff;
+            font-weight: bold;
+        }
+
         .calc-row {
             display: flex;
             justify-content: space-between;
@@ -527,11 +624,22 @@
     <header>
         <h1 id="appTitle" onclick="handleTitleClick()">🐂 牛老大專屬數據選房</h1>
         <p>ATG / RSG 雙系統大廳數據整合分析平台</p>
+        
         <div class="status-bar">
-            <span>系統狀態: <strong id="statusText" style="color:var(--text-sub)">尚未驗證登入</strong></span>
+            <span><span class="live-dot"></span>實體機台數據連線中 | 上次演算: <strong id="lastCalcTime" style="color:#fff">--:--:--</strong></span>
+            <span>下一次波段校準倒數: <strong id="recalTimer" style="color:var(--gold-accent)">59:59</strong></span>
             <span id="userTag" class="tag tag-free">UNVERIFIED</span>
         </div>
     </header>
+
+    <!-- 📢 實時獲利戰報動態跑馬燈 -->
+    <div class="marquee-box">
+        <div class="marquee-content">
+            🎉 恭喜 [VIP 玩家 **382] 鎖定房間 #1001 成功觸發 x1280 爆發大獎！ &nbsp;&nbsp;&nbsp;&nbsp;
+            ⚡ [VIP 玩家 **912] 在 #2852 帝王包廂連爆 14 圈獲利出場！ &nbsp;&nbsp;&nbsp;&nbsp;
+            🔥 [VIP 玩家 **507] 鎖定赤三國 #124 獲利突破 280%！
+        </div>
+    </div>
 
     <!-- 1. 登入視圖 -->
     <div id="viewLogin" class="view-section active">
@@ -587,15 +695,23 @@
             </div>
         </div>
 
-        <!-- 本金風控計算器 -->
+        <!-- 本金風控與策略計算器 -->
         <div class="card calc-box">
-            <div class="card-title">💰 本金風控與動態配注試算</div>
+            <div class="card-title">💰 本金風控與策略配注試算</div>
             <div style="display:flex; gap:10px;">
                 <input type="number" id="capitalInput" class="input-field" style="flex:1;" placeholder="輸入預計本金" value="10000">
                 <button class="btn" style="width: auto; padding: 0 20px;" onclick="calculateRisk()">開始試算</button>
             </div>
+
+            <!-- 策略類型切換 -->
+            <div class="strategy-tab-group">
+                <div class="strategy-tab" onclick="setStrategyMode('conservative', this)">🛡️ 保守平押型</div>
+                <div class="strategy-tab active" onclick="setStrategyMode('balanced', this)">⚖️ 穩健階梯型</div>
+                <div class="strategy-tab" onclick="setStrategyMode('aggressive', this)">🔥 激進狙擊型</div>
+            </div>
+
             <div class="calc-row">
-                <span>建議平押單注金額：</span>
+                <span>建議單注金額：</span>
                 <span class="calc-value" id="resSingleBet">$20</span>
             </div>
             <div class="calc-row">
@@ -603,7 +719,7 @@
                 <span class="calc-value" id="resSpins">500 圈</span>
             </div>
             <div class="calc-row">
-                <span>推薦打法策略：</span>
+                <span>推薦策略指導：</span>
                 <span class="calc-value" id="resStrategy" style="color:var(--gold-accent)">穩健階梯式倍壓</span>
             </div>
         </div>
@@ -614,6 +730,15 @@
                 <span>💎 VIP 專屬高爆率數據包廂監控</span>
                 <button class="btn btn-outline" style="width:auto; padding:4px 12px; font-size:0.8rem;" onclick="refreshRooms()">刷新房間數據</button>
             </div>
+
+            <!-- 快篩按鈕 -->
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterRooms('all', this)">全部包廂 (20)</button>
+                <button class="filter-btn" onclick="filterRooms('emperor', this)">👑 帝王頂級房</button>
+                <button class="filter-btn" onclick="filterRooms('high_rate', this)">🔥 爆分率 > 90%</button>
+                <button class="filter-btn" onclick="filterRooms('fast_burst', this)">⚡ 5圈內預計連爆</button>
+            </div>
+
             <div class="vip-room-grid" id="roomList">
                 <!-- 動態生成的實體 VIP 包廂 (20 間) -->
             </div>
@@ -641,7 +766,7 @@
         <!-- 動態觸發波段訊號 (1小時更新一次) -->
         <div class="card">
             <div class="card-title">
-                <span>⚡ 當日動態觸發波段訊號 (每小時動態校準)</span>
+                <span>⚡ 當日動態觸發波段訊號 (每小時定時校準)</span>
             </div>
             <div class="signal-container" id="signalBox">
                 <!-- 動態產生訊號 -->
@@ -783,6 +908,22 @@
     let currentProvider = '';
     let currentGame = null;
     let titleClickCount = 0;
+    let currentStrategyMode = 'balanced';
+    let rawRoomData = [];
+
+    // 初始化倒數計時與時間
+    function initTimers() {
+        document.getElementById('lastCalcTime').innerText = new Date().toLocaleTimeString();
+        let secondsLeft = 3599;
+        setInterval(() => {
+            secondsLeft--;
+            if (secondsLeft < 0) secondsLeft = 3599;
+            const m = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
+            const s = String(secondsLeft % 60).padStart(2, '0');
+            document.getElementById('recalTimer').innerText = `${m}:${s}`;
+        }, 1000);
+    }
+    window.onload = initTimers;
 
     function getStoredPasscodes() {
         try {
@@ -890,29 +1031,37 @@
         switchView('viewDashboard');
     }
 
+    function setStrategyMode(mode, el) {
+        currentStrategyMode = mode;
+        document.querySelectorAll('.strategy-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        calculateRisk();
+    }
+
     function calculateRisk() {
         const capital = parseFloat(document.getElementById('capitalInput').value) || 10000;
-        const singleBet = Math.max(1, Math.floor(capital / 500));
+        let divider = 500;
+        let strategyName = "穩健階梯式倍壓";
+
+        if (currentStrategyMode === 'conservative') {
+            divider = 800;
+            strategyName = "保守平押保本打法 (高防禦)";
+        } else if (currentStrategyMode === 'aggressive') {
+            divider = 250;
+            strategyName = "高倍率爆發狙擊打法 (高獲利)";
+        }
+
+        const singleBet = Math.max(1, Math.floor(capital / divider));
         const spins = Math.floor(capital / singleBet);
 
         document.getElementById('resSingleBet').innerText = `$${singleBet}`;
         document.getElementById('resSpins').innerText = `${spins} 圈`;
-
-        if (capital < 5000) {
-            document.getElementById('resStrategy').innerText = "保守微注保本法";
-        } else if (capital <= 20000) {
-            document.getElementById('resStrategy').innerText = "穩健階梯式倍壓";
-        } else {
-            document.getElementById('resStrategy').innerText = "高波幅爆發波段打法";
-        }
+        document.getElementById('resStrategy').innerText = strategyName;
     }
 
     function refreshRooms() {
         if (!currentGame || currentGame.maxRooms === 0) return;
-        const list = document.getElementById('roomList');
-        list.innerHTML = '';
-
-        let rooms = [];
+        rawRoomData = [];
         const badges = ['🔥 強力爆發中', '⚡ 熱門波段房', '🎯 訊號狙擊房', '👑 帝王頂級房'];
 
         for (let i = 0; i < 20; i++) {
@@ -922,18 +1071,28 @@
             const online = Math.floor(Math.random() * 4) + 1;
             const returnRate = Math.floor(Math.random() * 150) + 130;
             const spinsLeft = Math.floor(Math.random() * 12) + 3;
+            const maxMultiplier = Math.floor(Math.random() * 3000) + 800;
+            const trend = (Math.random() * 3.5).toFixed(1);
 
-            rooms.push({
+            rawRoomData.push({
                 num: formattedNum,
                 rate: parseFloat(rate),
                 online: online,
                 returnRate: returnRate,
                 spinsLeft: spinsLeft,
+                maxMultiplier: maxMultiplier,
+                trend: trend,
                 badge: badges[Math.floor(Math.random() * badges.length)]
             });
         }
 
-        rooms.sort((a, b) => b.rate - a.rate);
+        rawRoomData.sort((a, b) => b.rate - a.rate);
+        renderRoomCards(rawRoomData);
+    }
+
+    function renderRoomCards(rooms) {
+        const list = document.getElementById('roomList');
+        list.innerHTML = '';
 
         rooms.forEach((r, idx) => {
             const isEmperor = (idx === 0);
@@ -949,9 +1108,10 @@
                     <div>
                         <div style="font-size:0.65rem; color:var(--text-sub);">ROOM SUITE</div>
                         <div class="vip-room-number">#${r.num}</div>
+                        <div style="font-size:0.7rem; color:var(--gold-accent); margin-top:2px;">今日最高: x${r.maxMultiplier}</div>
                     </div>
                     <div class="vip-room-rate-box">
-                        <div class="vip-room-rate-label">當前爆分率 (WIN RATE)</div>
+                        <div class="vip-room-rate-label">當前爆分率 <span style="color:var(--green-glow)">▲${r.trend}%</span></div>
                         <div class="vip-room-rate-val">${r.rate}%</div>
                     </div>
                 </div>
@@ -967,11 +1127,25 @@
         });
     }
 
+    function filterRooms(type, btnEl) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+
+        if (type === 'all') {
+            renderRoomCards(rawRoomData);
+        } else if (type === 'emperor') {
+            renderRoomCards(rawRoomData.filter((_, idx) => idx === 0));
+        } else if (type === 'high_rate') {
+            renderRoomCards(rawRoomData.filter(r => r.rate >= 90.0));
+        } else if (type === 'fast_burst') {
+            renderRoomCards(rawRoomData.filter(r => r.spinsLeft <= 5));
+        }
+    }
+
     function lockRoom(num) {
         alert(`已鎖定 VIP 房間 #${num}！\n請立即前往遊戲選擇 #${num} 號房間進行下注！`);
     }
 
-    // ⚡ 波段訊號：設定為 1 小時 (3600000 毫秒) 自動更新一次
     function generateSignal() {
         const box = document.getElementById('signalBox');
         box.innerHTML = '';
@@ -992,7 +1166,6 @@
         const ONE_HOUR = 3600 * 1000;
         let signalGroups = [];
 
-        // 若在 1 小時內，使用歷史演算訊號；否則重新演算生成
         if (cachedData && (now - cachedData.timestamp < ONE_HOUR)) {
             signalGroups = cachedData.groups;
         } else {
