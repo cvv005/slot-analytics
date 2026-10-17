@@ -716,14 +716,14 @@
         <div class="card" id="roomCard">
             <div class="card-title" style="justify-content:space-between;">
                 <span>💎 VIP 專屬高爆率數據包廂監控</span>
-                <button class="btn btn-outline" style="width:auto; padding:4px 12px; font-size:0.8rem;" onclick="refreshRooms()">刷新房間數據</button>
+                <span style="font-size:0.8rem; color:var(--text-sub); font-weight:normal;">⏱️ 10分鐘自動更新</span>
             </div>
 
             <div class="filter-bar">
                 <button class="filter-btn active" onclick="filterRooms('all', this)">全部包廂 (20)</button>
                 <button class="filter-btn" onclick="filterRooms('emperor', this)">👑 帝王頂級房</button>
                 <button class="filter-btn" onclick="filterRooms('high_rate', this)">🔥 爆分率 > 90%</button>
-                <button class="filter-btn" onclick="filterRooms('fast_burst', this)">⚡ 5圈內預計連爆</button>
+                <button class="filter-btn" onclick="filterRooms('fast_burst', this)">⚡ 進入高爆發波段</button>
             </div>
 
             <div class="vip-room-grid" id="roomList"></div>
@@ -756,7 +756,6 @@
     </div>
 </div>
 
-<!-- 隱藏管理員彈窗 -->
 <div class="modal-overlay" id="adminModal">
     <div class="modal">
         <div class="card-title">🛡️ 管理員身分驗證</div>
@@ -766,7 +765,6 @@
     </div>
 </div>
 
-<!-- 管理員控制台 Modal -->
 <div class="modal-overlay" id="adminConsoleModal">
     <div class="modal" style="max-width:500px;">
         <div class="card-title">⚙️ 通行碼管理控制台</div>
@@ -815,6 +813,7 @@
     window.onload = function() {
         const timeEl = document.getElementById('lastCalcTime');
         if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
+        
         let secondsLeft = 3599;
         setInterval(() => {
             secondsLeft--;
@@ -824,6 +823,13 @@
             const timerEl = document.getElementById('recalTimer');
             if (timerEl) timerEl.innerText = `${m}:${s}`;
         }, 1000);
+
+        // ⏱️ 10 分鐘（600000 毫秒）自動刷新房間數據
+        setInterval(() => {
+            if (currentGame && currentUserType === 'VIP') {
+                refreshRooms();
+            }
+        }, 600000);
     };
 
     function getStoredPasscodes() {
@@ -844,7 +850,6 @@
         if (targetView) targetView.classList.add('active');
     }
 
-    // 🔒 嚴格安全的通行碼驗證機制
     function verifyPasscode() {
         const inputEl = document.getElementById('passcodeInput');
         if (!inputEl) return;
@@ -861,7 +866,6 @@
         const isMasterKey = (code === "AIMINCVV168");
         const isStoredValid = (activePasscodes[code] && activePasscodes[code] > now);
 
-        // 僅允許：1. 主管理密碼 2. 後台生成且在時效內的通行碼
         if (isMasterKey || isStoredValid) {
             currentUserType = 'VIP';
             const statusText = document.getElementById('statusText');
@@ -1003,6 +1007,7 @@
         if (!currentGame || currentGame.maxRooms === 0) return;
         rawRoomData = [];
         const badges = ['🔥 強力爆發中', '⚡ 熱門波段房', '🎯 訊號狙擊房', '👑 帝王頂級房'];
+        const states = ['進入高爆發波段', '高倍率累積期', '數據穩定上升期', '極高爆率醞釀期'];
 
         for (let i = 0; i < 20; i++) {
             const rNum = Math.floor(Math.random() * currentGame.maxRooms) + 1;
@@ -1010,7 +1015,7 @@
             const rate = (Math.random() * 30 + 68).toFixed(1);
             const online = Math.floor(Math.random() * 4) + 1;
             const returnRate = Math.floor(Math.random() * 150) + 130;
-            const spinsLeft = Math.floor(Math.random() * 12) + 3;
+            const cycleState = states[Math.floor(Math.random() * states.length)];
             const maxMultiplier = Math.floor(Math.random() * 3000) + 800;
             const trend = (Math.random() * 3.5).toFixed(1);
 
@@ -1019,7 +1024,7 @@
                 rate: parseFloat(rate),
                 online: online,
                 returnRate: returnRate,
-                spinsLeft: spinsLeft,
+                cycleState: cycleState,
                 maxMultiplier: maxMultiplier,
                 trend: trend,
                 badge: badges[Math.floor(Math.random() * badges.length)]
@@ -1060,7 +1065,7 @@
                     <div class="vip-progress-fill" style="width: ${r.rate}%"></div>
                 </div>
                 <div class="vip-room-footer">
-                    <span>⚡ 預計 <strong style="color:#fff">${r.spinsLeft}</strong> 圈內連爆</span>
+                    <span>📊 當前週期: <strong style="color:#fff">${r.cycleState}</strong></span>
                     <button class="vip-btn-lock" onclick="lockRoom('${r.num}')">🎯 鎖定此房</button>
                 </div>
             `;
@@ -1079,7 +1084,7 @@
         } else if (type === 'high_rate') {
             renderRoomCards(rawRoomData.filter(r => r.rate >= 90.0));
         } else if (type === 'fast_burst') {
-            renderRoomCards(rawRoomData.filter(r => r.spinsLeft <= 5));
+            renderRoomCards(rawRoomData.filter(r => r.cycleState === '進入高爆發波段'));
         }
     }
 
