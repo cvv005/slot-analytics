@@ -7,14 +7,14 @@
   "theme_color": "#ff0015",
   "icons": [
     {
-      "src": "https://image.spreadshirtmedia.net/image-server/v1/mp/products/T210A2MPA3176PT17X11Y5D1031383796W3056H3668/views/1,width=1200,height=1200,appearanceId=2,backgroundColor=F2F2F2/golden-taurus-zodiac-sign-symbol-poster.jpg",
+      "src": "https://cdn-icons-png.flaticon.com/512/825/825590.png",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "https://image.spreadshirtmedia.net/image-server/v1/mp/products/T210A2MPA3176PT17X11Y5D1031383796W3056H3668/views/1,width=1200,height=1200,appearanceId=2,backgroundColor=F2F2F2/golden-taurus-zodiac-sign-symbol-poster.jpg",
+      "src": "https://cdn-icons-png.flaticon.com/512/825/825590.png",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png"
     }
   ]
 }
