@@ -1056,19 +1056,29 @@
 
     function refreshRooms() {
         if (!currentGame || currentGame.maxRooms === 0) return;
+        
+        // 🔒 使用固定種子演算法：讓每 10 分鐘內的房間數據保持完全一致
+        const timeBlock = Math.floor(Date.now() / (10 * 60 * 1000));
         rawRoomData = [];
         const badges = ['🔥 強力爆發中', '⚡ 熱門波段房', '🎯 訊號狙擊房', '👑 帝王頂級房'];
         const states = ['進入高爆發波段', '高倍率累積期', '數據穩定上升期', '極高爆率醞釀期'];
 
         for (let i = 0; i < 20; i++) {
-            const rNum = Math.floor(Math.random() * currentGame.maxRooms) + 1;
+            // 根據「遊戲ID + 房間索引 + 時間區塊」生成固定偽隨機數
+            let seed = (currentGame.id.length * 1000) + (i * 100) + (timeBlock % 9999);
+            const pseudoRandom = () => {
+                let x = Math.sin(seed++) * 10000;
+                return x - Math.floor(x);
+            };
+
+            const rNum = Math.floor(pseudoRandom() * currentGame.maxRooms) + 1;
             const formattedNum = String(rNum).padStart(3, '0');
-            const rate = (Math.random() * 30 + 68).toFixed(1);
-            const online = Math.floor(Math.random() * 4) + 1;
-            const returnRate = Math.floor(Math.random() * 150) + 130;
-            const cycleState = states[Math.floor(Math.random() * states.length)];
-            const maxMultiplier = Math.floor(Math.random() * 3000) + 800;
-            const trend = (Math.random() * 3.5).toFixed(1);
+            const rate = (pseudoRandom() * 30 + 68).toFixed(1);
+            const online = Math.floor(pseudoRandom() * 4) + 1;
+            const returnRate = Math.floor(pseudoRandom() * 150) + 130;
+            const cycleState = states[Math.floor(pseudoRandom() * states.length)];
+            const maxMultiplier = Math.floor(pseudoRandom() * 3000) + 800;
+            const trend = (pseudoRandom() * 3.5).toFixed(1);
 
             rawRoomData.push({
                 num: formattedNum,
@@ -1078,14 +1088,13 @@
                 cycleState: cycleState,
                 maxMultiplier: maxMultiplier,
                 trend: trend,
-                badge: badges[Math.floor(Math.random() * badges.length)]
+                badge: badges[Math.floor(pseudoRandom() * badges.length)]
             });
         }
 
         rawRoomData.sort((a, b) => b.rate - a.rate);
         renderRoomCards(rawRoomData);
     }
-
     function renderRoomCards(rooms) {
         const list = document.getElementById('roomList');
         if (!list) return;
