@@ -886,15 +886,50 @@
     window.onload = function() {
         const timeEl = document.getElementById('lastCalcTime');
         if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
-        
-       // 🌐 自動讀取 GitHub 上的 data.json（包含跑馬燈與自訂打法）
+      let globalCloudData = null; // 全域儲存資料
+
+        // 🌐 自動讀取 GitHub 上的 data.json（包含跑馬燈與專屬遊戲打法）
         fetch('data.json?t=' + Date.now())
             .then(res => res.json())
             .then(data => {
+                globalCloudData = data;
+                
                 // 1. 同步更新跑馬燈內容
-                if (data.marquee) {
+                if (data && data.marquee) {
                     const marqueeEl = document.querySelector('.marquee-content');
                     if (marqueeEl) marqueeEl.innerText = data.marquee;
+                }
+                
+                // 2. 自動載入目前遊戲（預設戰神賽特2）的打法
+                renderGameStrategy('atg_seth2');
+            })
+            .catch(err => console.log('讀取數據失敗:', err));
+
+        // 🎯 根據遊戲 ID 動態渲染打法
+        function renderGameStrategy(currentGameId = 'atg_seth2') {
+            const listEl = document.getElementById('game-strategy-list');
+            if (!listEl) return;
+
+            if (!globalCloudData || (!globalCloudData.gameStrategies && !globalCloudData.strategies)) {
+                listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">目前尚無推薦打法</div>';
+                return;
+            }
+
+            // 支援新版專屬打法 (gameStrategies) 與舊版相容 (strategies)
+            const rawList = globalCloudData.gameStrategies || globalCloudData.strategies;
+            const matched = rawList.filter(s => !s.gameId || s.gameId === currentGameId || s.gameId === 'general');
+
+            if (matched.length === 0) {
+                listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">本遊戲暫無設定專屬打法</div>';
+            } else {
+                listEl.innerHTML = matched.map(s => `
+                    <div style="margin-bottom: 12px; background: #1f0c10; padding: 12px; border-radius: 6px; border-left: 4px solid #ff0015;">
+                        <strong style="color: #ffb700; font-size: 1.05rem; display: block; margin-bottom: 6px;">${s.title}</strong>
+                        <div style="color: #eee; line-height: 1.6; white-space: pre-line;">${s.content}</div>
+                    </div>
+                `).join('');
+            }
+        }
                 }
 
                 // 2. 完全根據後台填寫的「打法名稱」與「打法內容」動態渲染
