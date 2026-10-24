@@ -652,9 +652,7 @@
             🔥 [VIP 玩家 **507] 鎖定赤三國 #124 獲利突破 280%！
         </div>
     </div>
-<!-- 🎯 獨家實戰打法策略區域 -->
 
-</div>
     <!-- 1. 登入視圖 -->
     <div id="viewLogin" class="view-section active">
         <div class="card login-box">
@@ -732,11 +730,13 @@
                 <span class="calc-value" id="resStrategy" style="color:var(--gold-accent)">穩健階梯式倍壓</span>
             </div>
         </div>
-<!-- 🎯 點進遊戲後才看得見的打法專屬容器 -->
-<div id="game-strategy-section" style="background: #15080a; border: 1px solid #ff0015; border-radius: 8px; padding: 15px; margin: 15px 0;">
-    <h3 style="color: #ffb700; margin-top: 0; border-bottom: 1px solid #331115; padding-bottom: 8px; font-size: 1.1rem;">🎯 當前遊戲獨家實戰打法</h3>
-    <div id="game-strategy-list" style="color: #ddd;">載入中...</div>
-</div>
+
+        <!-- 🎯 點進遊戲後才看得見的打法專屬容器 -->
+        <div id="game-strategy-section" style="background: #15080a; border: 1px solid #ff0015; border-radius: 8px; padding: 15px; margin: 15px 0;">
+            <h3 style="color: #ffb700; margin-top: 0; border-bottom: 1px solid #331115; padding-bottom: 8px; font-size: 1.1rem;">🎯 當前遊戲獨家實戰打法</h3>
+            <div id="game-strategy-list" style="color: #ddd;">載入中...</div>
+        </div>
+
         <div class="card" id="roomCard">
             <div class="card-title" style="justify-content:space-between;">
                 <span>💎 VIP 專屬高爆率數據包廂監控</span>
@@ -828,16 +828,16 @@
 
     const GAME_DATABASE = {
         'ATG': [
-            { id: 'atg_seth', name: '戰神賽特', img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', maxRooms: 1300, symbols: ['https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png','https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png','https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png','https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png'] },
-            { id: 'atg_seth2', name: '戰神賽特2', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10', maxRooms: 4100, symbols: ['https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png','https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png','https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png'] },
-            { id: 'atg_tiger', name: '虎小妹', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10', maxRooms: 3000, symbols: ['https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp','https://husiaomei.com.tw/wp-content/uploads/2026/06/s2.webp','https://husiaomei.com.tw/wp-content/uploads/2026/06/s3.webp','https://husiaomei.com.tw/wp-content/uploads/2026/06/scatter.webp'] },
-            { id: 'atg_samkok', name: '赤三國', img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', maxRooms: 200, symbols: ['https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%BB%8D%E4%BB%A4%E7%89%8C.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E5%91%82%E6%B0%8F%E6%88%B0%E6%97%97.webp'] },
-            { id: 'atg_baphomet', name: '古神巴風特', img: 'https://atg-games.com/_ipx/f_webp&s_480x540/elder-god-baphomet/zh-tw/products.png', maxRooms: 1000, symbols: ['https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%85%E5%AF%B6%E7%9F%B3.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%AB%E5%AF%B6%E7%9F%B3.webp'] }
+            { id: 'atg_seth1', name: 'ATG 戰神賽特1', img: 'https://play-lh.googleusercontent.com/W3jZyCkrguJrjuKj_DlsllXc6Sd-4J-25ZCSzThfs-xok2frjGBPIyTez_Y8idg5Fxrv-u0zGmpdVU5tBq1cWDw', maxRooms: 1300, symbols: ['https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png','https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png','https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png','https://storm-of-seth.com/wp-content/uploads/atg1788-icon9.png'] },
+            { id: 'atg_seth2', name: 'ATG 戰神賽特2', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmEWWM1vjRbIy9GG5KIGzsrQ5ZDdYhg-0Gg2wrHcIb-g&s=10', maxRooms: 4100, symbols: ['https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon3.png','https://storm-of-seth2.com.tw/wp-content/uploads/atg1788-icon2.png','https://seth-it.com/wp-content/uploads/2025/11/atg1788-icon8.png'] },
+            { id: 'atg_tiger', name: 'ATG 虎小妹', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvVFO5k1_1DwwURY_eDJFffrOhpDmBpLjaq6MrNuMTg&s=10', maxRooms: 3000, symbols: ['https://husiaomei.com.tw/wp-content/uploads/2026/06/s1.webp','https://husiaomei.com.tw/wp-content/uploads/2026/06/s2.webp','https://husiaomei.com.tw/wp-content/uploads/2026/06/s3.webp','https://husiaomei.com.tw/wp-content/uploads/2026/06/scatter.webp'] },
+            { id: 'atg_sanguo', name: 'ATG 赤三國', img: 'https://xj99tw.com.tw/wp-content/uploads/2026/07/%E8%B5%A4%E4%B8%89%E5%9C%8B-1.webp', maxRooms: 1200, symbols: ['https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%BB%8D%E4%BB%A4%E7%89%8C.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E5%91%82%E6%B0%8F%E6%88%B0%E6%97%97.webp'] },
+            { id: 'atg_baphomet', name: 'ATG 古神巴風特', img: 'https://atg-games.com/_ipx/f_webp&s_480x540/elder-god-baphomet/zh-tw/products.png', maxRooms: 1000, symbols: ['https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%85%E5%AF%B6%E7%9F%B3.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E7%B4%AB%E5%AF%B6%E7%9F%B3.webp'] }
         ],
         'RSG': [
-            { id: 'rsg_thor', name: '雷神之錘', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg', maxRooms: 0, symbols: ['https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM1.webp','https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM2.webp','https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM3.webp'] },
-            { id: 'rsg_thor2', name: '雷神之錘2', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg', maxRooms: 0, symbols: ['https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM1.webp','https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM2.webp'] },
-            { id: 'rsg_lubu', name: '戰神呂布', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg', maxRooms: 0, symbols: ['https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp'] }
+            { id: 'rsg_thor1', name: 'RSG 雷神之錘1', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor.jpg', maxRooms: 2000, symbols: ['https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM1.webp','https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM2.webp','https://rsg雷神之鎚.tw/tw/wp-content/uploads/2025/12/base_symbolM3.webp'] },
+            { id: 'rsg_thor2', name: 'RSG 雷神之錘2', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-PowerOfThor2.jpg', maxRooms: 2500, symbols: ['https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM1.webp','https://www.power-of-thor.tw/wp-content/uploads/2026/06/base_symbolM2.webp'] },
+            { id: 'rsg_lubu', name: 'RSG 戰神呂布', img: 'https://gameresource.rsgaming666.com/Lobby/icon/zh-TW/game-LegendOfLuBu.jpg', maxRooms: 2200, symbols: ['https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E8%B5%A4%E5%85%94%E9%A6%AC.webp','https://theslotbear.com/wp-content/uploads/2026/08/%E6%88%B0%E7%A5%9E%E5%91%82%E5%B8%83-%E7%AC%A6%E8%99%9F-%E6%96%B9%E5%A4%A9%E7%95%AB%E6%88%9F.webp'] }
         ]
     };
 
@@ -847,24 +847,22 @@
     let titleClickCount = 0;
     let currentStrategyMode = 'balanced';
     let rawRoomData = [];
-    let currentSessionExpiry = 0; // 紀錄目前登入的到期時間戳記
+    let currentSessionExpiry = 0;
+    window.globalCloudData = null; // 全域雲端資料快取
 
-    // 🔑 核心演算法：解析編碼中的時效與隨機碼，進行跨裝置自動到期驗證
+    // 🔑 核心演算法：解析編碼中的時效與隨機碼
     function createPasscodeForHours(hours) {
-        const randNum = Math.floor(100 + Math.random() * 900); // 3位隨機數
+        const randNum = Math.floor(100 + Math.random() * 900);
         const expireTime = Date.now() + (hours * 3600 * 1000);
-        
-        // 將到期時間（秒數）轉為 36 進位字串進行編碼
         const expireSec = Math.floor(expireTime / 1000);
         const encodedTime = expireSec.toString(36).toUpperCase();
-        
         return `CVV-${randNum}-${encodedTime}`;
     }
 
     function verifyPasscodeLogic(code) {
         const clean = code.trim().toUpperCase();
         if (clean === "AIMINCVV168") {
-            return { valid: true, expireTime: Infinity }; // 主管理密碼永不過期
+            return { valid: true, expireTime: Infinity };
         }
 
         const parts = clean.split('-');
@@ -883,100 +881,23 @@
         return { valid: false, reason: 'INVALID' };
     }
 
+    // 🌐 頁面載入初始化
     window.onload = function() {
-            const timeEl = document.getElementById('lastCalcTime');
-            if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
+        const timeEl = document.getElementById('lastCalcTime');
+        if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
 
-            // 🌐 全域儲存 GitHub 雲端資料
-            window.globalCloudData = null;
-
-            // 🌐 自動讀取 GitHub 上的 data.json
-            fetch('data.json?t=' + Date.now())
-                .then(res => res.json())
-                .then(data => {
-                    window.globalCloudData = data;
-                    if (data && data.marquee) {
-                        const marqueeEl = document.querySelector('.marquee-content');
-                        if (marqueeEl) marqueeEl.innerText = data.marquee;
-                    }
-                    if (typeof renderGameStrategy === 'function') {
-                        renderGameStrategy('atg_seth2');
-                    }
-                })
-                .catch(err => console.log('讀取數據失敗:', err));
-
-            let secondsLeft = 3599;
-            setInterval(() => {
-                secondsLeft--;
-                if (secondsLeft < 0) secondsLeft = 3599;
-                const m = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
-                const s = String(secondsLeft % 60).padStart(2, '0');
-                const timerEl = document.getElementById('recalTimer');
-                if (timerEl) timerEl.innerText = `${m}:${s}`;
-            }, 1000);
-        };
-
-        // 🎯 專屬打法渲染邏輯（獨立放在 window.onload 外面，避免影響驗證登入）
-        function renderGameStrategy(currentGameId = 'atg_seth2') {
-            const listEl = document.getElementById('game-strategy-list');
-            if (!listEl) return;
-
-            const cloudData = window.globalCloudData;
-            if (!cloudData || (!cloudData.gameStrategies && !cloudData.strategies)) {
-                listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">目前尚無推薦打法</div>';
-                return;
-            }
-
-            const rawList = cloudData.gameStrategies || cloudData.strategies;
-            const matched = rawList.filter(s => !s.gameId || s.gameId === currentGameId || s.gameId === 'general');
-
-            if (matched.length === 0) {
-                listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">本遊戲暫無設定專屬打法</div>';
-            } else {
-                listEl.innerHTML = matched.map(s => `
-                    <div style="margin-bottom: 12px; background: #1f0c10; padding: 12px; border-radius: 6px; border-left: 4px solid #ff0015;">
-                        <strong style="color: #ffb700; font-size: 1.05rem; display: block; margin-bottom: 6px;">${s.title}</strong>
-                        <div style="color: #eee; line-height: 1.6; white-space: pre-line;">${s.content}</div>
-                    </div>
-                `).join('');
-            }
-        }
-
-            // 支援新版專屬打法 (gameStrategies) 與舊版相容 (strategies)
-            const rawList = globalCloudData.gameStrategies || globalCloudData.strategies;
-            const matched = rawList.filter(s => !s.gameId || s.gameId === currentGameId || s.gameId === 'general');
-
-            if (matched.length === 0) {
-                listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">本遊戲暫無設定專屬打法</div>';
-            } else {
-                listEl.innerHTML = matched.map(s => `
-                    <div style="margin-bottom: 12px; background: #1f0c10; padding: 12px; border-radius: 6px; border-left: 4px solid #ff0015;">
-                        <strong style="color: #ffb700; font-size: 1.05rem; display: block; margin-bottom: 6px;">${s.title}</strong>
-                        <div style="color: #eee; line-height: 1.6; white-space: pre-line;">${s.content}</div>
-                    </div>
-                `).join('');
-            }
-        }
-                }
-
-                // 2. 完全根據後台填寫的「打法名稱」與「打法內容」動態渲染
-                if (data.strategies && Array.isArray(data.strategies)) {
-                    const listEl = document.getElementById('strategy-list');
-                    if (listEl) {
-                        if (data.strategies.length === 0) {
-                            listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem;">目前尚無推薦打法</div>';
-                        } else {
-                            listEl.innerHTML = data.strategies.map(s => `
-                                <div style="margin-bottom: 12px; background: #1f0c10; padding: 12px; border-radius: 6px; border-left: 4px solid #ff0015;">
-                                    <strong style="color: #ffb700; font-size: 1.05rem; display: block; margin-bottom: 6px;">${s.title}</strong>
-                                    <div style="color: #eee; line-height: 1.5; white-space: pre-line;">${s.content}</div>
-                                </div>
-                            `).join('');
-                        }
-                    }
+        // 自動讀取 GitHub 上的 data.json
+        fetch('data.json?t=' + Date.now())
+            .then(res => res.json())
+            .then(data => {
+                window.globalCloudData = data;
+                if (data && data.marquee) {
+                    const marqueeEl = document.querySelector('.marquee-content');
+                    if (marqueeEl) marqueeEl.innerText = data.marquee;
                 }
             })
-            .catch(err => console.log('使用預設本地數據:', err));
+            .catch(err => console.log('讀取雲端數據失敗:', err));
+
         let secondsLeft = 3599;
         setInterval(() => {
             secondsLeft--;
@@ -987,7 +908,7 @@
             if (timerEl) timerEl.innerText = `${m}:${s}`;
         }, 1000);
 
-        // ⏱️ 全局背景監控：時間一到立即自動踢出登入裝置
+        // 全局背景監控：到期自動踢出
         setInterval(() => {
             if (currentUserType === 'VIP' && currentSessionExpiry !== Infinity) {
                 if (Date.now() >= currentSessionExpiry) {
@@ -1003,6 +924,32 @@
             }
         }, 600000);
     };
+
+    // 🎯 專屬打法渲染邏輯（獨立函數，點擊進入遊戲內頁後調用）
+    function renderGameStrategy(currentGameId) {
+        const listEl = document.getElementById('game-strategy-list');
+        if (!listEl) return;
+
+        const cloudData = window.globalCloudData;
+        if (!cloudData || (!cloudData.gameStrategies && !cloudData.strategies)) {
+            listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">目前尚無推薦打法</div>';
+            return;
+        }
+
+        const rawList = cloudData.gameStrategies || cloudData.strategies;
+        const matched = rawList.filter(s => !s.gameId || s.gameId === currentGameId || s.gameId === 'general');
+
+        if (matched.length === 0) {
+            listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">本遊戲暫無設定專屬打法</div>';
+        } else {
+            listEl.innerHTML = matched.map(s => `
+                <div style="margin-bottom: 12px; background: #1f0c10; padding: 12px; border-radius: 6px; border-left: 4px solid #ff0015;">
+                    <strong style="color: #ffb700; font-size: 1.05rem; display: block; margin-bottom: 6px;">${s.title}</strong>
+                    <div style="color: #eee; line-height: 1.6; white-space: pre-line;">${s.content}</div>
+                </div>
+            `).join('');
+        }
+    }
 
     function switchView(viewId) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -1094,6 +1041,9 @@
         document.getElementById('dashGameName').innerText = game.name;
         document.getElementById('dashProviderTag').innerText = `${currentProvider} 電子大廳數據演算`;
 
+        // 動態渲染該遊戲的專屬打法
+        renderGameStrategy(game.id);
+
         calculateRisk();
 
         const roomCard = document.getElementById('roomCard');
@@ -1153,14 +1103,12 @@
     function refreshRooms() {
         if (!currentGame || currentGame.maxRooms === 0) return;
         
-        // 🔒 使用固定種子演算法：讓每 10 分鐘內的房間數據保持完全一致
         const timeBlock = Math.floor(Date.now() / (10 * 60 * 1000));
         rawRoomData = [];
         const badges = ['🔥 強力爆發中', '⚡ 熱門波段房', '🎯 訊號狙擊房', '👑 帝王頂級房'];
         const states = ['進入高爆發波段', '高倍率累積期', '數據穩定上升期', '極高爆率醞釀期'];
 
         for (let i = 0; i < 20; i++) {
-            // 根據「遊戲ID + 房間索引 + 時間區塊」生成固定偽隨機數
             let seed = (currentGame.id.length * 1000) + (i * 100) + (timeBlock % 9999);
             const pseudoRandom = () => {
                 let x = Math.sin(seed++) * 10000;
@@ -1191,6 +1139,7 @@
         rawRoomData.sort((a, b) => b.rate - a.rate);
         renderRoomCards(rawRoomData);
     }
+
     function renderRoomCards(rooms) {
         const list = document.getElementById('roomList');
         if (!list) return;
@@ -1321,7 +1270,7 @@
         const hours = hoursEl ? parseInt(hoursEl.value) : 1;
         const code = createPasscodeForHours(hours);
 
-       const disp = document.getElementById('generatedPasscodeDisplay');
+        const disp = document.getElementById('generatedPasscodeDisplay');
         if (disp) {
             disp.innerHTML = `通行碼：<span id="codeText" style="user-select:all;">${code}</span> <button onclick="navigator.clipboard.writeText('${code}').then(()=>alert('已複製通行碼：${code}'))" style="background:var(--red-bright); color:#fff; border:none; padding:4px 10px; font-size:0.8rem; cursor:pointer; border-radius:4px; margin-left:8px;">📋 複製</button>`;
         }
@@ -1333,63 +1282,6 @@
             log.innerHTML = `最新生成: <b>${code}</b> (效期${hours}H，至 ${timeStr} 剔除)<br>` + log.innerHTML;
         }
     }
-    window.onload = function() {
-            const timeEl = document.getElementById('lastCalcTime');
-            if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
-
-            // 🌐 讀取 GitHub 雲端資料
-            window.globalCloudData = null;
-
-            fetch('data.json?t=' + Date.now())
-                .then(res => res.json())
-                .then(data => {
-                    window.globalCloudData = data;
-                    if (data && data.marquee) {
-                        const marqueeEl = document.querySelector('.marquee-content');
-                        if (marqueeEl) marqueeEl.innerText = data.marquee;
-                    }
-                    if (typeof renderGameStrategy === 'function') {
-                        renderGameStrategy('atg_seth2');
-                    }
-                })
-                .catch(err => console.log('讀取數據失敗'));
-
-            let secondsLeft = 3599;
-            setInterval(() => {
-                secondsLeft--;
-                if (secondsLeft < 0) secondsLeft = 3599;
-                const m = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
-                const s = String(secondsLeft % 60).padStart(2, '0');
-                const timerEl = document.getElementById('recalTimer');
-                if (timerEl) timerEl.innerText = `${m}:${s}`;
-            }, 1000);
-        };
-
-        // 🎯 專屬打法渲染邏輯
-        function renderGameStrategy(currentGameId = 'atg_seth2') {
-            const listEl = document.getElementById('game-strategy-list');
-            if (!listEl) return;
-
-            const cloudData = window.globalCloudData;
-            if (!cloudData || (!cloudData.gameStrategies && !cloudData.strategies)) {
-                listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">目前尚無推薦打法</div>';
-                return;
-            }
-
-            const rawList = cloudData.gameStrategies || cloudData.strategies;
-            const matched = rawList.filter(s => !s.gameId || s.gameId === currentGameId || s.gameId === 'general');
-
-            if (matched.length === 0) {
-                listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">本遊戲暫無設定專屬打法</div>';
-            } else {
-                listEl.innerHTML = matched.map(s => `
-                    <div style="margin-bottom: 12px; background: #1f0c10; padding: 12px; border-radius: 6px; border-left: 4px solid #ff0015;">
-                        <strong style="color: #ffb700; font-size: 1.05rem; display: block; margin-bottom: 6px;">${s.title}</strong>
-                        <div style="color: #eee; line-height: 1.6; white-space: pre-line;">${s.content}</div>
-                    </div>
-                `).join('');
-            }
-        }
 </script>
 </body>
 </html>
