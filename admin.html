@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>牛老大選房平台 - 個人管理後台</title>
     <style>
-        body { background: #0c0507; color: #fff; font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+        body { background: #0c0507; color: #fff; font-family: sans-serif; padding: 20px; max-width: 650px; margin: 0 auto; }
         h2 { color: #ff0015; border-bottom: 2px solid #ff0015; padding-bottom: 8px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; color: #ffb700; font-size: 0.9rem; }
         input, textarea { width: 100%; padding: 10px; background: #1a0a0d; border: 1px solid #ff0015; color: #fff; border-radius: 4px; box-sizing: border-box; }
-        button { background: #ff0015; color: #fff; border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; font-size: 1rem; margin-top: 10px; }
+        button { background: #ff0015; color: #fff; border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 1rem; }
         button:hover { background: #cc0011; }
+        .strategy-box { background: #1a0a0d; border: 1px dashed #ff0015; padding: 12px; margin-bottom: 12px; border-radius: 6px; }
+        .btn-del { background: #441111; color: #ff8888; border: 1px solid #ff4444; padding: 4px 8px; font-size: 0.8rem; float: right; margin-top: -5px; }
         .hint { font-size: 0.75rem; color: #aaa; margin-top: 4px; }
     </style>
 </head>
@@ -21,12 +23,12 @@
     <div class="form-group">
         <label>🔑 GitHub Access Token (PAT):</label>
         <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxx">
-        <div class="hint">需具備 repo 寫入權限，僅儲存在您的瀏覽器本機。</div>
+        <div class="hint">僅儲存於您的瀏覽器本機。</div>
     </div>
 
     <div class="form-group">
         <label>📢 前端跑馬燈公告內容：</label>
-        <textarea id="marqueeInput" rows="3"></textarea>
+        <textarea id="marqueeInput" rows="2"></textarea>
     </div>
 
     <div class="form-group">
@@ -34,14 +36,19 @@
         <input type="number" id="boostInput" step="0.1" value="0.0">
     </div>
 
-    <button onclick="saveData()">💾 儲存並同步至前端</button>
+    <hr style="border-color: #331115; margin: 20px 0;">
+
+    <h3>🎯 打法策略管理</h3>
+    <div id="strategiesContainer"></div>
+    <button onclick="addStrategyField()" style="background:#0088cc; width:100%; margin-bottom:15px;">＋ 新增一組打法</button>
+
+    <button onclick="saveData()" style="width:100%; padding:15px; font-size: 1.1rem;">💾 儲存並同步至前端</button>
     <p id="statusMsg" style="text-align:center; color:#00ff66; font-weight:bold; margin-top:15px;"></p>
 
     <script>
         const REPO = "cvv005/slot-analytics";
         const PATH = "data.json";
 
-        // 載入當前資料
         window.onload = async () => {
             const savedToken = localStorage.getItem('gh_pat_token');
             if (savedToken) document.getElementById('ghToken').value = savedToken;
@@ -51,10 +58,28 @@
                 const data = await res.json();
                 document.getElementById('marqueeInput').value = data.marquee || '';
                 document.getElementById('boostInput').value = data.customRateBoost || 0;
+                
+                if (data.strategies && Array.isArray(data.strategies)) {
+                    data.strategies.forEach(s => addStrategyField(s.title, s.content));
+                }
             } catch(e) {
-                console.log('載入預設 JSON 失敗:', e);
+                console.log('載入資料失敗:', e);
             }
         };
+
+        function addStrategyField(title = '', content = '') {
+            const container = document.getElementById('strategiesContainer');
+            const div = document.createElement('div');
+            div.className = 'strategy-box';
+            div.innerHTML = `
+                <button class="btn-del" onclick="this.parentElement.remove()">🗑️ 刪除</button>
+                <label>打法名稱：</label>
+                <input type="text" class="strat-title" value="${title}" placeholder="請輸入自訂打法名稱..." style="margin-bottom:8px;">
+                <label>打法內容：</label>
+                <textarea class="strat-content" rows="3" placeholder="請輸入自訂打法步驟或細節...">${content}</textarea>
+            `;
+            container.appendChild(div);
+        }
 
         async function saveData() {
             const token = document.getElementById('ghToken').value.trim();
@@ -63,28 +88,33 @@
             const msgEl = document.getElementById('statusMsg');
 
             if (!token) {
-                alert('請輸入 GitHub Access Token 方可寫入資料！');
+                alert('請輸入 GitHub Access Token！');
                 return;
             }
             localStorage.setItem('gh_pat_token', token);
             msgEl.innerText = "⏳ 正在同步更新至 GitHub...";
 
+            const strategies = [];
+            document.querySelectorAll('.strategy-box').forEach(box => {
+                const t = box.querySelector('.strat-title').value;
+                const c = box.querySelector('.strat-content').value;
+                if (t || c) strategies.push({ title: t, content: c });
+            });
+
             try {
-                // 1. 取得舊檔案 SHA
                 const getFileRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${PATH}`, {
                     headers: { 'Authorization': `token ${token}` }
                 });
                 const fileData = await getFileRes.json();
                 const sha = fileData.sha;
 
-                // 2. 準備新資料
                 const updatedContent = {
-                    marquee: marquee,
+                    marquee,
                     customRateBoost: boost,
+                    strategies,
                     updatedAt: new Date().toLocaleString()
                 };
 
-                // 3. 發送 PUT 請求寫入 GitHub
                 const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${PATH}`, {
                     method: 'PUT',
                     headers: {
@@ -92,17 +122,16 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: "後台數據動態更新",
+                        message: "更新自訂打法資料",
                         content: btoa(unescape(encodeURIComponent(JSON.stringify(updatedContent, null, 2)))),
                         sha: sha
                     })
                 });
 
                 if (putRes.ok) {
-                    msgEl.innerText = "✅ 數據已成功更新！前端網頁約 1 分鐘內完成同步。";
+                    msgEl.innerText = "✅ 打法與數據已成功同步！前端將自動更新。";
                 } else {
-                    const err = await putRes.json();
-                    msgEl.innerText = "❌ 更新失敗: " + (err.message || 'Token 權限不符');
+                    msgEl.innerText = "❌ 更新失敗，請檢查 Token 是否正確。";
                 }
             } catch(err) {
                 msgEl.innerText = "❌ 系統錯誤: " + err.message;
