@@ -9,7 +9,7 @@
         h2 { color: #ff0015; border-bottom: 2px solid #ff0015; padding-bottom: 8px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; color: #ffb700; font-size: 0.9rem; }
-        input, textarea { width: 100%; padding: 10px; background: #1a0a0d; border: 1px solid #ff0015; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        input, textarea, select { width: 100%; padding: 10px; background: #1a0a0d; border: 1px solid #ff0015; color: #fff; border-radius: 4px; box-sizing: border-box; }
         button { background: #ff0015; color: #fff; border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 1rem; }
         button:hover { background: #cc0011; }
         .strategy-box { background: #1a0a0d; border: 1px dashed #ff0015; padding: 12px; margin-bottom: 12px; border-radius: 6px; }
@@ -38,9 +38,9 @@
 
     <hr style="border-color: #331115; margin: 20px 0;">
 
-    <h3>🎯 打法策略管理</h3>
+    <h3>🎯 各遊戲專屬打法管理</h3>
     <div id="strategiesContainer"></div>
-    <button onclick="addStrategyField()" style="background:#0088cc; width:100%; margin-bottom:15px;">＋ 新增一組打法</button>
+    <button onclick="addStrategyField()" style="background:#0088cc; width:100%; margin-bottom:15px;">＋ 新增一組遊戲打法</button>
 
     <button onclick="saveData()" style="width:100%; padding:15px; font-size: 1.1rem;">💾 儲存並同步至前端</button>
     <p id="statusMsg" style="text-align:center; color:#00ff66; font-weight:bold; margin-top:15px;"></p>
@@ -48,6 +48,15 @@
     <script>
         const REPO = "cvv005/slot-analytics";
         const PATH = "data.json";
+
+        // 遊戲清單（可依需求擴充）
+        const GAME_OPTIONS = [
+            { id: "atg_seth2", name: "🎰 ATG 戰神賽特2" },
+            { id: "atg_seth1", name: "🎰 ATG 戰神賽特1" },
+            { id: "rsg_thor", name: "⚡ RSG 雷神之錘" },
+            { id: "rsg_royal", name: "👑 RSG 皇家約克" },
+            { id: "general", name: "🌐 通用全遊戲打法" }
+        ];
 
         window.onload = async () => {
             const savedToken = localStorage.getItem('gh_pat_token');
@@ -59,24 +68,36 @@
                 document.getElementById('marqueeInput').value = data.marquee || '';
                 document.getElementById('boostInput').value = data.customRateBoost || 0;
                 
-                if (data.strategies && Array.isArray(data.strategies)) {
-                    data.strategies.forEach(s => addStrategyField(s.title, s.content));
+                if (data.gameStrategies && Array.isArray(data.gameStrategies)) {
+                    data.gameStrategies.forEach(s => addStrategyField(s.gameId, s.title, s.content));
+                } else if (data.strategies && Array.isArray(data.strategies)) {
+                    // 相容舊資料
+                    data.strategies.forEach(s => addStrategyField("atg_seth2", s.title, s.content));
                 }
             } catch(e) {
                 console.log('載入資料失敗:', e);
             }
         };
 
-        function addStrategyField(title = '', content = '') {
+        function addStrategyField(gameId = 'atg_seth2', title = '', content = '') {
             const container = document.getElementById('strategiesContainer');
             const div = document.createElement('div');
             div.className = 'strategy-box';
+            
+            let optionsHtml = GAME_OPTIONS.map(g => 
+                `<option value="${g.id}" ${g.id === gameId ? 'selected' : ''}>${g.name}</option>`
+            ).join('');
+
             div.innerHTML = `
                 <button class="btn-del" onclick="this.parentElement.remove()">🗑️ 刪除</button>
+                <label>選擇所屬遊戲：</label>
+                <select class="strat-game-id" style="margin-bottom:8px;">
+                    ${optionsHtml}
+                </select>
                 <label>打法名稱：</label>
-                <input type="text" class="strat-title" value="${title}" placeholder="請輸入自訂打法名稱..." style="margin-bottom:8px;">
-                <label>打法內容：</label>
-                <textarea class="strat-content" rows="3" placeholder="請輸入自訂打法步驟或細節...">${content}</textarea>
+                <input type="text" class="strat-title" value="${title}" placeholder="例如：三階段打法" style="margin-bottom:8px;">
+                <label>打法詳細內容：</label>
+                <textarea class="strat-content" rows="4" placeholder="請輸入該遊戲的具體打法步驟...">${content}</textarea>
             `;
             container.appendChild(div);
         }
@@ -94,11 +115,12 @@
             localStorage.setItem('gh_pat_token', token);
             msgEl.innerText = "⏳ 正在同步更新至 GitHub...";
 
-            const strategies = [];
+            const gameStrategies = [];
             document.querySelectorAll('.strategy-box').forEach(box => {
+                const gId = box.querySelector('.strat-game-id').value;
                 const t = box.querySelector('.strat-title').value;
                 const c = box.querySelector('.strat-content').value;
-                if (t || c) strategies.push({ title: t, content: c });
+                if (t || c) gameStrategies.push({ gameId: gId, title: t, content: c });
             });
 
             try {
@@ -111,7 +133,7 @@
                 const updatedContent = {
                     marquee,
                     customRateBoost: boost,
-                    strategies,
+                    gameStrategies,
                     updatedAt: new Date().toLocaleString()
                 };
 
@@ -122,14 +144,14 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: "更新自訂打法資料",
+                        message: "更新專屬遊戲打法資料",
                         content: btoa(unescape(encodeURIComponent(JSON.stringify(updatedContent, null, 2)))),
                         sha: sha
                     })
                 });
 
                 if (putRes.ok) {
-                    msgEl.innerText = "✅ 打法與數據已成功同步！前端將自動更新。";
+                    msgEl.innerText = "✅ 遊戲專屬打法已成功同步！";
                 } else {
                     msgEl.innerText = "❌ 更新失敗，請檢查 Token 是否正確。";
                 }
