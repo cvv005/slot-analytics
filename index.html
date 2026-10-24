@@ -1333,6 +1333,63 @@
             log.innerHTML = `最新生成: <b>${code}</b> (效期${hours}H，至 ${timeStr} 剔除)<br>` + log.innerHTML;
         }
     }
+    window.onload = function() {
+            const timeEl = document.getElementById('lastCalcTime');
+            if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
+
+            // 🌐 讀取 GitHub 雲端資料
+            window.globalCloudData = null;
+
+            fetch('data.json?t=' + Date.now())
+                .then(res => res.json())
+                .then(data => {
+                    window.globalCloudData = data;
+                    if (data && data.marquee) {
+                        const marqueeEl = document.querySelector('.marquee-content');
+                        if (marqueeEl) marqueeEl.innerText = data.marquee;
+                    }
+                    if (typeof renderGameStrategy === 'function') {
+                        renderGameStrategy('atg_seth2');
+                    }
+                })
+                .catch(err => console.log('讀取數據失敗'));
+
+            let secondsLeft = 3599;
+            setInterval(() => {
+                secondsLeft--;
+                if (secondsLeft < 0) secondsLeft = 3599;
+                const m = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
+                const s = String(secondsLeft % 60).padStart(2, '0');
+                const timerEl = document.getElementById('recalTimer');
+                if (timerEl) timerEl.innerText = `${m}:${s}`;
+            }, 1000);
+        };
+
+        // 🎯 專屬打法渲染邏輯
+        function renderGameStrategy(currentGameId = 'atg_seth2') {
+            const listEl = document.getElementById('game-strategy-list');
+            if (!listEl) return;
+
+            const cloudData = window.globalCloudData;
+            if (!cloudData || (!cloudData.gameStrategies && !cloudData.strategies)) {
+                listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">目前尚無推薦打法</div>';
+                return;
+            }
+
+            const rawList = cloudData.gameStrategies || cloudData.strategies;
+            const matched = rawList.filter(s => !s.gameId || s.gameId === currentGameId || s.gameId === 'general');
+
+            if (matched.length === 0) {
+                listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem; text-align:center; padding:10px;">本遊戲暫無設定專屬打法</div>';
+            } else {
+                listEl.innerHTML = matched.map(s => `
+                    <div style="margin-bottom: 12px; background: #1f0c10; padding: 12px; border-radius: 6px; border-left: 4px solid #ff0015;">
+                        <strong style="color: #ffb700; font-size: 1.05rem; display: block; margin-bottom: 6px;">${s.title}</strong>
+                        <div style="color: #eee; line-height: 1.6; white-space: pre-line;">${s.content}</div>
+                    </div>
+                `).join('');
+            }
+        }
 </script>
 </body>
 </html>
