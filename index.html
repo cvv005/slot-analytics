@@ -881,6 +881,16 @@
         const timeEl = document.getElementById('lastCalcTime');
         if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
         
+        // 🌐 自動讀取 GitHub 上的 data.json 動態公告
+        fetch('data.json?t=' + Date.now())
+            .then(res => res.json())
+            .then(data => {
+                if (data.marquee) {
+                    const marqueeEl = document.querySelector('.marquee-content');
+                    if (marqueeEl) marqueeEl.innerText = data.marquee;
+                }
+            })
+            .catch(err => console.log('使用預設本地數據'));
         let secondsLeft = 3599;
         setInterval(() => {
             secondsLeft--;
