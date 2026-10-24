@@ -652,7 +652,11 @@
             🔥 [VIP 玩家 **507] 鎖定赤三國 #124 獲利突破 280%！
         </div>
     </div>
-
+<!-- 🎯 獨家實戰打法策略區域 -->
+<div id="strategy-section" style="background: #15080a; border: 1px solid #ff0015; border-radius: 8px; padding: 15px; margin: 15px 0;">
+    <h3 style="color: #ffb700; margin-top: 0; border-bottom: 1px solid #331115; padding-bottom: 8px; font-size: 1.1rem;">🎯 獨家實戰打法策略</h3>
+    <div id="strategy-list" style="color: #ddd;">載入中...</div>
+</div>
     <!-- 1. 登入視圖 -->
     <div id="viewLogin" class="view-section active">
         <div class="card login-box">
@@ -881,16 +885,34 @@
         const timeEl = document.getElementById('lastCalcTime');
         if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
         
-        // 🌐 自動讀取 GitHub 上的 data.json 動態公告
+       // 🌐 自動讀取 GitHub 上的 data.json（包含跑馬燈與自訂打法）
         fetch('data.json?t=' + Date.now())
             .then(res => res.json())
             .then(data => {
+                // 1. 同步更新跑馬燈內容
                 if (data.marquee) {
                     const marqueeEl = document.querySelector('.marquee-content');
                     if (marqueeEl) marqueeEl.innerText = data.marquee;
                 }
+
+                // 2. 完全根據後台填寫的「打法名稱」與「打法內容」動態渲染
+                if (data.strategies && Array.isArray(data.strategies)) {
+                    const listEl = document.getElementById('strategy-list');
+                    if (listEl) {
+                        if (data.strategies.length === 0) {
+                            listEl.innerHTML = '<div style="color:#aaa; font-size:0.9rem;">目前尚無推薦打法</div>';
+                        } else {
+                            listEl.innerHTML = data.strategies.map(s => `
+                                <div style="margin-bottom: 12px; background: #1f0c10; padding: 12px; border-radius: 6px; border-left: 4px solid #ff0015;">
+                                    <strong style="color: #ffb700; font-size: 1.05rem; display: block; margin-bottom: 6px;">${s.title}</strong>
+                                    <div style="color: #eee; line-height: 1.5; white-space: pre-line;">${s.content}</div>
+                                </div>
+                            `).join('');
+                        }
+                    }
+                }
             })
-            .catch(err => console.log('使用預設本地數據'));
+            .catch(err => console.log('使用預設本地數據:', err));
         let secondsLeft = 3599;
         setInterval(() => {
             secondsLeft--;
