@@ -1194,8 +1194,14 @@
     }
 
     function lockRoom(num) {
-        alert(`已鎖定 VIP 房間 #${num}！\n請立即前往遊戲選擇 #${num} 號房間進行下注！`);
+    const targetRoom = rawRoomData.find(r => r.num === num);
+    if (targetRoom) {
+        window.parent.postMessage({ type: 'LOCK_ROOM', room: targetRoom }, '*');
+        alert(`🎯 成功同步鎖定房間 #${num}！\n縮小跑馬燈將會為您專屬播報此房間數據。`);
+    } else {
+        alert(`已鎖定 VIP 房間 #${num}！`);
     }
+}
 
     function generateSignal() {
         const box = document.getElementById('signalBox');
